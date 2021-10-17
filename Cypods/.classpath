@@ -6,6 +6,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/bo821/eclipse-workspace/Libraries/json-20210307.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
