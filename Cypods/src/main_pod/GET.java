@@ -28,7 +28,7 @@ public class GET {
 		this.grabno = arr;	
 		GETTER(url,grabno);
 		
-	}
+	}//edit
 
 /**Overloaded GETTER Methods to get API Response */
 	
