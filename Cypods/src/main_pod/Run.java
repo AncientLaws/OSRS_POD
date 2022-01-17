@@ -19,7 +19,10 @@ public class Run extends Window {
 		// GET rs = new
 		// GET("https://services.runescape.com/m=itemdb_rs/api/catalogue/detail.json?item=21787");
 		// GET rs2 = new
-		 //GET rs5 =  new GET("https://services.runescape.com/m=itemdb_rs/api/catalogue/detail.json?item=21787","item");
+		 GET rs5 =  new GET(); 
+		 String s = rs5.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=26382");
+		 System.out.println(s);
+		 //rs5.GET("https://services.runescape.com/m=itemdb_rs/api/catalogue/detail.json?item=21787","item.[icon]");
 		 //GET rs3 = new GET("http://192.168.1.157:3000/root");
 
 		

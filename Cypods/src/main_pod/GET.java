@@ -15,22 +15,39 @@ public class GET extends Connect {
 	GET() {
 	}
 
-	protected GET(String url) {
-		GETTER(url);
+	public String getIconLargeSprite (String s){
+		return getIconLarge(s);
 	}
-
-	protected GET(String url, Object o) {
-		this.grab = o;
-		GETTER(url, o);
-
-	}
-
-	protected GET(String url, int arr[]) {
-		this.grabno = arr;
-		GETTER(url, grabno);
-
-	}// edit
-
+	
+		private String getIconLarge(String url) {
+			String s = "";
+			try {
+				HttpURLConnection http = httpStringURL(url); 
+				if (HttpURLConnection.HTTP_OK == responseCode) { // Success: Status = 200
+					BufferedReader in = new BufferedReader(new InputStreamReader(http.getInputStream()));
+					StringBuffer response = new StringBuffer();
+					String READ_INPUT_LINE_FROM_SITE;
+					while ((READ_INPUT_LINE_FROM_SITE = in.readLine()) != null) {
+							response.append(READ_INPUT_LINE_FROM_SITE);
+					}
+					in.close();
+					String jsonString = response.toString();
+					JSONObject obj = new JSONObject(jsonString);
+					Object target = obj.getJSONObject("item").getString("icon_large");
+					s = target.toString();
+					
+				}
+			
+			}
+	
+			catch (Exception e) {
+				System.out.println("Error in Method: private String GETTER(String url, Object o): "
+			+ " " + e.getMessage());
+			}
+			
+			return s;
+		}
+		
 	/** Overloaded GETTER Methods to get API Response */
 	private void GETTER(String url) {
 		try {
@@ -56,35 +73,7 @@ public class GET extends Connect {
 
 	}
 
-	private void GETTER(String url, Object o) {
-		try {
-			/*************************************
-			 * Setting up connection & Reading Input Stream
-			 ***********************************/
-			HttpURLConnection http = httpStringURL(url); // Setting http variable to equal predefined values returned by
-															// httpStringURL method
-			if (HttpURLConnection.HTTP_OK == responseCode) { // Success: Status = 200
-				BufferedReader in = new BufferedReader(new InputStreamReader(http.getInputStream()));
-				StringBuffer response = new StringBuffer();
-				String READ_INPUT_LINE_FROM_SITE;
-				// Reading input from BufferedReader into StringBuffer
-				while ((READ_INPUT_LINE_FROM_SITE = in.readLine()) != null) {
-					response.append(READ_INPUT_LINE_FROM_SITE);
-				}
-				in.close();
-				// Assign output to JSONObject
-				String jsonString = response.toString();
-				JSONObject obj = new JSONObject(jsonString);
-				Object target = obj.get(o.toString());
-				System.out.println(target);
-			}
-		}
 
-		catch (Exception e) {
-			System.out.println(" " + e.getMessage());
-		}
-
-	}
 
 	private void GETTER(String url, int[] i) {
 		try {

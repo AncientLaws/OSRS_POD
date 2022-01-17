@@ -8,40 +8,32 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class tabs extends Window{
+	
+	GET getCalls = new GET();
 	public void getTab1() {
 		try {
-            InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_rs/1641812494724_obj_sprite.gif?id=21787").openStream();
-      		 Image image = new Image(input); 
-      		 ImageView imageView = new ImageView(image);
-      		 imageView.setPreserveRatio(true);
-      		 imageView.setFitHeight(50);
-      		 imageView.setFitWidth(50);
-      		 imageView.setStyle("-fx-background-color: BLACK");
-             imageView.setCache(true);
-      		 tab2 = new Label("",imageView);
-      		 tab2.setTranslateX(111);
-             tab2.setTranslateY(25);
-             root.getChildren().add(tab2);
+		   Tab1 tab1 = new Tab1(); 
+		   tab1.setIcon("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=26382");
+           tab1.getIcon();
 			
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			System.out.println("Error in calling tab1");
 		}
 		
 	}
 	public void getTab2() {
 		try {
             InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_rs/1641812494724_obj_sprite.gif?id=21790").openStream();
+      		 URL ("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=26384").openStream();
       		 Image image = new Image(input); 
       		 ImageView imageView = new ImageView(image);
       		 imageView.setPreserveRatio(true);
-      		 imageView.setFitHeight(50);
-      		 imageView.setFitWidth(50);
+      		 imageView.setFitHeight(75);
+      		 imageView.setFitWidth(75);
       		 tab2 = new Label("",imageView);
-      		 tab2.setTranslateX(200);
-             tab2.setTranslateY(25);
+      		 tab2.setTranslateX(189);
+             tab2.setTranslateY(12);
              root.getChildren().add(tab2);
 			
 		}
@@ -53,15 +45,15 @@ public class tabs extends Window{
 	public void getTab3() {
 		try {
             InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_rs/1641812494724_obj_sprite.gif?id=21793").openStream();
+      		 URL ("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=26386").openStream();
       		 Image image = new Image(input); 
       		 ImageView imageView = new ImageView(image);
       		 imageView.setPreserveRatio(true);
-      		 imageView.setFitHeight(50);
-      		 imageView.setFitWidth(50);
+      		 imageView.setFitHeight(75);
+      		 imageView.setFitWidth(75);
       		 tab2 = new Label("",imageView);
-      		 tab2.setTranslateX(289);
-             tab2.setTranslateY(25);
+      		 tab2.setTranslateX(278);
+             tab2.setTranslateY(12);
              root.getChildren().add(tab2);
 			
 		}
@@ -73,15 +65,15 @@ public class tabs extends Window{
 	public void getTab4() {
 		try {
             InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_rs/1641812494724_obj_sprite.gif?id=21760").openStream();
+      		 URL ("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=26374").openStream();
       		 Image image = new Image(input); 
       		 ImageView imageView = new ImageView(image);
       		 imageView.setPreserveRatio(true);
-      		 imageView.setFitHeight(50);
-      		 imageView.setFitWidth(50);
+      		 imageView.setFitHeight(75);
+      		 imageView.setFitWidth(75);
       		 tab2 = new Label("",imageView);
-      		 tab2.setTranslateX(378);
-             tab2.setTranslateY(25);
+      		 tab2.setTranslateX(367);
+             tab2.setTranslateY(12);
              root.getChildren().add(tab2);
 			
 		}
@@ -93,15 +85,15 @@ public class tabs extends Window{
 	public void getTab5() {
 		try {
             InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_rs/1641812494724_obj_sprite.gif?id=21761").openStream();
+      		 URL ("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=26235").openStream();
       		 Image image = new Image(input); 
       		 ImageView imageView = new ImageView(image);
       		 imageView.setPreserveRatio(true);
-      		 imageView.setFitHeight(50);
-      		 imageView.setFitWidth(50);
+      		 imageView.setFitHeight(75);
+      		 imageView.setFitWidth(75);
       		 tab2 = new Label("",imageView);
-      		 tab2.setTranslateX(467);
-             tab2.setTranslateY(25);
+      		 tab2.setTranslateX(456);
+             tab2.setTranslateY(12);
              root.getChildren().add(tab2);
 			
 		}
@@ -114,15 +106,15 @@ public class tabs extends Window{
 	public void getTab6() {
 		try {
             InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_rs/1641812494724_obj_sprite.gif?id=21762").openStream();
+      		 URL ("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=26233").openStream();
       		 Image image = new Image(input); 
       		 ImageView imageView = new ImageView(image);
       		 imageView.setPreserveRatio(true);
-      		 imageView.setFitHeight(50);
-      		 imageView.setFitWidth(50);
+      		 imageView.setFitHeight(75);
+      		 imageView.setFitWidth(75);
       		 tab2 = new Label("",imageView);
-      		 tab2.setTranslateX(557);
-             tab2.setTranslateY(25);
+      		 tab2.setTranslateX(545);
+             tab2.setTranslateY(12);
              root.getChildren().add(tab2);
 			
 		}
@@ -133,15 +125,15 @@ public class tabs extends Window{
 	public void getTab7() {
 		try {
             InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_rs/1641812494724_obj_sprite.gif?id=21763").openStream();
+      		 URL ("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=11785").openStream();
       		 Image image = new Image(input); 
       		 ImageView imageView = new ImageView(image);
       		 imageView.setPreserveRatio(true);
-      		 imageView.setFitHeight(50);
-      		 imageView.setFitWidth(50);
+      		 imageView.setFitHeight(75);
+      		 imageView.setFitWidth(75);
       		 tab2 = new Label("",imageView);
-      		 tab2.setTranslateX(648);
-             tab2.setTranslateY(25);
+      		 tab2.setTranslateX(636);
+             tab2.setTranslateY(12);
              root.getChildren().add(tab2);
 			
 		}
@@ -152,15 +144,15 @@ public class tabs extends Window{
 	public void getTab8() {
 		try {
             InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_rs/1641812494724_obj_sprite.gif?id=21694").openStream();
+      		 URL ("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=11828").openStream();
       		 Image image = new Image(input); 
       		 ImageView imageView = new ImageView(image);
       		 imageView.setPreserveRatio(true);
-      		 imageView.setFitHeight(50);
-      		 imageView.setFitWidth(50);
+      		 imageView.setFitHeight(75);
+      		 imageView.setFitWidth(75);
       		 tab2 = new Label("",imageView);
-      		 tab2.setTranslateX(738);
-             tab2.setTranslateY(25);
+      		 tab2.setTranslateX(728);
+             tab2.setTranslateY(12);
              root.getChildren().add(tab2);
 			
 		}
@@ -171,15 +163,15 @@ public class tabs extends Window{
 	public void getTab9() {
 		try {
             InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_rs/1641812494724_obj_sprite.gif?id=21695").openStream();
+      		 URL ("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=26384").openStream();
       		 Image image = new Image(input); 
       		 ImageView imageView = new ImageView(image);
       		 imageView.setPreserveRatio(true);
-      		 imageView.setFitHeight(50);
-      		 imageView.setFitWidth(50);
+      		 imageView.setFitHeight(75);
+      		 imageView.setFitWidth(75);
       		 tab2 = new Label("",imageView);
-      		 tab2.setTranslateX(828);
-             tab2.setTranslateY(25);
+      		 tab2.setTranslateX(818);
+             tab2.setTranslateY(12);
              root.getChildren().add(tab2);
 			
 		}
@@ -190,15 +182,15 @@ public class tabs extends Window{
 	public void getTab10() {
 		try {
             InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_rs/1641812494724_obj_sprite.gif?id=21696").openStream();
+      		 URL ("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=26384").openStream();
       		 Image image = new Image(input); 
       		 ImageView imageView = new ImageView(image);
       		 imageView.setPreserveRatio(true);
-      		 imageView.setFitHeight(50);
-      		 imageView.setFitWidth(50);
+      		 imageView.setFitHeight(75);
+      		 imageView.setFitWidth(75);
       		 tab2 = new Label("",imageView);
-      		 tab2.setTranslateX(920);
-             tab2.setTranslateY(25);
+      		 tab2.setTranslateX(909);
+             tab2.setTranslateY(12);
              root.getChildren().add(tab2);
 			
 		}

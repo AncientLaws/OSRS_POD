@@ -1,0 +1,117 @@
+Returns the runedate when the ge was last updated, starting with number of days
+from  27 February 2002: https://secure.runescape.com/m=itemdb_oldschool/api/info.json
+
+Returns an item based on a query string (keep category=1: 
+https://services.runescape.com/m=itemdb_oldschool/api/catalogue/items.json?category=1&alpha=ItemName
+
+Returns an item general info and Ge trend using item ID: 
+https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=26382
+
+Returns the graph price of each item for the past 180 days:
+https://services.runescape.com/m=itemdb_oldschool/api/graph/2.json
+
+Returns highscore values for a player: 
+https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=Ancient Laws
+---Skills----
+Overall
+Attack
+Defence
+Strength
+Hitpoints
+Ranged
+Prayer
+Magic
+Cooking
+Woodcutting
+Fletching
+Fishing
+Firemaking
+Crafting
+Smithing
+Mining
+Herblore
+Agility
+Thieving
+Slayer
+Farming
+Runecrafting
+Hunter
+Construction
+
+---Activities-----
+League Points
+Bounty Hunter - Hunter
+Bounty Hunter - Rogue
+Clue Scrolls (all)
+Clue Scrolls (beginner)
+Clue Scrolls (easy)
+Clue Scrolls (medium)
+Clue Scrolls (hard)
+Clue Scrolls (elite)
+Clue Scrolls (master)
+LMS - Rank
+Soul Wars Zeal
+Abyssal Sire
+Alchemical Hydra
+Barrows Chests
+Bryophyta
+Callisto
+Cerberus
+Chambers of Xeric
+Chambers of Xeric: Challenge Mode
+Chaos Elemental
+Chaos Fanatic
+Commander Zilyana
+Corporeal Beast
+Crazy Archaeologist
+Dagannoth Prime
+Dagannoth Rex
+Dagannoth Supreme
+Deranged Archaeologist
+General Graardor
+Giant Mole
+Grotesque Guardians
+Hespori
+Kalphite Queen
+King Black Dragon
+Kraken
+Kree'Arra
+K'ril Tsutsaroth
+Mimic
+Nightmare
+Phosani's Nightmare
+Obor
+Sarachnis
+Scorpia
+Skotizo
+Tempoross
+The Gauntlet
+The Corrupted Gauntlet
+Theatre of Blood
+Theatre of Blood: Hard Mode
+Thermonuclear Smoke Devil
+TzKal-Zuk
+TzTok-Jad
+Venenatis
+Vet'ion
+Vorkath
+Wintertodt
+Zalcano
+Zulrah
+
+
+JSON Example:
+{  
+   "cover":"blabla.jpg",
+   "content":[  
+      {  
+         "article":"article_text",
+         "document":"document_text"
+      }
+   ]
+}
+Method1:
+yourJSonObject.getJSONObject("cover").getJSONObject("content").getJSONObject("article");
+
+Method2:
+json.getJSONArray("content").getJSONObject(0).getString("article")
