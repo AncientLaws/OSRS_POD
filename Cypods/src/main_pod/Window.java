@@ -32,6 +32,8 @@ public class Window extends Application implements ActionListener {
 	 * setStyle("-fx-background-image: url('https://secure.runescape.com/m=itemdb_rs/1641812494724_obj_sprite.gif?id=21787')"
 	 * ); bt.setPrefSize(30, 30); bt.setLayoutX(132); bt.setLayoutY(130);
 	 */
+	
+	 //String s = 
 
     
 	@Override
@@ -42,6 +44,7 @@ public class Window extends Application implements ActionListener {
             Scene scene = new Scene(root, 1080, 720);
 			root.setId("Bank-Screen");
 			tabs t = new tabs();
+			
 			t.getTab1();
 			t.getTab2();
 			t.getTab3();

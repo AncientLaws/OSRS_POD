@@ -9,13 +9,14 @@ import javafx.scene.image.ImageView;
 
 public class tabs extends Window{
 	
-	GET getCalls = new GET();
+	 GET getItemSprite =  new GET(); 
 	public void getTab1() {
 		try {
 		   Tab1 tab1 = new Tab1(); 
-		   tab1.setIcon("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=26382");
+		   tab1.setIcon(getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=26382"));
            tab1.getIcon();
-			
+		
+           
 		}
 		catch(Exception e) {
 			System.out.println("Error in calling tab1");
@@ -25,7 +26,7 @@ public class tabs extends Window{
 	public void getTab2() {
 		try {
             InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=26384").openStream();
+      		 URL (getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=26384")).openStream();
       		 Image image = new Image(input); 
       		 ImageView imageView = new ImageView(image);
       		 imageView.setPreserveRatio(true);
@@ -45,7 +46,7 @@ public class tabs extends Window{
 	public void getTab3() {
 		try {
             InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=26386").openStream();
+      		 URL (getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=26386")).openStream();
       		 Image image = new Image(input); 
       		 ImageView imageView = new ImageView(image);
       		 imageView.setPreserveRatio(true);
@@ -65,7 +66,7 @@ public class tabs extends Window{
 	public void getTab4() {
 		try {
             InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=26374").openStream();
+      		 URL (getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=26233")).openStream();
       		 Image image = new Image(input); 
       		 ImageView imageView = new ImageView(image);
       		 imageView.setPreserveRatio(true);
@@ -75,6 +76,7 @@ public class tabs extends Window{
       		 tab2.setTranslateX(367);
              tab2.setTranslateY(12);
              root.getChildren().add(tab2);
+             
 			
 		}
 		catch(Exception e) {
@@ -85,7 +87,7 @@ public class tabs extends Window{
 	public void getTab5() {
 		try {
             InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=26235").openStream();
+      		 URL (getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=26374")).openStream();
       		 Image image = new Image(input); 
       		 ImageView imageView = new ImageView(image);
       		 imageView.setPreserveRatio(true);
@@ -106,7 +108,7 @@ public class tabs extends Window{
 	public void getTab6() {
 		try {
             InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=26233").openStream();
+      		 URL (getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=26235")).openStream();
       		 Image image = new Image(input); 
       		 ImageView imageView = new ImageView(image);
       		 imageView.setPreserveRatio(true);
@@ -125,7 +127,7 @@ public class tabs extends Window{
 	public void getTab7() {
 		try {
             InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=11785").openStream();
+      		 URL (getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=11785")).openStream();
       		 Image image = new Image(input); 
       		 ImageView imageView = new ImageView(image);
       		 imageView.setPreserveRatio(true);
@@ -144,7 +146,7 @@ public class tabs extends Window{
 	public void getTab8() {
 		try {
             InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=11828").openStream();
+      		 URL (getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=11830")).openStream();
       		 Image image = new Image(input); 
       		 ImageView imageView = new ImageView(image);
       		 imageView.setPreserveRatio(true);
@@ -163,7 +165,7 @@ public class tabs extends Window{
 	public void getTab9() {
 		try {
             InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=26384").openStream();
+      		 URL (getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=11828")).openStream();
       		 Image image = new Image(input); 
       		 ImageView imageView = new ImageView(image);
       		 imageView.setPreserveRatio(true);
@@ -182,7 +184,7 @@ public class tabs extends Window{
 	public void getTab10() {
 		try {
             InputStream input = new
-      		 URL ("https://secure.runescape.com/m=itemdb_oldschool/1641812469448_obj_big.gif?id=26384").openStream();
+      		 URL (getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=11826")).openStream();
       		 Image image = new Image(input); 
       		 ImageView imageView = new ImageView(image);
       		 imageView.setPreserveRatio(true);
