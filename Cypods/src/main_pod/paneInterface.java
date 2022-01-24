@@ -14,6 +14,7 @@ public class paneInterface extends Tab {
 	//public Pane tabInterface = new Pane();
 	//ScrollPane sp = new ScrollPane();
 	ImageView imageView ;
+	ImageView geSearch;
 	
 	public void activateInterface() {
 		
@@ -21,23 +22,33 @@ public class paneInterface extends Tab {
 		
 		setItemScrollArea();
 		tabInterface.getChildren().add(imageView);
+		tabInterface.getChildren().add(geSearch);
 		//root.getChildren().add(sp);
 
 		
 	}
 	
 	private void setItemScrollArea() {
-		imageView = new ImageView(new Image("Bank_Interface_Pane_V1.png"));
-		//sp.setId("tabInterface");
-		
-		//sp.setLayoutX(0);
-		//sp.setLayoutY(90);
-		
+		imageView = new ImageView(new Image("GE_TEXT.png"));
+		geSearch = new ImageView(new Image("GE_SEARCH_V2.png"));
+		//geSearch = new ImageView(new Image("GE_SEARCH_V3.png"));
+		//geSearch = new ImageView(new Image("GE_SEARCH_V4.png"));
+		imageView.setOpacity(1.0);
+
 		tabInterface.setTranslateX(0);
 		tabInterface.setTranslateY(91);
 		
-		//imageView.setX(0);
-		//imageView.setY(95);
+		geSearch.setX(0);
+		geSearch.setY(405);
+		geSearch.setFitWidth(775);
+		geSearch.setFitHeight(225);
+		geSearch.setRotate(180);
+		
+		/*geSearch.setX(651);
+		geSearch.setY(215);
+		geSearch.setFitWidth(580);
+		geSearch.setFitHeight(255);
+		geSearch.setRotate(90);*/
 		
 		tabInterface.setVisible(true);
 		
