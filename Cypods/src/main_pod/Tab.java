@@ -17,9 +17,14 @@ public class Tab extends DisplayController {
 	ImageView imageView;
 	Image image;
 	InputStream error;
-	InputStream input;
+	protected InputStream input;
 	Label lTab;
 	
+	Tab (String s){
+		
+		tabSettings(s);
+		
+	}
 	
 /**Tab icon settings*/
 	int X;
@@ -29,8 +34,10 @@ public class Tab extends DisplayController {
 	
 	String tabActive;
 	
-	paneInterface pi ;
-	
+	paneInterface pi  = new paneInterface();
+	    
+
+	   //pi.setItemTopMenu(null);
 	public void tabSettings(String tab) {
 		switch (tab)
 		{
@@ -38,8 +45,6 @@ public class Tab extends DisplayController {
 				X = 100;
 				Y = 12;
 				tabActive = tab;
-				pi = new paneInterface();
-				pi.activateInterface();
 				break;
 			}
 			case "Tab2":{
@@ -99,8 +104,10 @@ public class Tab extends DisplayController {
 			
 		}
 		initLabel();
-		//setIcon(ICON);
+		pi.activateInterface();
+		setInterfaceLabels();
 		
+	
 	}
 	
 	
@@ -110,23 +117,26 @@ public class Tab extends DisplayController {
 			getIcon();
 		}
 
-	public void getIcon() {
+	private void getIcon() {
 		try {
 
-            input = new
+         input = new
       		 URL (ItemSpriteUrl).openStream();
-            iconImageSettings(input);
-      		 
+            iconImageSettings(input); 
+            //setInterfaceLabels(input);
+            
 		
 		}
 		catch(Exception e) {
-			System.out.println("Error in getting Icon for Tab1");
+			System.out.println("Error in getting Icon for:" + tabActive);
 			catchError();
 		}
 	}
 	
 	public void setActive() {
 		root.setId(tabActive);
+		System.out.println("setActive: " + tabActive);
+		
 		
 	}
 	
@@ -149,6 +159,7 @@ public class Tab extends DisplayController {
 	}
 	
 	private void iconImageSettings(InputStream i) {
+		 System.out.println("iconImageSettings InputStream: " + i);
 		 image = new Image(i); 
  		 imageView = new ImageView(image);
  		 imageView.setPreserveRatio(true);
@@ -160,7 +171,9 @@ public class Tab extends DisplayController {
          lTab.setTranslateX(X);
          lTab.setTranslateY(Y);
          root.getChildren().add(lTab);
+         pi.setItemTopMenu(i);
          lTab.setOnMousePressed((mouseEvent) -> setActive());
+        // setInterfaceLabels();
 		
 	}
 	
@@ -174,14 +187,23 @@ public class Tab extends DisplayController {
         lTab.setTranslateY(Y);
         root.getChildren().add(lTab);
         lTab.setOnMousePressed((mouseEvent) -> setActive());
-        //lTab.setOnMouseEntered((mouseEvent) -> imageView.setEffect(ds));
-		
+
 	}
 	
 	private void removeLabel() {
 		root.getChildren().remove(lTab);
 	}
 	
+	private void setInterfaceLabels(InputStream input) {
+		pi.setItemTopMenu(input);
+		
+	}
+	private void setInterfaceLabels() {
+		pi.setItemTopMenuError();
+		System.out.println(input);
+		//pi.setItemTopMenu(input);
+		
+	}
 
 
 }

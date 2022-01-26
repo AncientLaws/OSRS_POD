@@ -13,45 +13,46 @@ public class DisplayController extends Window{
 	
 	public void getTab() {
 		try {
-			// paneInterface pi = new paneInterface();
-		   Tab tab1 = new Tab(); 
-		   tab1.tabSettings("Tab1");
-		   //pi.activateInterface();
+			
+		   System.out.println("Called tab1");
+		   Tab tab1 = new Tab("Tab1"); 
 
-           
-		   Tab tab2 = new Tab(); 
-		   tab2.tabSettings("Tab2");
+		   System.out.println("Called tab2");
+		   Tab tab2 = new Tab("Tab2"); 
+
 		   tab2.setIcon(getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detai.json?item=26382"));
-		   
-		   Tab tab3 = new Tab(); 
-		   tab3.tabSettings("Tab3");
-		   
-		   Tab tab4 = new Tab(); 
-		   tab4.tabSettings("Tab4");
+		   System.out.println("Called tab2");
+	
+		   System.out.println("Called tab3");
+		   Tab tab3 = new Tab("Tab3"); 
 
-		   Tab tab5 = new Tab(); 
-		   tab5.tabSettings("Tab5");
-		   
-		   Tab tab6 = new Tab(); 
-		   tab6.tabSettings("Tab6");
-		   
-		   Tab tab7 = new Tab(); 
-		   tab7.tabSettings("Tab7");
+		   System.out.println("Called tab4");		   
+		   Tab tab4 = new Tab("Tab4"); 
+
+		   System.out.println("Called tab5");
+		   Tab tab5 = new Tab("Tab5"); 
+
+		   System.out.println("Called tab6");		   
+		   Tab tab6 = new Tab("Tab6"); 
+
+		   System.out.println("Called tab7");		   
+		   Tab tab7 = new Tab("Tab7"); 
 		   tab7.setIcon(getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=26386"));
-		   
-		   Tab tab8 = new Tab(); 
-		   tab8.tabSettings("Tab8");
-		   
-		   Tab tab9 = new Tab(); 
-		   tab9.tabSettings("Tab9");
-		   
-		   Tab tab10 = new Tab(); 
-		   tab10.tabSettings("Tab10");
+
+		   System.out.println("Called tab8");		   
+		   Tab tab8 = new Tab("Tab8"); 
+
+		   System.out.println("Called tab9");		   
+		   Tab tab9 = new Tab("Tab9"); 
+
+		   System.out.println("Called tab10");		   
+		   Tab tab10 = new Tab("Tab10"); 
 		   tab10.setIcon(getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=26382"));
+
 		   
 		}
 		catch(Exception e) {
-			System.out.println("Error in calling tab1");
+			System.out.println("Display Controller: Error in calling one of the tabs");
 		}
 		
 	}
