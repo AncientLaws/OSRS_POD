@@ -11,49 +11,59 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 public class paneInterface extends Tab {
-	//public Pane tabInterface = new Pane();
-	//ScrollPane sp = new ScrollPane();
+
 	ImageView imageView ;
 	ImageView geSearch;
+	ImageView inventory;
+	ImageView graphBackground;
+	public Pane tabInterface = new Pane();
 	
 	public void activateInterface() {
 		
-		//tabInterface.autosize();
-		
 		setItemScrollArea();
-		tabInterface.getChildren().add(imageView);
+		setInventoryMenu();
+		setItemMenu();
 		tabInterface.getChildren().add(geSearch);
-		//root.getChildren().add(sp);
-
+		tabInterface.getChildren().add(inventory);
+		tabInterface.getChildren().add(graphBackground);
+		group.getChildren().add(tabInterface);
+		tabInterface.setVisible(true);
 		
 	}
 	
 	private void setItemScrollArea() {
-		imageView = new ImageView(new Image("GE_TEXT.png"));
 		geSearch = new ImageView(new Image("GE_SEARCH_V2.png"));
-		//geSearch = new ImageView(new Image("GE_SEARCH_V3.png"));
-		//geSearch = new ImageView(new Image("GE_SEARCH_V4.png"));
-		imageView.setOpacity(1.0);
 
 		tabInterface.setTranslateX(0);
 		tabInterface.setTranslateY(91);
 		
 		geSearch.setX(0);
 		geSearch.setY(405);
-		geSearch.setFitWidth(775);
+		geSearch.setFitWidth(750);
 		geSearch.setFitHeight(225);
 		geSearch.setRotate(180);
 		
-		/*geSearch.setX(651);
-		geSearch.setY(215);
-		geSearch.setFitWidth(580);
-		geSearch.setFitHeight(255);
-		geSearch.setRotate(90);*/
 		
-		tabInterface.setVisible(true);
 		
 	}
 	
+	private void setInventoryMenu() {
+		inventory = new ImageView(new Image("Inventory_2.PNG"));
+		inventory.setX(746);
+		inventory.setY(210);
+		inventory.setFitWidth(325);
+		inventory.setFitHeight(425);
+		
+	}
+
+	private void setItemMenu() {
+		graphBackground = new ImageView(new Image("Inventory_2.PNG"));
+		graphBackground.setX(746);
+		graphBackground.setY(0);
+		graphBackground.setFitWidth(325);
+		graphBackground.setFitHeight(215);
+		
+	}
 	
 	
 

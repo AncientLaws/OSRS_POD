@@ -30,11 +30,12 @@ public class Window extends Application {
 	
 	
 	static Pane root = new Pane();
-	static Pane tabInterface = new Pane();
-	static Group group = new Group(root,tabInterface);
+	//static Pane tabInterface = new Pane();
+	static Group group = new Group(root);
 	Scene scene;
 	Button bt  = new Button("");
 	
+	//paneInterface paneI = new paneInterface();
    
 	
 	@Override
@@ -47,7 +48,6 @@ public class Window extends Application {
 			root.setId("Bank-Screen");
 			Image icon = new Image ("icon.png");
 			
-			
 			primaryStage.getIcons().add(icon);
 
 			
@@ -57,8 +57,6 @@ public class Window extends Application {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.setAlwaysOnTop(false);
-			
-			//primaryStage.
 			
 			primaryStage.setResizable(true);
 			primaryStage.show();
