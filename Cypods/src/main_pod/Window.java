@@ -30,7 +30,6 @@ public class Window extends Application {
 	
 	
 	static Pane root = new Pane();
-	//static Pane tabInterface = new Pane();
 	static Group group = new Group(root);
 	Scene scene;
 	Button bt  = new Button("");

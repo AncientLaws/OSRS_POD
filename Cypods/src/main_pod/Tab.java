@@ -3,6 +3,7 @@ package main_pod;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javafx.scene.control.Label;
@@ -11,18 +12,21 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
-public class Tab extends DisplayController {
+public class Tab extends paneInterface {
 	private String ItemSpriteUrl = "";
 	private String ItemError = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/ProhibitionSign2.svg/1200px-ProhibitionSign2.svg.png";
 	ImageView imageView;
 	Image image;
 	InputStream error;
-	protected InputStream input;
+	public InputStream input;
 	Label lTab;
+	static String instanceActiveTab; 
+	public boolean clicked = false;
 	
 	Tab (String s){
 		
 		tabSettings(s);
+		pi.activateInterface();
 		
 	}
 	
@@ -45,6 +49,7 @@ public class Tab extends DisplayController {
 				X = 100;
 				Y = 12;
 				tabActive = tab;
+				setActive();
 				break;
 			}
 			case "Tab2":{
@@ -104,8 +109,8 @@ public class Tab extends DisplayController {
 			
 		}
 		initLabel();
-		pi.activateInterface();
-		setInterfaceLabels();
+
+		
 		
 	
 	}
@@ -117,7 +122,7 @@ public class Tab extends DisplayController {
 			getIcon();
 		}
 
-	private void getIcon() {
+	private InputStream getIcon() {
 		try {
 
          input = new
@@ -131,12 +136,20 @@ public class Tab extends DisplayController {
 			System.out.println("Error in getting Icon for:" + tabActive);
 			catchError();
 		}
+		return input;
 	}
 	
 	public void setActive() {
+		//activeTabString = tabActive;
 		root.setId(tabActive);
+		setInterfaceLabels();
+		pi.setVisibleInterface(true);
 		System.out.println("setActive: " + tabActive);
 		
+		
+	}
+	
+	public void tabController() {
 		
 	}
 	
@@ -171,7 +184,7 @@ public class Tab extends DisplayController {
          lTab.setTranslateX(X);
          lTab.setTranslateY(Y);
          root.getChildren().add(lTab);
-         pi.setItemTopMenu(i);
+         //pi.setItemTopMenu(i);
          lTab.setOnMousePressed((mouseEvent) -> setActive());
         // setInterfaceLabels();
 		
@@ -194,16 +207,30 @@ public class Tab extends DisplayController {
 		root.getChildren().remove(lTab);
 	}
 	
-	private void setInterfaceLabels(InputStream input) {
-		pi.setItemTopMenu(input);
-		
-	}
 	private void setInterfaceLabels() {
-		pi.setItemTopMenuError();
-		System.out.println(input);
-		//pi.setItemTopMenu(input);
-		
+
+	         try {
+	        	 try {
+				input = new
+					 URL (ItemSpriteUrl).openStream();
+				iconImageSettings(input); 
+				pi.setItemTopMenu(input);
+	        	 }
+	        	 catch(Exception e) {
+	        		 catchError();
+	        	 }
+				
+
+
+	
+			} catch (Exception e) {
+				System.out.println("Error in setInterfaceLabels: " + e);
+
+			}
+
+			
 	}
+	
 
 
 }

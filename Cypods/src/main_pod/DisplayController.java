@@ -10,17 +10,30 @@ import javafx.scene.image.ImageView;
 public class DisplayController extends Window{
 	
 	 GET getItemSprite =  new GET(); 
-	
+	 Tab tab1 ;
+	 Tab tab2 ;
+	 Tab tab3 ;
+	 Tab tab4 ;
+	 Tab tab5 ;
+	 Tab tab6 ;
+	 Tab tab7 ;
+	 Tab tab8 ;
+	 Tab tab9 ;
+	 Tab tab10;
+	 
+
+
 	public void getTab() {
 		try {
 			
+			tab10.setVisibleInterface(false);
 		   System.out.println("Called tab1");
-		   Tab tab1 = new Tab("Tab1"); 
+		    tab1 = new Tab("Tab1"); 
 
 		   System.out.println("Called tab2");
-		   Tab tab2 = new Tab("Tab2"); 
+		    tab1 = new Tab("Tab2"); 
 
-		   tab2.setIcon(getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detai.json?item=26382"));
+		   tab1.setIcon(getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=26382"));
 		   System.out.println("Called tab2");
 	
 		   System.out.println("Called tab3");

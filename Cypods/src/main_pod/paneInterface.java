@@ -11,6 +11,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 public class paneInterface extends Window {
 
@@ -20,11 +21,18 @@ public class paneInterface extends Window {
 	ImageView graphBackground;
 	Label itemTopMenuLabel;	
 	ImageView itemIconPaneImage;
+	Image image;
 	
-	public Pane tabInterface = new Pane();
+	private Pane tabInterface = new Pane();
+	
+	public void setVisibleInterface(boolean bool)
+	{
+		tabInterface.setVisible(bool);
+	}
 	
 	public void activateInterface() {
 		
+		System.out.println("activateInterface");
 		drawItemScrollArea();
 		drawInventoryMenu();
 		drawItemTopMenu();
@@ -76,13 +84,14 @@ public class paneInterface extends Window {
 
 		//Item Menu Icon
 		System.out.println("setItemTopMenu InputStream: " + input);
-		 Image image = new Image(input);
+		 image = new Image(input);
 		 itemIconPaneImage = new ImageView(image);
 		 itemIconPaneImage.setPreserveRatio(true);
 		 itemIconPaneImage.setFitHeight(200);
 		 itemIconPaneImage.setFitWidth(200);
 		 itemIconPaneImage.setStyle("-fx-background-color: BLACK");
-		 itemTopMenuLabel = new Label("",itemIconPaneImage);
+		 itemTopMenuLabel = new Label("#############",itemIconPaneImage);
+		 itemTopMenuLabel.setTextFill(Color.WHITE);;
 		 itemTopMenuLabel.setTranslateX(200);
 		 itemTopMenuLabel.setTranslateY(0);
 		 tabInterface.getChildren().add(itemTopMenuLabel);
