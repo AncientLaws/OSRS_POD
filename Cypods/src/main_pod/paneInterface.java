@@ -13,7 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-public class paneInterface extends Window {
+public class paneInterface extends DisplayController {
 
 	ImageView imageView ;
 	ImageView geSearch;

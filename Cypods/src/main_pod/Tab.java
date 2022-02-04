@@ -36,7 +36,7 @@ public class Tab extends paneInterface {
 	
 /**End Tab icon Settings*/
 	
-	String tabActive;
+	private String tabActive;
 	
 	paneInterface pi  = new paneInterface();
 	    
@@ -140,7 +140,7 @@ public class Tab extends paneInterface {
 	}
 	
 	public void setActive() {
-		//activeTabString = tabActive;
+		instanceActiveTab = tabActive;
 		root.setId(tabActive);
 		setInterfaceLabels();
 		pi.setVisibleInterface(true);
@@ -150,6 +150,11 @@ public class Tab extends paneInterface {
 	}
 	
 	public void tabController() {
+		
+		if(instanceActiveTab == tabActive)
+		{
+			
+		}
 		
 	}
 	

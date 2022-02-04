@@ -26,7 +26,7 @@ public class DisplayController extends Window{
 	public void getTab() {
 		try {
 			
-			tab10.setVisibleInterface(false);
+			//tab10.setVisibleInterface(false);
 		   System.out.println("Called tab1");
 		    tab1 = new Tab("Tab1"); 
 
