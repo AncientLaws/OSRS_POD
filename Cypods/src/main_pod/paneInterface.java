@@ -25,6 +25,12 @@ public class paneInterface extends DisplayController {
 	
 	private Pane tabInterface = new Pane();
 	
+	paneInterface()
+	
+	{
+		activateInterface();
+	}
+	
 	public void setVisibleInterface(boolean bool)
 	{
 		tabInterface.setVisible(bool);
@@ -80,37 +86,37 @@ public class paneInterface extends DisplayController {
 	
 	}
 	
-	protected void setItemTopMenu(InputStream input) {
-
+	public void setItemTopMenu(Image input) {
 		//Item Menu Icon
-		System.out.println("setItemTopMenu InputStream: " + input);
-		 image = new Image(input);
-		 itemIconPaneImage = new ImageView(image);
+		 System.out.println("setItemTopMenu InputStream: " + input);
+		 itemIconPaneImage = new ImageView(input);
 		 itemIconPaneImage.setPreserveRatio(true);
-		 itemIconPaneImage.setFitHeight(200);
-		 itemIconPaneImage.setFitWidth(200);
-		 itemIconPaneImage.setStyle("-fx-background-color: BLACK");
-		 itemTopMenuLabel = new Label("#############",itemIconPaneImage);
-		 itemTopMenuLabel.setTextFill(Color.WHITE);;
-		 itemTopMenuLabel.setTranslateX(200);
-		 itemTopMenuLabel.setTranslateY(0);
-		 tabInterface.getChildren().add(itemTopMenuLabel);
+		 itemIconPaneImage.setFitHeight(100);
+		 itemIconPaneImage.setFitWidth(100);
+		 itemIconPaneImage.setX(960);
+		 itemIconPaneImage.setY(-5);
+		 tabInterface.getChildren().add(itemIconPaneImage);
+		 itemIconPaneImage.setOnMousePressed((mouseEvent) -> System.out.println("Teeehee clicked me"));
 	}
 	
 	protected void setItemTopMenuError() {
 
 		//Item Menu Icon
-		 Image image = new Image("Item_UnAvailable.png");
+		 image = new Image("Item_UnAvailable.png");
 		 itemIconPaneImage = new ImageView(image);
 		 itemIconPaneImage.setPreserveRatio(true);
 		 itemIconPaneImage.setFitHeight(75);
 		 itemIconPaneImage.setFitWidth(75);
 		 itemIconPaneImage.setStyle("-fx-background-color: BLACK");
+		 itemIconPaneImage.setX(960);
+		 itemIconPaneImage.setY(-5);
 		 //itemIconPaneImage.setCache(true);
-		 itemTopMenuLabel = new Label("",itemIconPaneImage);
-		 itemTopMenuLabel.setTranslateX(980);
-		 itemTopMenuLabel.setTranslateY(8);
-		 tabInterface.getChildren().add(itemTopMenuLabel);
+		 tabInterface.getChildren().add(itemIconPaneImage);
+	}
+	
+	protected void setItemTopMenuVisible(boolean b){
+		
+		itemIconPaneImage.setVisible(b);
 	}
 
 
