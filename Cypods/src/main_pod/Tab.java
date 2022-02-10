@@ -113,7 +113,24 @@ public class Tab extends paneInterface {
 	
 	}
 	
-	
+	protected void setInterfaceVisible(boolean b)
+	{
+		if(b==true)
+		{
+			setItemTopMenuVisible(b);
+		}
+		else if(b==false)
+		{
+			setItemTopMenuVisible(b);
+			deactivateInterface();
+		}
+		
+		
+	}
+	private void deactivateInterface()
+	{
+		instanceActiveTab = "deactivated";
+	}
 	public void setIcon(String s) {
 		
 			ItemSpriteUrl = s;
@@ -135,6 +152,7 @@ public class Tab extends paneInterface {
 	}
 	
 	public void setActive() {
+		//setInterfaceVisible(false);
 		instanceActiveTab = tabActive;
 		root.setId(tabActive);
 		setInterfaceLabels();
