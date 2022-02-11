@@ -51,7 +51,7 @@ public class paneInterface extends DisplayController {
 	}
 	
 	private void drawItemScrollArea() {
-		geSearch = new ImageView(new Image("GE_SEARCH_V2.png"));
+		geSearch = new ImageView(new Image("GE_SEARCH_V6.png"));
 
 		tabInterface.setTranslateX(0);
 		tabInterface.setTranslateY(91);

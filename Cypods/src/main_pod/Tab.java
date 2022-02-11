@@ -10,23 +10,26 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 public class Tab extends paneInterface {
+	
+	
 	private String ItemSpriteUrl = "";
-	private String ItemError = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/ProhibitionSign2.svg/1200px-ProhibitionSign2.svg.png";
-	ImageView imageView;
-	Image image;
-	InputStream error;
+	protected ImageView imageView;
+	private Image image;
+	protected InputStream error;
 	public InputStream input;
-	Label lTab;
+	protected Label lTab;
 	static String instanceActiveTab; 
-	public boolean clicked = false;
+
 	
 	Tab (String s){
-
+		 imageView = new ImageView();
 		tabSettings(s);
-		
+
+
 	}
 	
 /**Tab icon settings*/
@@ -41,98 +44,27 @@ public class Tab extends paneInterface {
 	    
 	public void tabSettings(String tab) {
 		System.out.println("tabSettings");
-		switch (tab)
-		{
-			case "Tab1":{
-				X = 100;
-				Y = 12;
-				tabActive = tab;
-				setActive();
-				break;
-			}
-			case "Tab2":{
-				X = 189;
-				Y = 12;
-				tabActive = tab;
-				break;
-			}
-			case "Tab3":{
-				X = 278;
-				Y = 12;
-				tabActive = tab;
-				break;
-			}
-			case "Tab4":{
-				X = 367;
-				Y = 12;
-				tabActive = tab;
-				break;
-			}
-			case "Tab5":{
-				X = 456;
-				Y = 12;
-				tabActive = tab;
-				break;
-			}
-			case "Tab6":{
-				X = 545;
-				Y = 12;
-				tabActive = tab;
-				break;
-			}
-			case "Tab7":{
-				X = 636;
-				Y = 12;
-				tabActive = tab;
-				break;
-			}
-			case "Tab8":{
-				X = 728;
-				Y = 12;
-				tabActive = tab;
-				break;
-			}
-			case "Tab9":{
-				X = 818;
-				Y = 12;
-				tabActive = tab;
-				break;
-			}
-			case "Tab10":{
-				X = 909;
-				Y = 12;
-				tabActive = tab;
-				break;
-			}
-			
+		switch (tab){
+			case "Tab1":{ X = 100; Y = 12; tabActive = tab; setActive(); break; }
+			case "Tab2":{ X = 189; Y = 12; tabActive = tab; break;}
+			case "Tab3":{ X = 278; Y = 12; tabActive = tab; break;}
+			case "Tab4":{ X = 367; Y = 12; tabActive = tab; break;}
+			case "Tab5":{ X = 456; Y = 12; tabActive = tab; break;}
+			case "Tab6":{ X = 545; Y = 12; tabActive = tab; break;}
+			case "Tab7":{ X = 636; Y = 12; tabActive = tab; break;}
+			case "Tab8":{ X = 728; Y = 12; tabActive = tab; break;}
+			case "Tab9":{ X = 818; Y = 12; tabActive = tab; break;}
+			case "Tab10":{X = 909; Y = 12; tabActive = tab; break;}			
 		}
 		initLabel();
+		initImage();
+	}
+	
+	protected void setInterfaceVisible(boolean b){
+					setVisibleInterface(b);
+	}
 
-		
-		
-	
-	}
-	
-	protected void setInterfaceVisible(boolean b)
-	{
-		if(b==true)
-		{
-			setItemTopMenuVisible(b);
-		}
-		else if(b==false)
-		{
-			setItemTopMenuVisible(b);
-			deactivateInterface();
-		}
-		
-		
-	}
-	private void deactivateInterface()
-	{
-		instanceActiveTab = "deactivated";
-	}
 	public void setIcon(String s) {
-		
 			ItemSpriteUrl = s;
 			getIcon();
 		}
@@ -140,9 +72,9 @@ public class Tab extends paneInterface {
 	private InputStream getIcon() {
 		try {
 
-         input = new
-      		 URL (ItemSpriteUrl).openStream();
+			input = new URL (ItemSpriteUrl).openStream();
          	image = new Image(input); 
+         	imageView.setImage(image);
 		}
 		catch(Exception e) {
 			System.out.println("Error in getting Icon for:" + tabActive);
@@ -152,24 +84,19 @@ public class Tab extends paneInterface {
 	}
 	
 	public void setActive() {
-		//setInterfaceVisible(false);
-		instanceActiveTab = tabActive;
+		tabNo = tabActive;
+		setInterfaceVisible(true); //testing out control using DC
 		root.setId(tabActive);
 		setInterfaceLabels();
-
-
 		System.out.println("setActive: " + tabActive);
-		
-		
-	}
+		}
 	
 
 	
-	private void catchError()
-	{
+	private void catchError(){
 		 root.getChildren().remove(lTab);
 		 image = new Image("Item_UnAvailable.png"); 
-		 imageView = new ImageView(image);
+		 imageView.setImage(image);
 		 imageView.setPreserveRatio(true);
 		 imageView.setFitHeight(75);
 		 imageView.setFitWidth(75);
@@ -178,63 +105,49 @@ public class Tab extends paneInterface {
 		 imageView.setStyle("-fx-background-color: BLACK");
 		 imageView.setCache(true);
 		 root.getChildren().add(imageView);
-		 imageView.setOnMousePressed((mouseEvent) -> setActive());
+		 //imageView.setOnMousePressed((mouseEvent) -> setActive());  Mouse Event 3
 		
 	}
 	
-
-
 	private void iconImageSettings() {
 		 System.out.println("iconImageSettings InputStream: ");
-		 imageView = new ImageView(image);
+		 imageView.setLayoutX(X);
+		 imageView.setLayoutY(Y);
 		 imageView.setPreserveRatio(true);
 		 imageView.setFitHeight(75);
 		 imageView.setFitWidth(75);
 		 imageView.setStyle("-fx-background-color: BLACK");
          imageView.setCache(true);
-		 imageView.setX(X);
-		 imageView.setY(Y);
-         root.getChildren().add(imageView);
-         imageView.setOnMousePressed((mouseEvent) -> setActive());
-
-		
+         imageView.setVisible(true);
 	}
 	
-	private void initLabel() {
-		
-		imageView = new ImageView();
-        imageView.setFitHeight(75);
-		imageView.setFitWidth(75);
-		lTab = new Label("",imageView);
-        lTab.setTranslateX(X);
-        lTab.setTranslateY(Y);
-        root.getChildren().add(lTab);
-        lTab.setOnMousePressed((mouseEvent) -> setActive());
-
+	private void initImage(){
+		root.getChildren().add(imageView); //adds all imageViews to the top left corner
+		imageView.setVisible(false);       //hides all the added images, only sets visible once clicked
 	}
 	
-	private void removeLabel() {
-		root.getChildren().remove(lTab);
+	private void initLabel(){
+		  lTab = new Label("");
+		  lTab.setTranslateX(X);
+		  lTab.setTranslateY(Y);
+		  lTab.setPrefSize(75, 75);
+		  root.getChildren().add(lTab);
 	}
 	
 	private void setInterfaceLabels() {
 
 	         try {
 	        	 try {
-	        		 setItemTopMenu(image);
-	        		 iconImageSettings();  //must have called getIcon() for it not to be null
-	 			//setItemTopMenu(input);
-
-	        	 }
+		        		 iconImageSettings();  //must have called getIcon() for it not to be null
+		        		 setItemTopMenu(image);		 
+	        	 	 }
 	        	 catch(Exception e) {
-	        		 catchError();
-	        	 }
+		        		 System.out.println("Error in setInterfaceLabels()");
+		        		 catchError();
+	        	 	 }
 			} catch (Exception e) {
-				System.out.println("Error in setInterfaceLabels: " + e);
-
+					System.out.println("Error in setInterfaceLabels: " + e);
 			}
-
-			
 	}
 	
 

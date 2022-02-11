@@ -33,25 +33,23 @@ public class Window extends Application {
 	static Group group = new Group(root);
 	Scene scene;
 	Button bt  = new Button("");
-	
-	//paneInterface paneI = new paneInterface();
-   
+	   
 	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			
 			primaryStage.setTitle("Grand Exchange Central");
-			root.setPrefSize(1080, 720);
-            scene = new Scene(group, 1080, 720,Color.BEIGE);
-			root.setId("Bank-Screen");
 			Image icon = new Image ("icon.png");
-			
 			primaryStage.getIcons().add(icon);
-
 			
-			DisplayController dc = new DisplayController();
+			root.setPrefSize(1080, 720);
+			root.setId("Bank-Screen");
+            scene = new Scene(group, 1080, 720,Color.BEIGE);
+
+            DisplayController dc = new DisplayController();
 			dc.getTab();
+			dc.setListners();
 			
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
