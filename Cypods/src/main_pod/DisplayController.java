@@ -13,7 +13,7 @@ import javafx.scene.image.ImageView;
 
 public class DisplayController extends Window implements ChangeListener{
 	
-	 GET getItemSprite =  new GET(); 
+	 
 	 Tab tab1  ;
 	 Tab tab2 ;
 	 Tab tab3 ;
@@ -33,50 +33,40 @@ public class DisplayController extends Window implements ChangeListener{
 	public void getTab() {
 		try {
 			
-			//tab10.setVisibleInterface(false);
-		   System.out.println("Called tab1");
-		    tab1 = new Tab("Tab1"); 
-		    
-		    System.out.println("Called tab2");
-		    tab2 = new Tab("Tab2"); 
 
-		    tab2.setIcon(getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=26382"));
+		   System.out.println("Called tab1");
+		   tab1 = new Tab("Tab1"); 
+		    
+		   System.out.println("Called tab2");
+		   tab2 = new Tab("Tab2"); 
+
 		    System.out.println("Called tab2");
 	
 		   System.out.println("Called tab3");
 		   tab3 = new Tab("Tab3"); 
-		   tab3.setIcon(getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=12883"));
-
+		  
 		   System.out.println("Called tab4");		   
 		   tab4 = new Tab("Tab4"); 
-		   tab4.setIcon(getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=12883"));
 		   
 		   System.out.println("Called tab5");
 		   tab5 = new Tab("Tab5"); 
-		   tab5.setIcon(getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=12883"));
 		   
 		   System.out.println("Called tab6");		   
 		   tab6 = new Tab("Tab6"); 
-		   tab6.setIcon(getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=12883"));
 		   
 		   System.out.println("Called tab7");		   
 		   tab7 = new Tab("Tab7"); 
-		   tab7.setIcon(getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=12883"));
-
+		  
 		   System.out.println("Called tab8");		   
 		   tab8 = new Tab("Tab8"); 
-		   tab8.setIcon(getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=12883"));
-		   
+		  
 		   System.out.println("Called tab9");		   
 		   tab9 = new Tab("Tab9"); 
-		   tab9.setIcon(getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=4950"));
 		   
 		   System.out.println("Called tab10");		   
 		   tab10 = new Tab("Tab10"); 
-		   tab10.setIcon(getItemSprite.getIconLargeSprite("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=26382"));
 		   
-		   //setListners();
-		   
+   
 		}
 		catch(Exception e) {
 			System.out.println("Display Controller: Error in calling one of the tabs");
@@ -86,7 +76,7 @@ public class DisplayController extends Window implements ChangeListener{
 	protected void initListners() {
 		tab1.lTab.setOnMousePressed((mouseEvent) -> tab1.setActive());
 	}
-	public void setListners()
+	protected void setListners()
 	{
 
 		tab1.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab1"));
@@ -100,7 +90,7 @@ public class DisplayController extends Window implements ChangeListener{
 		tab9.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab9"));
 	   tab10.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab10"));
 	    
-	   tab1.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab1"));
+	    tab1.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab1"));
 	    tab2.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab2"));
 	    tab3.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab3"));
 	    tab4.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab4"));
@@ -115,7 +105,7 @@ public class DisplayController extends Window implements ChangeListener{
 		
 	}
 	//addChangelistener to the 1Tab label
-	protected void setInterfaceInvisible(String s)
+	private void setInterfaceInvisible(String s)
 	{
 		
 		tab1.setInterfaceVisible(false);
@@ -133,7 +123,7 @@ public class DisplayController extends Window implements ChangeListener{
 	}
 
 
-	protected void dc_enableActiveInterface() {
+	private void dc_enableActiveInterface() {
 		
 		System.out.println("dc_enableActiveInterface, tab no: " + tabNo);
 	    switch(tabNo)

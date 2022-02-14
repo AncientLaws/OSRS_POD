@@ -8,6 +8,7 @@ import java.nio.channels.NonWritableChannelException;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -22,26 +23,27 @@ public class paneInterface extends DisplayController {
 	Label itemTopMenuLabel;	
 	ImageView itemIconPaneImage;
 	Image image;
+	protected Tooltip pane_Tooltip;
 	
 	private Pane tabInterface = new Pane();
 	
 	paneInterface()
 	
 	{
-		activateInterface();
+		pane_activateInterface();
 	}
 	
-	public void setVisibleInterface(boolean bool)
+	protected void pane_setVisibleInterface(boolean bool)
 	{
 		tabInterface.setVisible(bool);
 	}
 	
-	public void activateInterface() {
+	protected void pane_activateInterface() {
 		
 		System.out.println("activateInterface");
-		drawItemScrollArea();
-		drawInventoryMenu();
-		drawItemTopMenu();
+		pane_drawItemScrollArea();
+		pane_drawInventoryMenu();
+		pane_drawItemTopMenu();
 		tabInterface.getChildren().add(geSearch);
 		tabInterface.getChildren().add(inventory);
 		tabInterface.getChildren().add(graphBackground);
@@ -50,7 +52,7 @@ public class paneInterface extends DisplayController {
 		
 	}
 	
-	private void drawItemScrollArea() {
+	private void pane_drawItemScrollArea() {
 		geSearch = new ImageView(new Image("GE_SEARCH_V6.png"));
 
 		tabInterface.setTranslateX(0);
@@ -66,7 +68,7 @@ public class paneInterface extends DisplayController {
 		
 	}
 	
-	private void drawInventoryMenu() {
+	private void pane_drawInventoryMenu() {
 		inventory = new ImageView(new Image("Inventory_2.PNG"));
 		inventory.setX(746);
 		inventory.setY(210);
@@ -75,7 +77,7 @@ public class paneInterface extends DisplayController {
 		
 	}
 
-	private void drawItemTopMenu() {
+	private void pane_drawItemTopMenu() {
 		//Item Menu Border
 		graphBackground = new ImageView(new Image("Inventory_2.PNG"));
 		graphBackground.setX(746);
@@ -86,7 +88,7 @@ public class paneInterface extends DisplayController {
 	
 	}
 	
-	public void setItemTopMenu(Image input) {
+	protected void pane_setItemTopMenu(Image input) {
 		//Item Menu Icon
 		 System.out.println("setItemTopMenu InputStream: " + input);
 		 itemIconPaneImage = new ImageView(input);
@@ -97,9 +99,10 @@ public class paneInterface extends DisplayController {
 		 itemIconPaneImage.setY(-5);
 		 tabInterface.getChildren().add(itemIconPaneImage);
 		 itemIconPaneImage.setOnMousePressed((mouseEvent) -> System.out.println("Teeehee clicked me"));
+		 pane_iconTooltip("Icon!");
 	}
 	
-	protected void setItemTopMenuError() {
+	protected void pane_setItemTopMenuError() {
 
 		//Item Menu Icon
 		 image = new Image("Item_UnAvailable.png");
@@ -112,12 +115,20 @@ public class paneInterface extends DisplayController {
 		 itemIconPaneImage.setY(-5);
 		 //itemIconPaneImage.setCache(true);
 		 tabInterface.getChildren().add(itemIconPaneImage);
+		 pane_iconTooltip("Item unavailable or unable to retrieve item");
 	}
 	
-	protected void setItemTopMenuVisible(boolean b){
+	protected void pane_setItemTopMenuVisible(boolean b){
 		
 		itemIconPaneImage.setVisible(b);
 	}
 
+	protected void pane_iconTooltip (String s)
+	{
+		pane_Tooltip = new Tooltip(s);
+		//pane_Tooltip.setId("tooltip");
+		pane_Tooltip.install(itemIconPaneImage, pane_Tooltip);
+		
+	}
 
 }

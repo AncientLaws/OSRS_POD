@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,35 +18,43 @@ public class Tab extends paneInterface {
 	
 	
 	private String ItemSpriteUrl = "";
+	private String itemToolTip = "Item Tool Tip";
+	private String tabActive;
 	protected ImageView imageView;
 	private Image image;
 	protected InputStream error;
 	public InputStream input;
 	protected Label lTab;
 	static String instanceActiveTab; 
-
-	
-	Tab (String s){
-		 imageView = new ImageView();
-		tabSettings(s);
-
-
-	}
-	
-/**Tab icon settings*/
+	Tooltip tooltip;
+	GET Get =  new GET(); 
+	/**Tab icon settings*/
 	int X;
 	int Y;
 	
 /**End Tab icon Settings*/
 	
-	private String tabActive;
+	Tab (String s){
+		 imageView = new ImageView();
+		tabSettings(s);
+		try {
+			Get.getItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=26382");
+			setIcon();
+		}
+		catch(Exception e)
+		{
+			catchError();
+		}
+
+	}
+	
 	
 	//paneInterface pi  = new paneInterface();
 	    
 	public void tabSettings(String tab) {
 		System.out.println("tabSettings");
 		switch (tab){
-			case "Tab1":{ X = 100; Y = 12; tabActive = tab; setActive(); break; }
+			case "Tab1":{ X = 100; Y = 12; tabActive = tab; break; }
 			case "Tab2":{ X = 189; Y = 12; tabActive = tab; break;}
 			case "Tab3":{ X = 278; Y = 12; tabActive = tab; break;}
 			case "Tab4":{ X = 367; Y = 12; tabActive = tab; break;}
@@ -61,15 +70,15 @@ public class Tab extends paneInterface {
 	}
 	
 	protected void setInterfaceVisible(boolean b){
-					setVisibleInterface(b);
+		pane_setVisibleInterface(b);
 	}
 
-	public void setIcon(String s) {
-			ItemSpriteUrl = s;
+	private void setIcon() {
+			ItemSpriteUrl = Get.getIconLargeSprite();
 			getIcon();
 		}
 
-	private InputStream getIcon() {
+	private void /*InputStream*/ getIcon() {
 		try {
 
 			input = new URL (ItemSpriteUrl).openStream();
@@ -77,10 +86,11 @@ public class Tab extends paneInterface {
          	imageView.setImage(image);
 		}
 		catch(Exception e) {
-			System.out.println("Error in getting Icon for:" + tabActive);
 			catchError();
+			System.out.println("Error in getting Icon for:" + tabActive);
+			
 		}
-		return input;
+		//return input;
 	}
 	
 	public void setActive() {
@@ -94,7 +104,7 @@ public class Tab extends paneInterface {
 
 	
 	private void catchError(){
-		 root.getChildren().remove(lTab);
+		 //root.getChildren().remove(lTab);
 		 image = new Image("Item_UnAvailable.png"); 
 		 imageView.setImage(image);
 		 imageView.setPreserveRatio(true);
@@ -119,6 +129,7 @@ public class Tab extends paneInterface {
 		 imageView.setStyle("-fx-background-color: BLACK");
          imageView.setCache(true);
          imageView.setVisible(true);
+         tab_IconTooltip(Get.getItemName());
 	}
 	
 	private void initImage(){
@@ -139,7 +150,8 @@ public class Tab extends paneInterface {
 	         try {
 	        	 try {
 		        		 iconImageSettings();  //must have called getIcon() for it not to be null
-		        		 setItemTopMenu(image);		 
+		        		 pane_setItemTopMenu(image);
+		        		 pane_iconTooltip(Get.getItemName());
 	        	 	 }
 	        	 catch(Exception e) {
 		        		 System.out.println("Error in setInterfaceLabels()");
@@ -150,6 +162,14 @@ public class Tab extends paneInterface {
 			}
 	}
 	
+	private void tab_IconTooltip (String s)
+	{
+		tooltip = new Tooltip(s);
+		tooltip.setId("tooltip");
+		tooltip.install(imageView, tooltip);
+		
+		
+	}
 
 
 }
