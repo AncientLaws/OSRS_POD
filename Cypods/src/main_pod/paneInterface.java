@@ -26,25 +26,25 @@ public class paneInterface extends DisplayController {
 	Image image;
 	protected Tooltip pane_Tooltip;
 
-	private String name;
-	private String id;
-	private String type;
-	private String typeIcon;
-	private String description;
-	private String members;
-	private String currentTrend;
-	private String currentPrice;
-	private String todayTrend;
-	private String todayPrice;
-	private String day30;
-	private String day30_trend;
-	private String day30_change;
-	private String day90;
-	private String day90_trend;
-	private String day90_change;
-	private String day180;
-	private String day180_trend;
-	private String day180_change;
+	Label name;
+	Label id;
+	Label type;
+	Label typeIcon;
+	Label description;
+	Label members;
+	Label currentTrend;
+	Label currentPrice;
+	Label todayTrend;
+	Label todayPrice;
+	Label day30;
+	Label day30_trend;
+	Label day30_change;
+	Label day90;
+	Label day90_trend;
+	Label day90_change;
+	Label day180;
+	Label day180_trend;
+	Label day180_change;
 	
 
 	private Pane tabInterface = new Pane();
@@ -66,6 +66,7 @@ public class paneInterface extends DisplayController {
 		pane_drawItemScrollArea();
 		pane_drawInventoryMenu();
 		pane_drawItemTopMenu();
+		initLabels();
 		tabInterface.getChildren().add(geSearch);
 		tabInterface.getChildren().add(inventory);
 		tabInterface.getChildren().add(graphBackground);
@@ -154,5 +155,95 @@ public class paneInterface extends DisplayController {
 		
 	}
 	
+	private void initLabels() {
+		Label name  = new Label("-");
+		 name.setTranslateX(900);
+		 name.setTranslateY(10);
+		 name.setStyle("#label");
+		 
+		Label id  = new Label("-");
+		 id.setTranslateX(900);
+		 id.setTranslateY(15);
+		 
+		 
+		Label description  = new Label("-");
+		 description.setTranslateX(900);
+		 description.setTranslateY(20);
+		 
+		Label members = new Label("");
+		 members.setTranslateX(900);
+		 members.setTranslateY(25);
+		 
+		Label currentTrend = new Label("-");
+		 currentTrend.setTranslateX(900);
+		 currentTrend.setTranslateY(30);
+		 
+		Label currentPrice = new Label("-");
+		 currentPrice.setTranslateX(900);
+		 currentPrice.setTranslateY(35);
+		 
+		Label todayTrend = new Label("-");
+		 todayTrend.setTranslateX(900);
+		 todayTrend.setTranslateY(40);
+		 
+		Label todayPrice = new Label("-");
+		 todayPrice.setTranslateX(900);
+		 todayPrice.setTranslateY(45);
+		 
+		Label day30 = new Label("-");
+		 day30.setTranslateX(900);
+		 day30.setTranslateY(50);
+		 
+		Label day30_trend  = new Label("-");
+		 day30_trend.setTranslateX(900);
+		 day30_trend.setTranslateY(55);
+		 
+		Label day30_change  = new Label("-");
+		 day30_change.setTranslateX(900);
+		 day30_change.setTranslateY(60);   
+		 
+		Label day90   = new Label("-");
+		 day90.setTranslateX(900);
+		 day90.setTranslateY(65);
+		 
+		Label day90_trend  = new Label("-");
+		 day90_trend.setTranslateX(900);
+		 day90_trend.setTranslateY(70);
+		 
+		Label day90_change  = new Label("-");
+		 day90_change.setTranslateX(900);
+		 day90_change.setTranslateY(75);
+		 
+		Label day180  = new Label("-");
+		 day180.setTranslateX(900);
+		 day180.setTranslateY(80);
+		 
+		Label day180_trend  = new Label("-");
+		 day180_trend.setTranslateX(900);
+		 day180_trend.setTranslateY(85);
+		 
+		Label day180_change  = new Label("-");
+		 day180_change.setTranslateX(900);
+		 day180_change.setTranslateY(90);
+		 tabInterface.getChildren().addAll(name
+				 ,id
+				 ,description
+				 ,members
+				 ,currentTrend
+				 ,currentPrice
+				 ,todayTrend
+				 ,todayPrice
+				 ,day30
+				 ,day30_trend
+				 ,day30_change
+				 ,day90
+				 ,day90_trend
+				 ,day90_change
+				 ,day180
+				 ,day180_trend
+				 ,day180_change
+);
+		 
+	}
 
 }

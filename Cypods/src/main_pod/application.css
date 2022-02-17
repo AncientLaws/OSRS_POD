@@ -109,6 +109,12 @@
     -fx-background-position: center center;
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
 }
+#label {
+    -fx-text-fill: white
+    -fx-font-weight: bold;
+    -fx-font-size: 12;
+
+}
 .menu-bar {
   -fx-background-color: derive(#FF1d1d,20%); 
   
