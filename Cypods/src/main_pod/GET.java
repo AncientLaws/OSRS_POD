@@ -15,13 +15,17 @@ public class GET extends Connect {
 	
 	/***********Item key values*************/
 	private String name;
-	private int id;
+	private String id;
 	private String icon;
 	private String icon_large;
 	private String type;
 	private String typeIcon;
 	private String description;
 	private String members;
+	private String currentTrend;
+	private String currentPrice;
+	private String todayTrend;
+	private String todayPrice;
 	private String day30;
 	private String day30_trend;
 	private String day30_change;
@@ -32,6 +36,8 @@ public class GET extends Connect {
 	private String day180_trend;
 	private String day180_change;
 	/***********Item key values*************/
+	
+	private String[] itemInfoArr1 = new String [18];
 
 	GET() {
 	}
@@ -64,7 +70,7 @@ public class GET extends Connect {
 	
 	private void parseItemJson() {
 		name 				= obj.getJSONObject("item").getString("name");
-		id   				= obj.getJSONObject("item").getInt("id");
+		id   				= String.valueOf(obj.getJSONObject("item").getInt("id"));
 		icon 				= obj.getJSONObject("item").getString("icon");
 		icon_large  		= obj.getJSONObject("item").getString("icon_large");
 		type  				= obj.getJSONObject("item").getString("type");
@@ -72,19 +78,48 @@ public class GET extends Connect {
 		description 		= obj.getJSONObject("item").getString("description");
 		members 			= obj.getJSONObject("item").getString("members");
 		
-		/*
-		day30 				= obj.getJSONObject("item").getString("");
-		day30_trend 		= obj.getJSONObject("item").getString("");
-		day30_change 		= obj.getJSONObject("item").getString("");
-		day90 				= obj.getJSONObject("item").getString("");
-		day90_trend 		= obj.getJSONObject("item").getString("");
-		day90_change 		= obj.getJSONObject("item").getString("");
-		day180 				= obj.getJSONObject("item").getString("");
-		day180_trend 		= obj.getJSONObject("item").getString("");
-		day180_change 		= obj.getJSONObject("item").getString("");*/
+		currentPrice		= obj.getJSONObject("item").getJSONObject("current").getString("price");
+		currentTrend		= obj.getJSONObject("item").getJSONObject("current").getString("trend");
 
+		todayPrice			= obj.getJSONObject("item").getJSONObject("today").getString("price");
+		todayTrend			= obj.getJSONObject("item").getJSONObject("today").getString("trend");
+		
+		day30_trend 		= obj.getJSONObject("item").getJSONObject("day30").getString("trend");
+		day30_change 		= obj.getJSONObject("item").getJSONObject("day30").getString("change");
+		day90_trend 		= obj.getJSONObject("item").getJSONObject("day90").getString("trend");
+		day90_change 		= obj.getJSONObject("item").getJSONObject("day90").getString("change");
+		day180_trend 		= obj.getJSONObject("item").getJSONObject("day180").getString("trend");
+		day180_change 		= obj.getJSONObject("item").getJSONObject("day180").getString("change");
+		
+		String itemInfoArr2[] = {
+				 name  				//0		
+				,id    				//1	
+				,icon 				//2	
+				,icon_large  		//3	
+				,type  				//4	
+				,typeIcon  			//5	
+				,description 		//6	
+				,members 			//7	
+
+				,currentPrice		//8	
+				,currentTrend		//9	
+
+				,todayPrice			//10	
+				,todayTrend			//11	
+
+				,day30_trend 		//12	
+				,day30_change 		//13	
+				,day90_trend 		//14	
+				,day90_change 		//15
+				,day180_trend 		//16	
+				,day180_change};	//17	
+		
+		itemInfoArr1=itemInfoArr2;
+		
 	}
-
+	public String[] getItemInfo() {
+		return itemInfoArr1;
+	}
 	public String getIconLargeSprite (){
 		return icon_large;
 	}
@@ -93,7 +128,7 @@ public class GET extends Connect {
 		return name;
 	}
 	
-	public int getItemId() {
+	public String getItemId() {
 		return id;
 	}
 	public String getIconSprite() {
@@ -111,7 +146,36 @@ public class GET extends Connect {
 	public String getItemMemberStatus() {
 		return members;
 	}
-
+	public String getCurrentPrice() {
+		return currentPrice;
+	}
+	public String getCurrentTrend() {
+		return currentTrend;
+	}
+	public String getPriceToday() {
+		return todayPrice;
+	}
+	public String getTrendToday() {
+		return todayTrend;
+	}
+	public String getDay30Trend() {
+		return day30_trend;
+	}
+	public String getDay30Change() {
+		return day30_change;
+	}
+	public String getDay90Change() {
+		return day90_change;
+	}
+	public String getDay90Trend() {
+		return day90_trend;
+	}
+	public String getDay180Trend() {
+		return day180_trend;
+	}	
+	public String getDay180Change() {
+		return day180_change ;
+	}	
 		
 	/** Overloaded GETTER Methods to get API Response */
 	private void GETTER(String url) {

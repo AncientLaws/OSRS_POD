@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 public class Tab extends paneInterface {
 	
@@ -28,6 +29,30 @@ public class Tab extends paneInterface {
 	static String instanceActiveTab; 
 	Tooltip tooltip;
 	GET Get =  new GET(); 
+	private String[] itemInfoArr = new String [18];
+	/** name  				//0		
+	,id    				//1	
+	,icon 				//2	
+	,icon_large  		//3	
+	,type  				//4	
+	,typeIcon  			//5	
+	,description 		//6	
+	,members 			//7	
+
+	,currentPrice		//8	
+	,currentTrend		//9	
+
+	,todayPrice			//10	
+	,todayTrend			//11	
+
+	,day30_trend 		//12	
+	,day30_change 		//13	
+	,day90_trend 		//14	
+	,day90_change 		//15
+	,day180_trend 		//16	
+	,day180_change};	//17	
+	*/
+
 	/**Tab icon settings*/
 	int X;
 	int Y;
@@ -97,6 +122,7 @@ public class Tab extends paneInterface {
 		tabNo = tabActive;
 		setInterfaceVisible(true); //testing out control using DC
 		root.setId(tabActive);
+		itemInfoArr = Get.getItemInfo();
 		setInterfaceLabels();
 		System.out.println("setActive: " + tabActive);
 		}
@@ -151,7 +177,7 @@ public class Tab extends paneInterface {
 	        	 try {
 		        		 iconImageSettings();  //must have called getIcon() for it not to be null
 		        		 pane_setItemTopMenu(image);
-		        		 pane_iconTooltip(Get.getItemName());
+		        		 pane_iconTooltip(itemInfoArr[0]);
 	        	 	 }
 	        	 catch(Exception e) {
 		        		 System.out.println("Error in setInterfaceLabels()");
@@ -165,6 +191,7 @@ public class Tab extends paneInterface {
 	private void tab_IconTooltip (String s)
 	{
 		tooltip = new Tooltip(s);
+		tooltip.setShowDelay(Duration.millis(100));
 		tooltip.setId("tooltip");
 		tooltip.install(imageView, tooltip);
 		

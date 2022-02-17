@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 public class paneInterface extends DisplayController {
 
@@ -20,11 +21,32 @@ public class paneInterface extends DisplayController {
 	ImageView geSearch;
 	ImageView inventory;
 	ImageView graphBackground;
-	Label itemTopMenuLabel;	
+	//Label itemTopMenuLabel;	
 	ImageView itemIconPaneImage;
 	Image image;
 	protected Tooltip pane_Tooltip;
+
+	private String name;
+	private String id;
+	private String type;
+	private String typeIcon;
+	private String description;
+	private String members;
+	private String currentTrend;
+	private String currentPrice;
+	private String todayTrend;
+	private String todayPrice;
+	private String day30;
+	private String day30_trend;
+	private String day30_change;
+	private String day90;
+	private String day90_trend;
+	private String day90_change;
+	private String day180;
+	private String day180_trend;
+	private String day180_change;
 	
+
 	private Pane tabInterface = new Pane();
 	
 	paneInterface()
@@ -102,7 +124,7 @@ public class paneInterface extends DisplayController {
 		 pane_iconTooltip("Icon!");
 	}
 	
-	protected void pane_setItemTopMenuError() {
+	private void pane_setItemTopMenuError() {
 
 		//Item Menu Icon
 		 image = new Image("Item_UnAvailable.png");
@@ -126,9 +148,11 @@ public class paneInterface extends DisplayController {
 	protected void pane_iconTooltip (String s)
 	{
 		pane_Tooltip = new Tooltip(s);
+		pane_Tooltip.setShowDelay(Duration.millis(100));
 		//pane_Tooltip.setId("tooltip");
 		pane_Tooltip.install(itemIconPaneImage, pane_Tooltip);
 		
 	}
+	
 
 }
