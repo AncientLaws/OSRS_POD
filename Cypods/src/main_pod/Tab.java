@@ -63,7 +63,7 @@ public class Tab extends paneInterface {
 		 imageView = new ImageView();
 		tabSettings(s);
 		try {
-			Get.getItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=26382");
+			Get.getItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=11828");
 			setIcon();
 		}
 		catch(Exception e)
@@ -103,7 +103,7 @@ public class Tab extends paneInterface {
 			getIcon();
 		}
 
-	private void /*InputStream*/ getIcon() {
+	private void getIcon() {
 		try {
 
 			input = new URL (ItemSpriteUrl).openStream();
@@ -120,10 +120,11 @@ public class Tab extends paneInterface {
 	
 	public void setActive() {
 		tabNo = tabActive;
-		setInterfaceVisible(true); //testing out control using DC
-		root.setId(tabActive);
-		itemInfoArr = Get.getItemInfo();
-		setInterfaceLabels();
+		setInterfaceVisible(true); 				//Setting current Objects paneInterface to be visible
+		root.setId(tabActive);					//changing background to simulate tab change
+		itemInfoArr = Get.getItemInfo();		//Getting chosen Item Json Data
+		setInterfaceLabels();					//Drawing everything
+		imageView.setOpacity(1);            	//returns item to full opacity
 		System.out.println("setActive: " + tabActive);
 		}
 	
@@ -141,7 +142,7 @@ public class Tab extends paneInterface {
 		 imageView.setStyle("-fx-background-color: BLACK");
 		 imageView.setCache(true);
 		 root.getChildren().add(imageView);
-		 //imageView.setOnMousePressed((mouseEvent) -> setActive());  Mouse Event 3
+
 		
 	}
 	
@@ -155,9 +156,21 @@ public class Tab extends paneInterface {
 		 imageView.setStyle("-fx-background-color: BLACK");
          imageView.setCache(true);
          imageView.setVisible(true);
-         tab_IconTooltip(Get.getItemName());
+         tab_IconTooltip(itemInfoArr[0]);
+         imageView.setOnMouseEntered((mouseEvent) -> MakeItemPop());
+         imageView.setOnMouseExited((mouseEvent) -> MakeItemPopBack());
+		 
+
 	}
-	
+	 private void MakeItemPop() {
+		  imageView.setScaleX(1.2);  
+		  imageView.setScaleY(1.2);
+	 }
+	 private void MakeItemPopBack() {
+		  imageView.setScaleX(1);  
+		  imageView.setScaleY(1); 
+	 }
+	  
 	private void initImage(){
 		root.getChildren().add(imageView); //adds all imageViews to the top left corner
 		imageView.setVisible(false);       //hides all the added images, only sets visible once clicked
@@ -178,6 +191,22 @@ public class Tab extends paneInterface {
 		        		 iconImageSettings();  //must have called getIcon() for it not to be null
 		        		 pane_setItemTopMenu(image);
 		        		 pane_iconTooltip(itemInfoArr[0]);
+		        		 setLabels(  
+		        				 	 		 itemInfoArr[0]							//name
+		        				 			,itemInfoArr[1] 						//Item ID
+		        				 			,itemInfoArr[6]							//Description 
+		        				 			,itemInfoArr[7]							//Member
+		        				 			,itemInfoArr[8]							//Current price
+		        				 			,itemInfoArr[9]							//Current trend
+		        				 			,itemInfoArr[10]						//Todays price
+		        				 			,itemInfoArr[11]						//Todays trend
+		        				 			,itemInfoArr[12]						//30 day trend
+		        				 			,itemInfoArr[13]						//30 day change
+		        				 			,itemInfoArr[14]						//90 day trend
+		        				 			,itemInfoArr[15]						//90 day change
+		        				 			,itemInfoArr[16]						//180 day trend
+		        				 			,itemInfoArr[17]						//180 day change
+  		        				 );
 	        	 	 }
 	        	 catch(Exception e) {
 		        		 System.out.println("Error in setInterfaceLabels()");

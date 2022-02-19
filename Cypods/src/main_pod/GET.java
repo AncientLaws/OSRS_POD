@@ -42,7 +42,7 @@ public class GET extends Connect {
 	GET() {
 	}
 	
-	public void getItemJson(String url) {
+	protected void getItemJson(String url) {
 		String s = "";
 		try {
 			HttpURLConnection http = httpStringURL(url); 

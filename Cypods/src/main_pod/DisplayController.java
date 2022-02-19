@@ -25,6 +25,7 @@ public class DisplayController extends Window implements ChangeListener{
 	 Tab tab9 ;
 	 Tab tab10;
 	 String tabNo;
+	 double opacity = .4;
 	 
 	 DisplayController (){
 		
@@ -65,7 +66,7 @@ public class DisplayController extends Window implements ChangeListener{
 		   
 		   System.out.println("Called tab10");		   
 		   tab10 = new Tab("Tab10"); 
-		   
+		   setTabActiveOnStart();
    
 		}
 		catch(Exception e) {
@@ -75,6 +76,10 @@ public class DisplayController extends Window implements ChangeListener{
 	}
 	protected void initListners() {
 		tab1.lTab.setOnMousePressed((mouseEvent) -> tab1.setActive());
+	}
+	protected void setTabActiveOnStart() {
+		tab1.setActive();
+		setInterfaceInvisible(tabNo = "Tab1");
 	}
 	protected void setListners()
 	{
@@ -100,6 +105,8 @@ public class DisplayController extends Window implements ChangeListener{
 	    tab8.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab8"));
 	    tab9.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab9"));
 	   tab10.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab10"));
+	   
+	   
 	    
 		
 		
@@ -118,6 +125,16 @@ public class DisplayController extends Window implements ChangeListener{
 		tab8.setInterfaceVisible(false);
 		tab9.setInterfaceVisible(false);
 		tab10.setInterfaceVisible(false);
+		tab1.imageView.setOpacity(opacity);
+		tab2.imageView.setOpacity(opacity);
+		tab3.imageView.setOpacity(opacity);
+		tab4.imageView.setOpacity(opacity);
+		tab5.imageView.setOpacity(opacity);
+		tab6.imageView.setOpacity(opacity);
+		tab7.imageView.setOpacity(opacity);
+		tab8.imageView.setOpacity(opacity);
+		tab9.imageView.setOpacity(opacity);
+		tab10.imageView.setOpacity(opacity);
 		dc_enableActiveInterface();
 		
 	}

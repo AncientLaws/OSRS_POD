@@ -109,10 +109,14 @@
     -fx-background-position: center center;
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
 }
-#label {
-    -fx-text-fill: white
+@font-face {
+    src: url('/runescape_uf.ttf');
+}
+.label {
+    -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 12;
+    -fx-font-family:'runescape';
 
 }
 .menu-bar {
@@ -128,4 +132,12 @@
     -fx-padding: 0.667em 0.75em 0.667em 0.75em; /* 10px */
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.5) , 10, 0.0 , 0 , 3 );
     -fx-font-size: 0.85em;
+}
+.text-field {
+    -fx-background-color: rgba(201,182,147,.1);
+    -fx-prompt-text-fill: blue;
+    /*-fx-effect: dropshadow( two-pass-box , blue , .5, 10 , 1 , 1); */
+}
+.text-field:empty .text {
+    -fx-effect: null ;
 }

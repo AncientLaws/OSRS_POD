@@ -3,16 +3,24 @@ package main_pod;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.channels.NonWritableChannelException;
 
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 public class paneInterface extends DisplayController {
@@ -32,31 +40,29 @@ public class paneInterface extends DisplayController {
 	Label typeIcon;
 	Label description;
 	Label members;
-	Label currentTrend;
 	Label currentPrice;
-	Label todayTrend;
 	Label todayPrice;
-	Label day30;
-	Label day30_trend;
 	Label day30_change;
-	Label day90;
-	Label day90_trend;
 	Label day90_change;
-	Label day180;
-	Label day180_trend;
 	Label day180_change;
 	
-
+	Label changeToday;
+	Label change30Days;
+	Label change90Days;
+	Label change180Days;
+	
+	Label xyCoordinates;
+	private EventHandler<MouseEvent> mouseMovedHandler ;
+	
+	TextField itemSearchInput;
+	Font f;
 	private Pane tabInterface = new Pane();
 	
-	paneInterface()
-	
-	{
+	paneInterface()	{
 		pane_activateInterface();
 	}
 	
-	protected void pane_setVisibleInterface(boolean bool)
-	{
+	protected void pane_setVisibleInterface(boolean bool){
 		tabInterface.setVisible(bool);
 	}
 	
@@ -67,12 +73,26 @@ public class paneInterface extends DisplayController {
 		pane_drawInventoryMenu();
 		pane_drawItemTopMenu();
 		initLabels();
+		
 		tabInterface.getChildren().add(geSearch);
 		tabInterface.getChildren().add(inventory);
 		tabInterface.getChildren().add(graphBackground);
+		initTextField();
 		group.getChildren().add(tabInterface);
 		tabInterface.setVisible(true);
 		
+	
+	}
+	
+	private void createMonitoredLabel() {
+	   
+      mouseMovedHandler = event -> {String msg =
+	          "(x: "       + event.getX()      + ", y: "       + event.getY()       + ")";
+
+	        xyCoordinates.setText(msg);
+	      };
+		
+	      tabInterface.addEventHandler(MouseEvent.MOUSE_MOVED, mouseMovedHandler);
 	}
 	
 	private void pane_drawItemScrollArea() {
@@ -94,9 +114,9 @@ public class paneInterface extends DisplayController {
 	private void pane_drawInventoryMenu() {
 		inventory = new ImageView(new Image("Inventory_2.PNG"));
 		inventory.setX(746);
-		inventory.setY(210);
+		inventory.setY(110);
 		inventory.setFitWidth(325);
-		inventory.setFitHeight(425);
+		inventory.setFitHeight(525); //425
 		
 	}
 
@@ -106,7 +126,7 @@ public class paneInterface extends DisplayController {
 		graphBackground.setX(746);
 		graphBackground.setY(0);
 		graphBackground.setFitWidth(325);
-		graphBackground.setFitHeight(215);
+		graphBackground.setFitHeight(115); //215
 
 	
 	}
@@ -155,95 +175,177 @@ public class paneInterface extends DisplayController {
 		
 	}
 	
+	private void initTextField() {
+		f = new Font("runescape_uf.ttf", 12);
+		//f.loadFont(, 50);
+		
+		itemSearchInput = new TextField("Click me to start searching");
+		//itemSearchInput.setStyle("-fx-text-fill: orange; -fx-font-size: 20px; -fx-font-weight: bold");
+		itemSearchInput.setOpacity(1);
+		itemSearchInput.setBackground(new Background(new BackgroundFill(Color.rgb(201,182,147),null,null))) ;
+		itemSearchInput.setLayoutX(8);
+		itemSearchInput.setLayoutY(411);
+		itemSearchInput.setPrefWidth(734);
+		itemSearchInput.setFont(f);
+		itemSearchInput.setStyle("-fx-text-fill: blue; -fx-font-size: 13px; -fx-font-weight: bold;-fx-font-family: runescape_uf");
+		itemSearchInput.setAlignment(Pos.CENTER);
+		//itemSearchInput.setPromptText("Begin typing to search");
+		itemSearchInput.setOnMousePressed((mouseEvent) -> itemSearchInput.setText(""));
+		itemSearchInput.setFocusTraversable(false);
+		tabInterface.getChildren().add(itemSearchInput);
+	}
+	
 	private void initLabels() {
-		Label name  = new Label("-");
-		 name.setTranslateX(900);
+		xyCoordinates = new Label("Coordinates");
+		xyCoordinates.setTranslateX(5);
+		xyCoordinates.setTranslateY(375);
+		xyCoordinates.setStyle("-fx-text-fill: orange; -fx-font-size: 20px; -fx-font-weight: bold");
+		
+		
+		 name  = new Label("-");
+		 name.setTranslateX(763);
 		 name.setTranslateY(10);
-		 name.setStyle("#label");
+		 name.setStyle("-fx-text-fill: orange; -fx-font-size: 20px; -fx-font-weight: bold");
 		 
-		Label id  = new Label("-");
-		 id.setTranslateX(900);
-		 id.setTranslateY(15);
+		 currentPrice = new Label("-");
+		 currentPrice.setTranslateX(985);
+		 currentPrice.setTranslateY(85);
+		 currentPrice.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold");
+		 
+		 id  = new Label("");
+		 id.setTranslateX(825);
+		 id.setTranslateY(190);
 		 
 		 
-		Label description  = new Label("-");
-		 description.setTranslateX(900);
-		 description.setTranslateY(20);
+		 description  = new Label("-");
+		 description.setTranslateX(763);
+		 description.setTranslateY(50);
+		 description.setWrapText(true);
+		 description.setStyle("-fx-text-fill: white; -fx-font-size: 15px;");
+		 description.setMaxWidth(205);
+		
 		 
-		Label members = new Label("");
-		 members.setTranslateX(900);
-		 members.setTranslateY(25);
+		 members = new Label("");
+		 members.setTranslateX(990);
+		 members.setTranslateY(135);
 		 
-		Label currentTrend = new Label("-");
-		 currentTrend.setTranslateX(900);
-		 currentTrend.setTranslateY(30);
+		 todayPrice = new Label("-");
+		 todayPrice.setTranslateX(850);
+		 todayPrice.setTranslateY(135);
 		 
-		Label currentPrice = new Label("-");
-		 currentPrice.setTranslateX(900);
-		 currentPrice.setTranslateY(35);
+		 changeToday = new Label("Change today:");
+		 changeToday.setTranslateX(763);
+		 changeToday.setTranslateY(135);
 		 
-		Label todayTrend = new Label("-");
-		 todayTrend.setTranslateX(900);
-		 todayTrend.setTranslateY(40);
+		 day30_change  = new Label("-");
+		 day30_change.setTranslateX(820);
+		 day30_change.setTranslateY(165);   
 		 
-		Label todayPrice = new Label("-");
-		 todayPrice.setTranslateX(900);
-		 todayPrice.setTranslateY(45);
+		 change30Days = new Label("30 days: ");
+		 change30Days.setTranslateX(763);
+		 change30Days.setTranslateY(165);   
+
+		 day90_change  = new Label("-");
+		 day90_change.setTranslateX(820);
+		 day90_change.setTranslateY(195);
+
+		 change90Days = new Label("90 days: ");
+		 change90Days.setTranslateX(763);
+		 change90Days.setTranslateY(195);
 		 
-		Label day30 = new Label("-");
-		 day30.setTranslateX(900);
-		 day30.setTranslateY(50);
+		 day180_change  = new Label("-");
+		 day180_change.setTranslateX(820);
+		 day180_change.setTranslateY(225);
 		 
-		Label day30_trend  = new Label("-");
-		 day30_trend.setTranslateX(900);
-		 day30_trend.setTranslateY(55);
+		 change180Days = new Label("180 days: ");
+		 change180Days.setTranslateX(763);
+		 change180Days.setTranslateY(225);
 		 
-		Label day30_change  = new Label("-");
-		 day30_change.setTranslateX(900);
-		 day30_change.setTranslateY(60);   
-		 
-		Label day90   = new Label("-");
-		 day90.setTranslateX(900);
-		 day90.setTranslateY(65);
-		 
-		Label day90_trend  = new Label("-");
-		 day90_trend.setTranslateX(900);
-		 day90_trend.setTranslateY(70);
-		 
-		Label day90_change  = new Label("-");
-		 day90_change.setTranslateX(900);
-		 day90_change.setTranslateY(75);
-		 
-		Label day180  = new Label("-");
-		 day180.setTranslateX(900);
-		 day180.setTranslateY(80);
-		 
-		Label day180_trend  = new Label("-");
-		 day180_trend.setTranslateX(900);
-		 day180_trend.setTranslateY(85);
-		 
-		Label day180_change  = new Label("-");
-		 day180_change.setTranslateX(900);
-		 day180_change.setTranslateY(90);
 		 tabInterface.getChildren().addAll(name
 				 ,id
 				 ,description
 				 ,members
-				 ,currentTrend
 				 ,currentPrice
-				 ,todayTrend
 				 ,todayPrice
-				 ,day30
-				 ,day30_trend
 				 ,day30_change
-				 ,day90
-				 ,day90_trend
 				 ,day90_change
-				 ,day180
-				 ,day180_trend
 				 ,day180_change
-);
+				 
+				 ,changeToday
+				 ,change30Days
+				 ,change90Days
+				 ,change180Days
+				 
+				 ,xyCoordinates	);
 		 
+	}
+	
+	protected void setLabels(
+			 String name1
+			,String id1
+			,String description1
+			,String members1
+			,String currentPrice1
+			,String currentTrend1
+			,String todayPrice1
+			,String todayTrend1
+			,String day30_trend1
+			,String day30_change1
+			,String day90_trend1
+			,String day90_change1
+			,String day180_trend1
+			,String day180_change1) 
+	{
+		createMonitoredLabel();
+		name.setText(name1);
+		//id.setText(id1);
+		description.setText(description1);
+		currentPrice.setText(currentPrice1);
+		
+		if(members1.equals("true")) 
+			{members.setText("Members");
+		}
+		else { 
+			members.setText("Free-to-Play");
+		}
+		
+		if (todayTrend1.equals("negative")) {
+			
+			todayPrice.setText(todayPrice1);
+			todayPrice.setStyle("-fx-text-fill: red;");
+		}
+		else {
+			todayPrice.setText(todayPrice1);
+			todayPrice.setStyle("-fx-text-fill: green;");
+		};
+		
+		if (day30_trend1.equals("negative")) {
+			day30_change.setText(day30_change1);
+			day30_change.setStyle("-fx-text-fill: red;");
+		}
+		else {
+			day30_change.setText(day30_change1);
+			day30_change.setStyle("-fx-text-fill: green;");
+		};
+		
+		if (day90_trend1.equals("negative")) {
+			day90_change.setText(day90_change1);
+			day90_change.setStyle("-fx-text-fill: red;");
+		}
+		else {
+			day90_change.setText(day90_change1);
+			day90_change.setStyle("-fx-text-fill: green;");
+		};
+
+		if (day180_trend1.equals("negative")) {
+			day180_change.setText(day180_change1);
+			day180_change.setStyle("-fx-text-fill: red;");
+		}
+		else {
+			day180_change.setText(day180_change1);
+			day180_change.setStyle("-fx-text-fill: green;");
+		};
+
 	}
 
 }
