@@ -11,6 +11,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -63,8 +64,9 @@ public class Tab extends paneInterface {
 		 imageView = new ImageView();
 		tabSettings(s);
 		try {
-			Get.getItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=11828");
-			setIcon();
+			
+			itemSearchListener();
+			
 		}
 		catch(Exception e)
 		{
@@ -99,7 +101,7 @@ public class Tab extends paneInterface {
 	}
 
 	private void setIcon() {
-			ItemSpriteUrl = Get.getIconLargeSprite();
+			ItemSpriteUrl = itemInfoArr[3];
 			getIcon();
 		}
 
@@ -122,13 +124,25 @@ public class Tab extends paneInterface {
 		tabNo = tabActive;
 		setInterfaceVisible(true); 				//Setting current Objects paneInterface to be visible
 		root.setId(tabActive);					//changing background to simulate tab change
-		itemInfoArr = Get.getItemInfo();		//Getting chosen Item Json Data
-		setInterfaceLabels();					//Drawing everything
 		imageView.setOpacity(1);            	//returns item to full opacity
 		System.out.println("setActive: " + tabActive);
 		}
 	
-
+	private void itemSearchListener() {
+		itemSearchInput.setOnKeyPressed(KeyEvent ->
+		{
+			if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
+			pane_ItemSearchInputText = itemSearchInput.getText();
+			Get.getItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + pane_ItemSearchInputText);
+			itemInfoArr = Get.getItemInfo();		//Getting chosen Item Json Data
+			setIcon();
+			setInterfaceLabels();					//Drawing everything
+			
+			
+			
+			}
+		});
+	}
 	
 	private void catchError(){
 		 //root.getChildren().remove(lTab);
@@ -137,11 +151,11 @@ public class Tab extends paneInterface {
 		 imageView.setPreserveRatio(true);
 		 imageView.setFitHeight(75);
 		 imageView.setFitWidth(75);
-		 imageView.setX(X);
-		 imageView.setY(Y);
+		 imageView.setLayoutX(X);
+		 imageView.setLayoutY(Y);
 		 imageView.setStyle("-fx-background-color: BLACK");
 		 imageView.setCache(true);
-		 root.getChildren().add(imageView);
+		 //root.getChildren().add(imageView);
 
 		
 	}
@@ -210,6 +224,7 @@ public class Tab extends paneInterface {
 	        	 	 }
 	        	 catch(Exception e) {
 		        		 System.out.println("Error in setInterfaceLabels()");
+		        		 pane_setItemTopMenuError();
 		        		 catchError();
 	        	 	 }
 			} catch (Exception e) {

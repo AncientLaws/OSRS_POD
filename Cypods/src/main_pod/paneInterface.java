@@ -15,6 +15,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -53,8 +55,10 @@ public class paneInterface extends DisplayController {
 	
 	Label xyCoordinates;
 	private EventHandler<MouseEvent> mouseMovedHandler ;
+	private EventHandler<KeyEvent> textInputListener ;
 	
 	TextField itemSearchInput;
+	String pane_ItemSearchInputText;
 	Font f;
 	private Pane tabInterface = new Pane();
 	
@@ -133,20 +137,30 @@ public class paneInterface extends DisplayController {
 	
 	protected void pane_setItemTopMenu(Image input) {
 		//Item Menu Icon
-		 System.out.println("setItemTopMenu InputStream: " + input);
+		System.out.println("START - pane_setItemTopMenu(Image input)");
+		tabInterface.getChildren().remove(itemIconPaneImage);
+		 try {System.out.println("setItemTopMenu InputStream: " + input);
 		 itemIconPaneImage = new ImageView(input);
 		 itemIconPaneImage.setPreserveRatio(true);
 		 itemIconPaneImage.setFitHeight(100);
 		 itemIconPaneImage.setFitWidth(100);
-		 itemIconPaneImage.setX(960);
-		 itemIconPaneImage.setY(-5);
+		 itemIconPaneImage.setLayoutX(960);
+		 itemIconPaneImage.setLayoutY(-5);
 		 tabInterface.getChildren().add(itemIconPaneImage);
 		 itemIconPaneImage.setOnMousePressed((mouseEvent) -> System.out.println("Teeehee clicked me"));
 		 pane_iconTooltip("Icon!");
+		 System.out.println("END - pane_setItemTopMenu(Image input)");
+		 }
+		 catch(Exception e) {
+			 System.out.println("ERROR - pane_setItemTopMenu(Image input)");
+			 pane_setItemTopMenuError();
+		 }
 	}
 	
-	private void pane_setItemTopMenuError() {
-
+	protected void pane_setItemTopMenuError() {
+		
+		 System.out.println("pane_setItemTopMenuError()");
+		tabInterface.getChildren().remove(itemIconPaneImage);
 		//Item Menu Icon
 		 image = new Image("Item_UnAvailable.png");
 		 itemIconPaneImage = new ImageView(image);
@@ -154,9 +168,9 @@ public class paneInterface extends DisplayController {
 		 itemIconPaneImage.setFitHeight(75);
 		 itemIconPaneImage.setFitWidth(75);
 		 itemIconPaneImage.setStyle("-fx-background-color: BLACK");
-		 itemIconPaneImage.setX(960);
-		 itemIconPaneImage.setY(-5);
-		 //itemIconPaneImage.setCache(true);
+		 itemIconPaneImage.setLayoutX(960);
+		 itemIconPaneImage.setLayoutY(5);
+		 itemIconPaneImage.setCache(true);
 		 tabInterface.getChildren().add(itemIconPaneImage);
 		 pane_iconTooltip("Item unavailable or unable to retrieve item");
 	}
@@ -193,8 +207,17 @@ public class paneInterface extends DisplayController {
 		itemSearchInput.setOnMousePressed((mouseEvent) -> itemSearchInput.setText(""));
 		itemSearchInput.setFocusTraversable(false);
 		tabInterface.getChildren().add(itemSearchInput);
+		
+			
 	}
 	
+	/*
+	 * private void createTextFieldListener() { textInputListener = event ->{
+	 * if(event.getCode().equals(KeyCode.ENTER)) { pane_ItemSearchInputText =
+	 * itemSearchInput.getText(); } };
+	 * tabInterface.addEventHandler(KeyEvent.KEY_PRESSED, textInputListener); }
+	 */
+
 	private void initLabels() {
 		xyCoordinates = new Label("Coordinates");
 		xyCoordinates.setTranslateX(5);
@@ -208,7 +231,7 @@ public class paneInterface extends DisplayController {
 		 name.setStyle("-fx-text-fill: orange; -fx-font-size: 20px; -fx-font-weight: bold");
 		 
 		 currentPrice = new Label("-");
-		 currentPrice.setTranslateX(985);
+		 currentPrice.setTranslateX(980);
 		 currentPrice.setTranslateY(85);
 		 currentPrice.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold");
 		 
