@@ -130,17 +130,16 @@ public class Tab extends paneInterface {
 	
 	private void itemSearchListener() {
 		itemSearchInput.setOnKeyPressed(KeyEvent ->
-		{
-			if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
-			pane_ItemSearchInputText = itemSearchInput.getText();
-			Get.getItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + pane_ItemSearchInputText);
-			itemInfoArr = Get.getItemInfo();		//Getting chosen Item Json Data
-			setIcon();
-			setInterfaceLabels();					//Drawing everything
-			
-			
-			
+			{
+				if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
+				pane_ItemSearchInputText = itemSearchInput.getText();
+				//Get.getItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + pane_ItemSearchInputText);
+				Get.getItemJsonList("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/items.json?category=1&alpha=" + pane_ItemSearchInputText);
+				//itemInfoArr = Get.getItemInfo();		//Getting chosen Item Json Data
+				//setIcon();
+				//setInterfaceLabels();					//Drawing everything
 			}
+
 		});
 	}
 	
@@ -155,6 +154,7 @@ public class Tab extends paneInterface {
 		 imageView.setLayoutY(Y);
 		 imageView.setStyle("-fx-background-color: BLACK");
 		 imageView.setCache(true);
+		 tab_IconTooltip("Item unavailable or unable to retrieve item");
 		 //root.getChildren().add(imageView);
 
 		
@@ -221,6 +221,7 @@ public class Tab extends paneInterface {
 		        				 			,itemInfoArr[16]						//180 day trend
 		        				 			,itemInfoArr[17]						//180 day change
   		        				 );
+		        		 itemSearchInput.positionCaret(itemSearchInput.getText().length());  //
 	        	 	 }
 	        	 catch(Exception e) {
 		        		 System.out.println("Error in setInterfaceLabels()");

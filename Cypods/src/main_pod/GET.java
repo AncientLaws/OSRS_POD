@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Iterator;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class GET extends Connect {
@@ -12,6 +14,7 @@ public class GET extends Connect {
 	private Object grab;
 	private int[] grabno;
 	JSONObject obj;
+	JSONObject searchJSONObj;
 	
 	/***********Item key values*************/
 	private String name;
@@ -38,6 +41,9 @@ public class GET extends Connect {
 	/***********Item key values*************/
 	
 	private String[] itemInfoArr1 = new String [18];
+	private String[] []itemListArray = new String [6][25];
+	//private Object[] itemListNode = new String [6];
+	//JSONObject arrayParserJSONObject;
 
 	GET() {
 	}
@@ -117,137 +123,72 @@ public class GET extends Connect {
 		itemInfoArr1=itemInfoArr2;
 		
 	}
-	public String[] getItemInfo() {
+	protected String[] getItemInfo() {
 		return itemInfoArr1;
 	}
-	public String getIconLargeSprite (){
-		return icon_large;
-	}
 	
-	public String getItemName()	{
-		return name;
-	}
-	
-	public String getItemId() {
-		return id;
-	}
-	public String getIconSprite() {
-		return icon;
-	}
-	public String getItemType()	{
-		return type;
-	}
-	public String getTypeIcon() {
-		return typeIcon;
-	}
-	public String getItemDescription() {
-		return description;
-	}
-	public String getItemMemberStatus() {
-		return members;
-	}
-	public String getCurrentPrice() {
-		return currentPrice;
-	}
-	public String getCurrentTrend() {
-		return currentTrend;
-	}
-	public String getPriceToday() {
-		return todayPrice;
-	}
-	public String getTrendToday() {
-		return todayTrend;
-	}
-	public String getDay30Trend() {
-		return day30_trend;
-	}
-	public String getDay30Change() {
-		return day30_change;
-	}
-	public String getDay90Change() {
-		return day90_change;
-	}
-	public String getDay90Trend() {
-		return day90_trend;
-	}
-	public String getDay180Trend() {
-		return day180_trend;
-	}	
-	public String getDay180Change() {
-		return day180_change ;
-	}	
+	protected String[][] returnItemListArray () {
+		return itemListArray;
 		
-	/** Overloaded GETTER Methods to get API Response */
-	private void GETTER(String url) {
-		try {
-			HttpURLConnection http = httpStringURL(url); // Setting http variable to equal predefined values returned by
-															// httpStringURL method
-			if (HttpURLConnection.HTTP_OK == responseCode) { // Success: Status = 200
-				BufferedReader in = new BufferedReader(new InputStreamReader(http.getInputStream()));
-				StringBuffer response = new StringBuffer();
-				String READ_INPUT_LINE_FROM_SITE;
-				// Reading input from BufferedReader into StringBuffer
-				while ((READ_INPUT_LINE_FROM_SITE = in.readLine()) != null) {
-					response.append(READ_INPUT_LINE_FROM_SITE);
-				}
-				in.close();
-				System.out.println(response);
-
-			}
-		}
-
-		catch (Exception e) {
-			System.out.println(" " + e.getMessage());
-		}
-
 	}
 
-
-
-	private void GETTER(String url, int[] i) {
+	
+	protected void getItemJsonList(String url) {
+		String s = "";
 		try {
-			HttpURLConnection http = httpStringURL(url); // Setting http variable to equal predefined values returned by
-															// httpStringURL method
+			HttpURLConnection http = httpStringURL(url); 
 			if (HttpURLConnection.HTTP_OK == responseCode) { // Success: Status = 200
 				BufferedReader in = new BufferedReader(new InputStreamReader(http.getInputStream()));
 				StringBuffer response = new StringBuffer();
 				String READ_INPUT_LINE_FROM_SITE;
-				// Reading input from BufferedReader into StringBuffer
 				while ((READ_INPUT_LINE_FROM_SITE = in.readLine()) != null) {
-					response.append(READ_INPUT_LINE_FROM_SITE);
+						response.append(READ_INPUT_LINE_FROM_SITE);
 				}
 				in.close();
-				// Assign output to JSONObject
-
 				String jsonString = response.toString();
-				JSONObject obj = new JSONObject(jsonString);
-				Object JSON_KEYS = null;
-
-				for (int k = 0; k < i.length; k++) {
-					int KEY_INDEX;
-					String KEY_STRING;
-					String KEY_STRING_VALUE;
-					if (i[k] < obj.length()) {
-						KEY_INDEX = i[k];
-						JSON_KEYS = obj.keySet();
-						String JSON_KEYS_STRING = JSON_KEYS.toString();
-						JSON_KEYS_STRING = JSON_KEYS_STRING.substring(1, JSON_KEYS_STRING.length() - 1);
-						// System.out.println(JSON_KEYS_STRING);
-						String JKS_Arr[];
-						JKS_Arr = JSON_KEYS_STRING.split(",");
-						KEY_STRING = JKS_Arr[KEY_INDEX].trim();
-						KEY_STRING_VALUE = obj.get(KEY_STRING).toString();
-
-						System.out.println(KEY_STRING_VALUE);
-
-					} else {
-						System.out.println("Index out of bounds");
-					}
-				}
+				searchJSONObj = new JSONObject(jsonString);
+				parseItemJsonList();
 			}
-		} catch (Exception e) {
-			System.out.println(" " + e.getMessage());
 		}
+		catch (Exception e) {
+			System.out.println("Error in Method: getItemJsonList() "
+		+ " " + e.getMessage());
+		}
+		
 	}
+	
+	private void parseItemJsonList() {
 
+		try {
+		
+		JSONArray jsonArray =  searchJSONObj.getJSONArray("items");
+		
+		for(int i = 0, size = jsonArray.length(); i < size; i++) {
+			JSONObject arrayParserJSONObject =  jsonArray.getJSONObject(i);
+			
+			String[] itemListNode = new String [6];
+			itemListNode [0] = arrayParserJSONObject.getString("icon");
+			itemListNode [1] = String.valueOf(arrayParserJSONObject.getInt("id"));
+			itemListNode [2] = arrayParserJSONObject.getString("name");
+			itemListNode [3] = arrayParserJSONObject.getJSONObject("current").getString("price");
+			itemListNode [4] = arrayParserJSONObject.getJSONObject("today").getString("trend");
+			itemListNode [5] = String.valueOf(arrayParserJSONObject.getJSONObject("today").get("price")); //if 0 will become an integer
+			
+			itemListArray[i] = itemListNode;
+
+			//System.out.println("\nIcon: "+itemListNode [0] +"\nID: "+ itemListNode [1]+"\nName: "+itemListNode [2]+"\n Price Today: "+itemListNode [3]+"\n Trend Today "+itemListNode [4]
+			//		+"\nPrice Change Today: "+itemListNode [5]);
+			
+			//System.out.println(itemListArray[i][1]);
+
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error parsing ItemJsonList: " + e.getMessage());
+		}
+		
+	}
 }
+
+

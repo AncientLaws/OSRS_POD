@@ -133,10 +133,10 @@
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.5) , 10, 0.0 , 0 , 3 );
     -fx-font-size: 0.85em;
 }
-.text-field {
+ .text-field {
     -fx-background-color: rgba(201,182,147,.1);
-    -fx-prompt-text-fill: blue;
-    /*-fx-effect: dropshadow( two-pass-box , blue , .5, 10 , 1 , 1); */
+    -fx-prompt-text-fill: black;
+   /*  -fx-effect: dropshadow( two-pass-box , blue , .5, 10 , 1 , 1); */
 }
 .text-field:empty .text {
     -fx-effect: null ;

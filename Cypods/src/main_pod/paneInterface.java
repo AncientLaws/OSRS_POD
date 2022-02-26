@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.channels.NonWritableChannelException;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -27,6 +28,7 @@ import javafx.util.Duration;
 
 public class paneInterface extends DisplayController {
 
+/**************************Variable Declaration**************************/
 	ImageView imageView ;
 	ImageView geSearch;
 	ImageView inventory;
@@ -61,6 +63,7 @@ public class paneInterface extends DisplayController {
 	String pane_ItemSearchInputText;
 	Font f;
 	private Pane tabInterface = new Pane();
+/**************************Variable Declaration**************************/	
 	
 	paneInterface()	{
 		pane_activateInterface();
@@ -71,21 +74,17 @@ public class paneInterface extends DisplayController {
 	}
 	
 	protected void pane_activateInterface() {
-		
 		System.out.println("activateInterface");
 		pane_drawItemScrollArea();
 		pane_drawInventoryMenu();
 		pane_drawItemTopMenu();
 		initLabels();
-		
 		tabInterface.getChildren().add(geSearch);
 		tabInterface.getChildren().add(inventory);
 		tabInterface.getChildren().add(graphBackground);
 		initTextField();
 		group.getChildren().add(tabInterface);
 		tabInterface.setVisible(true);
-		
-	
 	}
 	
 	private void createMonitoredLabel() {
@@ -101,18 +100,13 @@ public class paneInterface extends DisplayController {
 	
 	private void pane_drawItemScrollArea() {
 		geSearch = new ImageView(new Image("GE_SEARCH_V6.png"));
-
 		tabInterface.setTranslateX(0);
 		tabInterface.setTranslateY(91);
-		
 		geSearch.setX(0);
 		geSearch.setY(405);
 		geSearch.setFitWidth(750);
 		geSearch.setFitHeight(225);
 		geSearch.setRotate(180);
-		
-		
-		
 	}
 	
 	private void pane_drawInventoryMenu() {
@@ -121,7 +115,6 @@ public class paneInterface extends DisplayController {
 		inventory.setY(110);
 		inventory.setFitWidth(325);
 		inventory.setFitHeight(525); //425
-		
 	}
 
 	private void pane_drawItemTopMenu() {
@@ -131,8 +124,6 @@ public class paneInterface extends DisplayController {
 		graphBackground.setY(0);
 		graphBackground.setFitWidth(325);
 		graphBackground.setFitHeight(115); //215
-
-	
 	}
 	
 	protected void pane_setItemTopMenu(Image input) {
@@ -184,39 +175,34 @@ public class paneInterface extends DisplayController {
 	{
 		pane_Tooltip = new Tooltip(s);
 		pane_Tooltip.setShowDelay(Duration.millis(100));
-		//pane_Tooltip.setId("tooltip");
 		pane_Tooltip.install(itemIconPaneImage, pane_Tooltip);
 		
 	}
-	
+/**
+ * Initializes input text field and adds mouse listener that will remove the initial prompt text	
+ */
 	private void initTextField() {
 		f = new Font("runescape_uf.ttf", 12);
-		//f.loadFont(, 50);
-		
-		itemSearchInput = new TextField("Click me to start searching");
-		//itemSearchInput.setStyle("-fx-text-fill: orange; -fx-font-size: 20px; -fx-font-weight: bold");
+		itemSearchInput = new TextField("What would you like to buy?");
+		itemSearchInput.end();
 		itemSearchInput.setOpacity(1);
 		itemSearchInput.setBackground(new Background(new BackgroundFill(Color.rgb(201,182,147),null,null))) ;
 		itemSearchInput.setLayoutX(8);
 		itemSearchInput.setLayoutY(411);
 		itemSearchInput.setPrefWidth(734);
 		itemSearchInput.setFont(f);
-		itemSearchInput.setStyle("-fx-text-fill: blue; -fx-font-size: 13px; -fx-font-weight: bold;-fx-font-family: runescape_uf");
 		itemSearchInput.setAlignment(Pos.CENTER);
-		//itemSearchInput.setPromptText("Begin typing to search");
-		itemSearchInput.setOnMousePressed((mouseEvent) -> itemSearchInput.setText(""));
+		itemSearchInput.setPromptText("What would you like to buy?");
+		System.out.println("Caret Position: "+ itemSearchInput.getCaretPosition());
+		itemSearchInput.setStyle("-fx-text-fill: black; -fx-font-size: 13px; -fx-font-weight: bold;-fx-font-family: runescape_uf");
+		itemSearchInput.setOnMousePressed((mouseEvent) -> {
+				itemSearchInput.setText("");
+			});
 		itemSearchInput.setFocusTraversable(false);
 		tabInterface.getChildren().add(itemSearchInput);
 		
 			
 	}
-	
-	/*
-	 * private void createTextFieldListener() { textInputListener = event ->{
-	 * if(event.getCode().equals(KeyCode.ENTER)) { pane_ItemSearchInputText =
-	 * itemSearchInput.getText(); } };
-	 * tabInterface.addEventHandler(KeyEvent.KEY_PRESSED, textInputListener); }
-	 */
 
 	private void initLabels() {
 		xyCoordinates = new Label("Coordinates");
@@ -317,11 +303,10 @@ public class paneInterface extends DisplayController {
 			,String day90_trend1
 			,String day90_change1
 			,String day180_trend1
-			,String day180_change1) 
-	{
+			,String day180_change1){
+		
 		createMonitoredLabel();
 		name.setText(name1);
-		//id.setText(id1);
 		description.setText(description1);
 		currentPrice.setText(currentPrice1);
 		
@@ -333,7 +318,6 @@ public class paneInterface extends DisplayController {
 		}
 		
 		if (todayTrend1.equals("negative")) {
-			
 			todayPrice.setText(todayPrice1);
 			todayPrice.setStyle("-fx-text-fill: red;");
 		}
