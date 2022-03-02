@@ -55,7 +55,7 @@ public class Window extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setAlwaysOnTop(false);
 			
-			primaryStage.setResizable(true);
+			primaryStage.setResizable(false);
 			primaryStage.show();
 	
 		} catch (Exception e) {

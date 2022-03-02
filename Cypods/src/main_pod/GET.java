@@ -182,6 +182,7 @@ public class GET extends Connect {
 			//System.out.println(itemListArray[i][1]);
 
 			}
+		System.out.println(itemListArray[0][0] +"" +itemListArray[0][1]+"" +itemListArray[0][2]);
 		}
 		catch(Exception e)
 		{

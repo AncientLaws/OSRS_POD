@@ -16,7 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
-public class Tab extends paneInterface {
+public class TabController extends paneInterface {
 	
 	
 	private String ItemSpriteUrl = "";
@@ -60,7 +60,7 @@ public class Tab extends paneInterface {
 	
 /**End Tab icon Settings*/
 	
-	Tab (String s){
+	TabController (String s){
 		 imageView = new ImageView();
 		tabSettings(s);
 		try {
@@ -135,6 +135,7 @@ public class Tab extends paneInterface {
 				pane_ItemSearchInputText = itemSearchInput.getText();
 				//Get.getItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + pane_ItemSearchInputText);
 				Get.getItemJsonList("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/items.json?category=1&alpha=" + pane_ItemSearchInputText);
+				
 				//itemInfoArr = Get.getItemInfo();		//Getting chosen Item Json Data
 				//setIcon();
 				//setInterfaceLabels();					//Drawing everything

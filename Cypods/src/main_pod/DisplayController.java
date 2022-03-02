@@ -14,16 +14,16 @@ import javafx.scene.image.ImageView;
 public class DisplayController extends Window implements ChangeListener{
 	
 	 
-	 Tab tab1  ;
-	 Tab tab2 ;
-	 Tab tab3 ;
-	 Tab tab4 ;
-	 Tab tab5 ;
-	 Tab tab6 ;
-	 Tab tab7 ;
-	 Tab tab8 ;
-	 Tab tab9 ;
-	 Tab tab10;
+	TabController tab1  ;
+	TabController tab2 ;
+	TabController tab3 ;
+	TabController tab4 ;
+	TabController tab5 ;
+	TabController tab6 ;
+	TabController tab7 ;
+	TabController tab8 ;
+	TabController tab9 ;
+	TabController tab10;
 	 String tabNo;
 	 double opacity = .4;
 	 
@@ -36,36 +36,36 @@ public class DisplayController extends Window implements ChangeListener{
 			
 
 		   System.out.println("Called tab1");
-		   tab1 = new Tab("Tab1"); 
+		   tab1 = new TabController("Tab1"); 
 		    
 		   System.out.println("Called tab2");
-		   tab2 = new Tab("Tab2"); 
+		   tab2 = new TabController("Tab2"); 
 
 		    System.out.println("Called tab2");
 	
 		   System.out.println("Called tab3");
-		   tab3 = new Tab("Tab3"); 
+		   tab3 = new TabController("Tab3"); 
 		  
 		   System.out.println("Called tab4");		   
-		   tab4 = new Tab("Tab4"); 
+		   tab4 = new TabController("Tab4"); 
 		   
 		   System.out.println("Called tab5");
-		   tab5 = new Tab("Tab5"); 
+		   tab5 = new TabController("Tab5"); 
 		   
 		   System.out.println("Called tab6");		   
-		   tab6 = new Tab("Tab6"); 
+		   tab6 = new TabController("Tab6"); 
 		   
 		   System.out.println("Called tab7");		   
-		   tab7 = new Tab("Tab7"); 
+		   tab7 = new TabController("Tab7"); 
 		  
 		   System.out.println("Called tab8");		   
-		   tab8 = new Tab("Tab8"); 
+		   tab8 = new TabController("Tab8"); 
 		  
 		   System.out.println("Called tab9");		   
-		   tab9 = new Tab("Tab9"); 
+		   tab9 = new TabController("Tab9"); 
 		   
 		   System.out.println("Called tab10");		   
-		   tab10 = new Tab("Tab10"); 
+		   tab10 = new TabController("Tab10"); 
 		   setTabActiveOnStart();
    
 		}

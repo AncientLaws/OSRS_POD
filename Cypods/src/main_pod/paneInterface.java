@@ -33,10 +33,9 @@ public class paneInterface extends DisplayController {
 	ImageView geSearch;
 	ImageView inventory;
 	ImageView graphBackground;
-	//Label itemTopMenuLabel;	
 	ImageView itemIconPaneImage;
 	Image image;
-	protected Tooltip pane_Tooltip;
+
 
 	Label name;
 	Label id;
@@ -56,16 +55,30 @@ public class paneInterface extends DisplayController {
 	Label change180Days;
 	
 	Label xyCoordinates;
+	
+	Label geSearchResult1;
+	Label geSearchResult2;
+	Label geSearchResult3;
+	Label geSearchResult4;
+	Label geSearchResult5;
+	Label geSearchResult6;
+	Label geSearchResult7;
+	Label geSearchResult8;
+	Label geSearchResult9;
+	
 	private EventHandler<MouseEvent> mouseMovedHandler ;
 	private EventHandler<KeyEvent> textInputListener ;
+	
+	protected Pane tabInterface = new Pane();
+	protected Tooltip pane_Tooltip;
 	
 	TextField itemSearchInput;
 	String pane_ItemSearchInputText;
 	Font f;
-	private Pane tabInterface = new Pane();
+	
 /**************************Variable Declaration**************************/	
 	
-	paneInterface()	{
+	public paneInterface()	{
 		pane_activateInterface();
 	}
 	
@@ -75,6 +88,7 @@ public class paneInterface extends DisplayController {
 	
 	protected void pane_activateInterface() {
 		System.out.println("activateInterface");
+		
 		pane_drawItemScrollArea();
 		pane_drawInventoryMenu();
 		pane_drawItemTopMenu();
@@ -83,6 +97,7 @@ public class paneInterface extends DisplayController {
 		tabInterface.getChildren().add(inventory);
 		tabInterface.getChildren().add(graphBackground);
 		initTextField();
+		initGeSearchLabels();
 		group.getChildren().add(tabInterface);
 		tabInterface.setVisible(true);
 	}
@@ -128,8 +143,8 @@ public class paneInterface extends DisplayController {
 	
 	protected void pane_setItemTopMenu(Image input) {
 		//Item Menu Icon
-		System.out.println("START - pane_setItemTopMenu(Image input)");
-		tabInterface.getChildren().remove(itemIconPaneImage);
+		 System.out.println("START - pane_setItemTopMenu(Image input)");
+		 tabInterface.getChildren().remove(itemIconPaneImage);
 		 try {System.out.println("setItemTopMenu InputStream: " + input);
 		 itemIconPaneImage = new ImageView(input);
 		 itemIconPaneImage.setPreserveRatio(true);
@@ -151,8 +166,7 @@ public class paneInterface extends DisplayController {
 	protected void pane_setItemTopMenuError() {
 		
 		 System.out.println("pane_setItemTopMenuError()");
-		tabInterface.getChildren().remove(itemIconPaneImage);
-		//Item Menu Icon
+		 tabInterface.getChildren().remove(itemIconPaneImage);
 		 image = new Image("Item_UnAvailable.png");
 		 itemIconPaneImage = new ImageView(image);
 		 itemIconPaneImage.setPreserveRatio(true);
@@ -205,10 +219,10 @@ public class paneInterface extends DisplayController {
 	}
 
 	private void initLabels() {
-		xyCoordinates = new Label("Coordinates");
-		xyCoordinates.setTranslateX(5);
-		xyCoordinates.setTranslateY(375);
-		xyCoordinates.setStyle("-fx-text-fill: orange; -fx-font-size: 20px; -fx-font-weight: bold");
+		 xyCoordinates = new Label("Coordinates");
+		 xyCoordinates.setTranslateX(5);
+		 xyCoordinates.setTranslateY(375);
+		 xyCoordinates.setStyle("-fx-text-fill: orange; -fx-font-size: 20px; -fx-font-weight: bold");
 		
 		
 		 name  = new Label("-");
@@ -355,4 +369,125 @@ public class paneInterface extends DisplayController {
 
 	}
 
+	protected void initGeSearchLabels() {
+		image = new Image("Item_UnAvailable.png");
+		int row1X = 14;
+		int row2X = 230;
+		int row3X = 460;
+		
+		int row1Y = 430;
+		int row2Y = 490;
+		int row3Y = 550;		
+		
+		
+		ImageView img1 = new ImageView(image);
+		img1.setFitWidth(50);
+		img1.setFitHeight(50);
+		
+		ImageView img2 = new ImageView(image);
+		img2.setFitWidth(50);
+		img2.setFitHeight(50);
+		
+		ImageView img3 = new ImageView(image);
+		img3.setFitWidth(50);
+		img3.setFitHeight(50);
+				
+		ImageView img4 = new ImageView(image);
+		img4.setFitWidth(50);
+		img4.setFitHeight(50);
+		
+		ImageView img5 = new ImageView(image);
+		img5.setFitWidth(50);
+		img5.setFitHeight(50);
+
+		ImageView img6 = new ImageView(image);
+		img6.setFitWidth(50);
+		img6.setFitHeight(50);
+		
+		ImageView img7 = new ImageView(image);
+		img7.setFitWidth(50);
+		img7.setFitHeight(50);
+
+		ImageView img8 = new ImageView(image);
+		img8.setFitWidth(50);
+		img8.setFitHeight(50);
+		
+		ImageView img9 = new ImageView(image);
+		img9.setFitWidth(50);
+		img9.setFitHeight(50);
+		
+		
+		geSearchResult1 = new Label(" Torva Full helm "+image);
+		geSearchResult2 = new Label(" Torva Full helm"+image);
+		geSearchResult3 = new Label(" Torva Full helm"+image);
+		geSearchResult4 = new Label(" Torva Full helm"+image);
+		geSearchResult5 = new Label(" Torva Full helm"+image);
+		geSearchResult6 = new Label(" Torva Full helm"+image);
+		geSearchResult7 = new Label(" Torva Full helm"+image);
+		geSearchResult8 = new Label(" Torva Full helm"+image);
+		geSearchResult9 = new Label(" Torva Full helm"+image);
+		
+		geSearchResult1.setTranslateX(row1X);
+		geSearchResult1.setTranslateY(row1Y);
+		geSearchResult1.setPrefSize(200, 75);
+		geSearchResult1.setGraphic(img1);
+		
+		geSearchResult2.setTranslateX(row2X);
+		geSearchResult2.setTranslateY(row1Y);
+		geSearchResult2.setPrefSize(200, 75);
+		geSearchResult2.setGraphic(img2);
+		
+		geSearchResult3.setTranslateX(row3X);
+		geSearchResult3.setTranslateY(row1Y);
+		geSearchResult3.setPrefSize(200, 75);
+		geSearchResult3.setGraphic(img3);
+		
+		geSearchResult4.setTranslateX(row1X);
+		geSearchResult4.setTranslateY(row2Y);
+		geSearchResult4.setPrefSize(200, 75);
+		geSearchResult4.setGraphic(img4);
+		
+		geSearchResult5.setTranslateX(row2X);
+		geSearchResult5.setTranslateY(row2Y);
+		geSearchResult5.setPrefSize(200, 75);
+		geSearchResult5.setGraphic(img5);
+		
+		geSearchResult6.setTranslateX(row3X);
+		geSearchResult6.setTranslateY(row2Y);
+		geSearchResult6.setPrefSize(200, 75);
+		geSearchResult6.setGraphic(img6);
+		
+		geSearchResult7.setTranslateX(row1X);
+		geSearchResult7.setTranslateY(row3Y);
+		geSearchResult7.setPrefSize(200, 75);
+		geSearchResult7.setGraphic(img7);
+		
+		geSearchResult8.setTranslateX(row2X);
+		geSearchResult8.setTranslateY(row3Y);
+		geSearchResult8.setPrefSize(200, 75);
+		geSearchResult8.setGraphic(img8);
+		
+		geSearchResult9.setTranslateX(row3X);
+		geSearchResult9.setTranslateY(row3Y);
+		geSearchResult9.setPrefSize(200, 75);
+		geSearchResult9.setGraphic(img9);
+
+
+		
+		
+		
+		tabInterface.getChildren().addAll(
+				geSearchResult1,
+				geSearchResult2,
+				geSearchResult3,
+				geSearchResult4,
+				geSearchResult5,
+				geSearchResult6,
+				geSearchResult7,
+				geSearchResult8,
+				geSearchResult9
+				);
+
+		
+	}
 }
