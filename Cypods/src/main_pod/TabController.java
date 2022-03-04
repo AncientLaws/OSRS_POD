@@ -12,6 +12,8 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -31,6 +33,7 @@ public class TabController extends paneInterface {
 	Tooltip tooltip;
 	GET Get =  new GET(); 
 	private String[] itemInfoArr = new String [18];
+	private String[][] tc_itemListArray = new String[100][6];
 	/** name  				//0		
 	,id    				//1	
 	,icon 				//2	
@@ -133,15 +136,26 @@ public class TabController extends paneInterface {
 			{
 				if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
 				pane_ItemSearchInputText = itemSearchInput.getText();
-				//Get.getItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + pane_ItemSearchInputText);
-				Get.getItemJsonList("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/items.json?category=1&alpha=" + pane_ItemSearchInputText);
 				
-				//itemInfoArr = Get.getItemInfo();		//Getting chosen Item Json Data
-				//setIcon();
-				//setInterfaceLabels();					//Drawing everything
+				Get.getItemJsonList("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/items.json?category=1&alpha=" + pane_ItemSearchInputText);
+				geSearchResults();
 			}
+				
+		itemSearchInput.setOnMousePressed((mouseEvent) -> {
+			itemSearchInput.setText("");
+			clearGeSearchResults();
+		});
+				
+				
 
 		});
+	}
+	
+	private void itemSearchSelectionListener(int itemID) {
+		Get.getItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + itemID);
+		itemInfoArr = Get.getItemInfo();		//Getting chosen Item Json Data
+		setIcon();
+		setInterfaceLabels();					//Drawing everything
 	}
 	
 	private void catchError(){
@@ -234,15 +248,189 @@ public class TabController extends paneInterface {
 			}
 	}
 	
-	private void tab_IconTooltip (String s)
-	{
+	private void tab_IconTooltip (String s) {
 		tooltip = new Tooltip(s);
 		tooltip.setShowDelay(Duration.millis(100));
 		tooltip.setId("tooltip");
 		tooltip.install(imageView, tooltip);
+	}
+	
+	private void clearGeSearchResults() {
+		removeLabelActionListeners();
+		geSearchResult1.setText("");
+		geSearchResult2.setText("");
+		geSearchResult3.setText("");
+		geSearchResult4.setText("");
+		geSearchResult5.setText("");
+		geSearchResult6.setText("");
+		geSearchResult7.setText("");
+		geSearchResult8.setText("");
+		geSearchResult9.setText("");
+		
+		img1.setImage(null);
+		img2.setImage(null);
+		img3.setImage(null);
+		img4.setImage(null);
+		img5.setImage(null);
+		img6.setImage(null);
+		img7.setImage(null);
+		img8.setImage(null);
+		img9.setImage(null);
+	}
+	
+	private void geSearchResults() {
+		clearGeSearchResults();		
+		addLabelActionListeners();
+		
+		tc_itemListArray = Get.returnItemListArray() ;
+		
+		geSearchResult1.setText(tc_itemListArray[0][2]);
+		geSearchResult2.setText(tc_itemListArray[1][2]);
+		geSearchResult3.setText(tc_itemListArray[2][2]);
+		geSearchResult4.setText(tc_itemListArray[3][2]);
+		geSearchResult5.setText(tc_itemListArray[4][2]);
+		geSearchResult6.setText(tc_itemListArray[5][2]);
+		geSearchResult7.setText(tc_itemListArray[6][2]);
+		geSearchResult8.setText(tc_itemListArray[7][2]);
+		geSearchResult9.setText(tc_itemListArray[8][2]);
+		
+
+		
+		try {
+			input = new URL (tc_itemListArray[0][0]).openStream();
+	     	image = new Image(input); 
+	     	img1.setImage(image);
+			
+			input = new URL (tc_itemListArray[1][0]).openStream();
+	     	image = new Image(input); 
+	     	img2.setImage(image);
+			
+			
+			input = new URL (tc_itemListArray[2][0]).openStream();
+	     	image = new Image(input); 
+	     	img3.setImage(image);
+			
+			
+			input = new URL (tc_itemListArray[3][0]).openStream();
+	     	image = new Image(input); 
+	     	img4.setImage(image);
+			
+			
+			
+			input = new URL (tc_itemListArray[4][0]).openStream();
+	     	image = new Image(input); 
+	     	img5.setImage(image);
+			
+			
+			
+			input = new URL (tc_itemListArray[5][0]).openStream();
+	     	image = new Image(input); 
+	     	img6.setImage(image);
+			
+			
+			input = new URL (tc_itemListArray[6][0]).openStream();
+	     	image = new Image(input); 
+	     	img7.setImage(image);
+			
+			input = new URL (tc_itemListArray[7][0]).openStream();
+	     	image = new Image(input); 
+	     	img8.setImage(image);
+			
+			input = new URL (tc_itemListArray[8][0]).openStream();
+	     	image = new Image(input); 
+	     	img9.setImage(image);
+		
+	     	
+			
+		}
+		catch(Exception e) {
+			System.out.println("Error grabbing Icon Images");
+			
+		}
 		
 		
 	}
+
+	private void addLabelActionListeners() {
+		geSearchResult1.setOnMouseEntered((mouseEvent)-> {geSearchResult1.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
+		geSearchResult1.setOnMouseExited ((mouseEvent)-> {geSearchResult1.setBackground(new Background(new BackgroundFill(null, null, null)));});
+		geSearchResult1.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[0][1]));});
+		
+		geSearchResult2.setOnMouseEntered((mouseEvent)-> {geSearchResult2.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
+		geSearchResult2.setOnMouseExited ((mouseEvent)-> {geSearchResult2.setBackground(new Background(new BackgroundFill(null, null, null)));});
+		geSearchResult2.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[1][1]));});
+		
+		geSearchResult3.setOnMouseEntered((mouseEvent)-> {geSearchResult3.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
+		geSearchResult3.setOnMouseExited ((mouseEvent)-> {geSearchResult3.setBackground(new Background(new BackgroundFill(null, null, null)));});
+		geSearchResult3.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[2][1]));});
+		
+		geSearchResult4.setOnMouseEntered((mouseEvent)-> {geSearchResult4.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
+		geSearchResult4.setOnMouseExited ((mouseEvent)-> {geSearchResult4.setBackground(new Background(new BackgroundFill(null, null, null)));});
+		geSearchResult4.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[3][1]));});
+		
+		geSearchResult5.setOnMouseEntered((mouseEvent)-> {geSearchResult5.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
+		geSearchResult5.setOnMouseExited ((mouseEvent)-> {geSearchResult5.setBackground(new Background(new BackgroundFill(null, null, null)));});
+		geSearchResult5.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[4][1]));});
+		
+		geSearchResult6.setOnMouseEntered((mouseEvent)-> {geSearchResult6.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
+		geSearchResult6.setOnMouseExited ((mouseEvent)-> {geSearchResult6.setBackground(new Background(new BackgroundFill(null, null, null)));});
+		geSearchResult6.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[5][1]));});
+		
+		geSearchResult7.setOnMouseEntered((mouseEvent)-> {geSearchResult7.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
+		geSearchResult7.setOnMouseExited ((mouseEvent)-> {geSearchResult7.setBackground(new Background(new BackgroundFill(null, null, null)));});
+		geSearchResult7.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[6][1]));});
+		
+		geSearchResult8.setOnMouseEntered((mouseEvent)-> {geSearchResult8.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
+		geSearchResult8.setOnMouseExited ((mouseEvent)-> {geSearchResult8.setBackground(new Background(new BackgroundFill(null, null, null)));});
+		geSearchResult8.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[7][1]));});
+		
+		geSearchResult9.setOnMouseEntered((mouseEvent)-> {geSearchResult9.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
+		geSearchResult9.setOnMouseExited ((mouseEvent)-> {geSearchResult9.setBackground(new Background(new BackgroundFill(null, null, null)));});
+		geSearchResult9.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[8][1]));});
+		
+		geSearchResult10.setOnMouseEntered((mouseEvent)-> {geSearchResult10.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
+		geSearchResult10.setOnMouseExited ((mouseEvent)-> {geSearchResult10.setBackground(new Background(new BackgroundFill(null, null, null)));});
+		geSearchResult10.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[9][1]));});
+		
+		geSearchResult11.setOnMouseEntered((mouseEvent)-> {geSearchResult11.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
+		geSearchResult11.setOnMouseExited ((mouseEvent)-> {geSearchResult11.setBackground(new Background(new BackgroundFill(null, null, null)));});
+		geSearchResult11.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[10][1]));});
+		
+		geSearchResult12.setOnMouseEntered((mouseEvent)-> {geSearchResult12.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
+		geSearchResult12.setOnMouseExited ((mouseEvent)-> {geSearchResult12.setBackground(new Background(new BackgroundFill(null, null, null)));});
+		geSearchResult12.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[11][1]));});
+	}
+	
+	
+	private void removeLabelActionListeners() {
+		geSearchResult1.setOnMouseEntered((mouseEvent)-> {});
+		geSearchResult2.setOnMouseEntered((mouseEvent)-> {});
+		geSearchResult3.setOnMouseEntered((mouseEvent)-> {});
+		geSearchResult4.setOnMouseEntered((mouseEvent)-> {});
+		geSearchResult5.setOnMouseEntered((mouseEvent)-> {});
+		geSearchResult6.setOnMouseEntered((mouseEvent)-> {});
+		geSearchResult7.setOnMouseEntered((mouseEvent)-> {});
+		geSearchResult8.setOnMouseEntered((mouseEvent)-> {});
+		geSearchResult9.setOnMouseEntered((mouseEvent)-> {});
+		geSearchResult10.setOnMouseEntered((mouseEvent)-> {});
+		geSearchResult11.setOnMouseEntered((mouseEvent)-> {});
+		geSearchResult12.setOnMouseEntered((mouseEvent)-> {});
+		
+		geSearchResult1.setOnMouseClicked((mouseEvent)->{});
+		geSearchResult2.setOnMouseClicked((mouseEvent)->{});
+		geSearchResult3.setOnMouseClicked((mouseEvent)->{});
+		geSearchResult4.setOnMouseClicked((mouseEvent)->{});
+		geSearchResult5.setOnMouseClicked((mouseEvent)->{});
+		geSearchResult6.setOnMouseClicked((mouseEvent)->{});
+		geSearchResult7.setOnMouseClicked((mouseEvent)->{});
+		geSearchResult8.setOnMouseClicked((mouseEvent)->{});
+		geSearchResult9.setOnMouseClicked((mouseEvent)->{});
+		geSearchResult10.setOnMouseClicked((mouseEvent)->{});
+		geSearchResult11.setOnMouseClicked((mouseEvent)->{});
+		geSearchResult12.setOnMouseClicked((mouseEvent)->{});
+	}
+	
+	
 
 
 }

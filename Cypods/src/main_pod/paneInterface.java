@@ -65,6 +65,32 @@ public class paneInterface extends DisplayController {
 	Label geSearchResult7;
 	Label geSearchResult8;
 	Label geSearchResult9;
+	Label geSearchResult10;
+	Label geSearchResult11;
+	Label geSearchResult12;
+	
+	ImageView img1 = new ImageView(image);
+	ImageView img2 = new ImageView(image);
+	ImageView img3 = new ImageView(image);
+	ImageView img4 = new ImageView(image);
+	ImageView img5 = new ImageView(image);
+	ImageView img6 = new ImageView(image);
+	ImageView img7 = new ImageView(image);
+	ImageView img8 = new ImageView(image);
+	ImageView img9 = new ImageView(image);
+	ImageView img10 = new ImageView(image);
+	ImageView img11 = new ImageView(image);
+	ImageView img12 = new ImageView(image);
+
+	
+	int row1X;
+	int row2X;
+	int row3X;
+	int row4X;
+	
+	int row1Y;
+	int row2Y;
+	int row3Y;	
 	
 	private EventHandler<MouseEvent> mouseMovedHandler ;
 	private EventHandler<KeyEvent> textInputListener ;
@@ -209,9 +235,10 @@ public class paneInterface extends DisplayController {
 		itemSearchInput.setPromptText("What would you like to buy?");
 		System.out.println("Caret Position: "+ itemSearchInput.getCaretPosition());
 		itemSearchInput.setStyle("-fx-text-fill: black; -fx-font-size: 13px; -fx-font-weight: bold;-fx-font-family: runescape_uf");
-		itemSearchInput.setOnMousePressed((mouseEvent) -> {
-				itemSearchInput.setText("");
-			});
+		//itemSearchInput.setOnMousePressed((mouseEvent) -> {
+		//itemSearchInput.setText("");	
+				
+		//	});
 		itemSearchInput.setFocusTraversable(false);
 		tabInterface.getChildren().add(itemSearchInput);
 		
@@ -370,112 +397,60 @@ public class paneInterface extends DisplayController {
 	}
 
 	protected void initGeSearchLabels() {
-		image = new Image("Item_UnAvailable.png");
-		int row1X = 14;
-		int row2X = 230;
-		int row3X = 460;
+		int iconWidth  =  65;
+		int iconHeight =  65;
 		
-		int row1Y = 430;
-		int row2Y = 490;
-		int row3Y = 550;		
+		int sizeX = 175;
+		int sizeY = 50;
 		
+		row1X = 14;
+		row2X = 190;
+		row3X = 366;
+		row4X = 542;
 		
-		ImageView img1 = new ImageView(image);
-		img1.setFitWidth(50);
-		img1.setFitHeight(50);
+		row1Y = 435;
+		row2Y = 495;
+		row3Y = 555;
 		
-		ImageView img2 = new ImageView(image);
-		img2.setFitWidth(50);
-		img2.setFitHeight(50);
-		
-		ImageView img3 = new ImageView(image);
-		img3.setFitWidth(50);
-		img3.setFitHeight(50);
-				
-		ImageView img4 = new ImageView(image);
-		img4.setFitWidth(50);
-		img4.setFitHeight(50);
-		
-		ImageView img5 = new ImageView(image);
-		img5.setFitWidth(50);
-		img5.setFitHeight(50);
-
-		ImageView img6 = new ImageView(image);
-		img6.setFitWidth(50);
-		img6.setFitHeight(50);
-		
-		ImageView img7 = new ImageView(image);
-		img7.setFitWidth(50);
-		img7.setFitHeight(50);
-
-		ImageView img8 = new ImageView(image);
-		img8.setFitWidth(50);
-		img8.setFitHeight(50);
-		
-		ImageView img9 = new ImageView(image);
-		img9.setFitWidth(50);
-		img9.setFitHeight(50);
-		
-		
-		geSearchResult1 = new Label(" Torva Full helm "+image);
-		geSearchResult2 = new Label(" Torva Full helm"+image);
-		geSearchResult3 = new Label(" Torva Full helm"+image);
-		geSearchResult4 = new Label(" Torva Full helm"+image);
-		geSearchResult5 = new Label(" Torva Full helm"+image);
-		geSearchResult6 = new Label(" Torva Full helm"+image);
-		geSearchResult7 = new Label(" Torva Full helm"+image);
-		geSearchResult8 = new Label(" Torva Full helm"+image);
-		geSearchResult9 = new Label(" Torva Full helm"+image);
-		
-		geSearchResult1.setTranslateX(row1X);
-		geSearchResult1.setTranslateY(row1Y);
-		geSearchResult1.setPrefSize(200, 75);
-		geSearchResult1.setGraphic(img1);
-		
-		geSearchResult2.setTranslateX(row2X);
-		geSearchResult2.setTranslateY(row1Y);
-		geSearchResult2.setPrefSize(200, 75);
-		geSearchResult2.setGraphic(img2);
-		
-		geSearchResult3.setTranslateX(row3X);
-		geSearchResult3.setTranslateY(row1Y);
-		geSearchResult3.setPrefSize(200, 75);
-		geSearchResult3.setGraphic(img3);
-		
-		geSearchResult4.setTranslateX(row1X);
-		geSearchResult4.setTranslateY(row2Y);
-		geSearchResult4.setPrefSize(200, 75);
-		geSearchResult4.setGraphic(img4);
-		
-		geSearchResult5.setTranslateX(row2X);
-		geSearchResult5.setTranslateY(row2Y);
-		geSearchResult5.setPrefSize(200, 75);
-		geSearchResult5.setGraphic(img5);
-		
-		geSearchResult6.setTranslateX(row3X);
-		geSearchResult6.setTranslateY(row2Y);
-		geSearchResult6.setPrefSize(200, 75);
-		geSearchResult6.setGraphic(img6);
-		
-		geSearchResult7.setTranslateX(row1X);
-		geSearchResult7.setTranslateY(row3Y);
-		geSearchResult7.setPrefSize(200, 75);
-		geSearchResult7.setGraphic(img7);
-		
-		geSearchResult8.setTranslateX(row2X);
-		geSearchResult8.setTranslateY(row3Y);
-		geSearchResult8.setPrefSize(200, 75);
-		geSearchResult8.setGraphic(img8);
-		
-		geSearchResult9.setTranslateX(row3X);
-		geSearchResult9.setTranslateY(row3Y);
-		geSearchResult9.setPrefSize(200, 75);
-		geSearchResult9.setGraphic(img9);
-
 
 		
+
+		img1.setFitWidth(iconWidth); 		img1.setFitHeight(iconHeight);
+		img2.setFitWidth(iconWidth);		img2.setFitHeight(iconHeight);
+		img3.setFitWidth(iconWidth);		img3.setFitHeight(iconHeight);
+		img4.setFitWidth(iconWidth);		img4.setFitHeight(iconHeight);
+		img5.setFitWidth(iconWidth);		img5.setFitHeight(iconHeight);
+		img6.setFitWidth(iconWidth);		img6.setFitHeight(iconHeight);
+		img7.setFitWidth(iconWidth);		img7.setFitHeight(iconHeight);
+		img8.setFitWidth(iconWidth);		img8.setFitHeight(iconHeight);
+		img9.setFitWidth(iconWidth);		img9.setFitHeight(iconHeight);
+		img10.setFitWidth(iconWidth);		img10.setFitHeight(iconHeight);
+		img11.setFitWidth(iconWidth);		img11.setFitHeight(iconHeight);
+		img12.setFitWidth(iconWidth);		img12.setFitHeight(iconHeight);
 		
 		
+		geSearchResult1 = new Label("");			geSearchResult2 = new Label("");			geSearchResult3 = new Label("");			geSearchResult4 = new Label("");		
+		geSearchResult1.setTranslateX(row1X);		geSearchResult2.setTranslateX(row2X);		geSearchResult3.setTranslateX(row3X);		geSearchResult4.setTranslateX(row4X);
+		geSearchResult1.setTranslateY(row1Y);		geSearchResult2.setTranslateY(row1Y);		geSearchResult3.setTranslateY(row1Y);		geSearchResult4.setTranslateY(row1Y);
+		geSearchResult1.setPrefSize(sizeX, sizeY);	geSearchResult2.setPrefSize(sizeX, sizeY);	geSearchResult3.setPrefSize(sizeX, sizeY);	geSearchResult4.setPrefSize(sizeX, sizeY);
+		geSearchResult1.setWrapText(true);			geSearchResult2.setWrapText(true);			geSearchResult3.setWrapText(true);			geSearchResult4.setWrapText(true);
+		geSearchResult1.setGraphic(img1);			geSearchResult2.setGraphic(img2);			geSearchResult3.setGraphic(img3);			geSearchResult4.setGraphic(img4);
+
+		geSearchResult5 = new Label("");			geSearchResult6 = new Label("");			geSearchResult7 = new Label("");			geSearchResult8 = new Label("");			
+		geSearchResult5.setTranslateX(row1X);		geSearchResult6.setTranslateX(row2X);		geSearchResult7.setTranslateX(row3X);		geSearchResult8.setTranslateX(row4X);
+		geSearchResult5.setTranslateY(row2Y);		geSearchResult6.setTranslateY(row2Y);		geSearchResult7.setTranslateY(row2Y);		geSearchResult8.setTranslateY(row2Y);
+		geSearchResult5.setPrefSize(sizeX, sizeY);	geSearchResult6.setPrefSize(sizeX, sizeY);	geSearchResult7.setPrefSize(sizeX, sizeY);	geSearchResult8.setPrefSize(sizeX, sizeY);
+		geSearchResult5.setWrapText(true);			geSearchResult6.setWrapText(true);			geSearchResult7.setWrapText(true);			geSearchResult8.setWrapText(true);
+		geSearchResult5.setGraphic(img5);			geSearchResult6.setGraphic(img6);			geSearchResult7.setGraphic(img7);			geSearchResult8.setGraphic(img8);
+		
+		geSearchResult9 = new Label("");			geSearchResult10 = new Label("");			geSearchResult11 = new Label("");			geSearchResult12 = new Label("");
+		geSearchResult9.setTranslateX(row1X);		geSearchResult10.setTranslateX(row2X);		geSearchResult11.setTranslateX(row3X);		geSearchResult12.setTranslateX(row4X);
+		geSearchResult9.setTranslateY(row3Y);		geSearchResult10.setTranslateY(row3Y);		geSearchResult11.setTranslateY(row3Y);  	geSearchResult12.setTranslateY(row3Y);
+		geSearchResult9.setPrefSize(sizeX, sizeY);	geSearchResult10.setPrefSize(sizeX, sizeY);	geSearchResult11.setPrefSize(sizeX, sizeY);	geSearchResult12.setPrefSize(155, sizeY);
+		geSearchResult9.setWrapText(true);			geSearchResult10.setWrapText(true);			geSearchResult11.setWrapText(true);			geSearchResult12.setWrapText(true);
+		geSearchResult9.setGraphic(img9);			geSearchResult10.setGraphic(img10);			geSearchResult11.setGraphic(img11);			geSearchResult12.setGraphic(img12);
+
+	
 		tabInterface.getChildren().addAll(
 				geSearchResult1,
 				geSearchResult2,
@@ -485,7 +460,10 @@ public class paneInterface extends DisplayController {
 				geSearchResult6,
 				geSearchResult7,
 				geSearchResult8,
-				geSearchResult9
+				geSearchResult9,
+				geSearchResult10,
+				geSearchResult11,
+				geSearchResult12
 				);
 
 		

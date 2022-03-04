@@ -41,7 +41,7 @@ public class GET extends Connect {
 	/***********Item key values*************/
 	
 	private String[] itemInfoArr1 = new String [18];
-	private String[] []itemListArray = new String [6][25];
+	private String[][] itemListArray = new String [100][6];
 	//private Object[] itemListNode = new String [6];
 	//JSONObject arrayParserJSONObject;
 
@@ -84,18 +84,18 @@ public class GET extends Connect {
 		description 		= obj.getJSONObject("item").getString("description");
 		members 			= obj.getJSONObject("item").getString("members");
 		
-		currentPrice		= obj.getJSONObject("item").getJSONObject("current").getString("price");
+		currentPrice		= String.valueOf(obj.getJSONObject("item").getJSONObject("current").get("price"));
 		currentTrend		= obj.getJSONObject("item").getJSONObject("current").getString("trend");
 
-		todayPrice			= obj.getJSONObject("item").getJSONObject("today").getString("price");
+		todayPrice			= String.valueOf(obj.getJSONObject("item").getJSONObject("today").get("price"));
 		todayTrend			= obj.getJSONObject("item").getJSONObject("today").getString("trend");
 		
 		day30_trend 		= obj.getJSONObject("item").getJSONObject("day30").getString("trend");
-		day30_change 		= obj.getJSONObject("item").getJSONObject("day30").getString("change");
+		day30_change 		= String.valueOf(obj.getJSONObject("item").getJSONObject("day30").get("change"));
 		day90_trend 		= obj.getJSONObject("item").getJSONObject("day90").getString("trend");
-		day90_change 		= obj.getJSONObject("item").getJSONObject("day90").getString("change");
+		day90_change 		= String.valueOf(obj.getJSONObject("item").getJSONObject("day90").get("change"));
 		day180_trend 		= obj.getJSONObject("item").getJSONObject("day180").getString("trend");
-		day180_change 		= obj.getJSONObject("item").getJSONObject("day180").getString("change");
+		day180_change 		= String.valueOf(obj.getJSONObject("item").getJSONObject("day180").get("change"));
 		
 		String itemInfoArr2[] = {
 				 name  				//0		
@@ -128,6 +128,8 @@ public class GET extends Connect {
 	}
 	
 	protected String[][] returnItemListArray () {
+		
+		System.out.println(itemListArray[0][2]);
 		return itemListArray;
 		
 	}
@@ -160,17 +162,24 @@ public class GET extends Connect {
 	private void parseItemJsonList() {
 
 		try {
-		
+
 		JSONArray jsonArray =  searchJSONObj.getJSONArray("items");
+		
+		System.out.println("itemListArray.length = "+ itemListArray.length + " itemListArray[0].length = "+ itemListArray[0].length );
+		
+		for(int i = 0, x = itemListArray.length - 1; i < x; i++) {
+			for(int j = 0, y = itemListArray[x].length - 1; j < y; j++)
+			itemListArray[i][j] = null;
+		}
 		
 		for(int i = 0, size = jsonArray.length(); i < size; i++) {
 			JSONObject arrayParserJSONObject =  jsonArray.getJSONObject(i);
 			
 			String[] itemListNode = new String [6];
-			itemListNode [0] = arrayParserJSONObject.getString("icon");
+			itemListNode [0] = arrayParserJSONObject.getString("icon_large");
 			itemListNode [1] = String.valueOf(arrayParserJSONObject.getInt("id"));
 			itemListNode [2] = arrayParserJSONObject.getString("name");
-			itemListNode [3] = arrayParserJSONObject.getJSONObject("current").getString("price");
+			itemListNode [3] = String.valueOf(arrayParserJSONObject.getJSONObject("current").get("price"));
 			itemListNode [4] = arrayParserJSONObject.getJSONObject("today").getString("trend");
 			itemListNode [5] = String.valueOf(arrayParserJSONObject.getJSONObject("today").get("price")); //if 0 will become an integer
 			
