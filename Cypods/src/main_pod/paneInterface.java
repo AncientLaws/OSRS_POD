@@ -96,6 +96,7 @@ public class paneInterface extends DisplayController {
 	private EventHandler<KeyEvent> textInputListener ;
 	
 	protected Pane tabInterface = new Pane();
+	chartPane chart = new chartPane();
 	protected Tooltip pane_Tooltip;
 	
 	TextField itemSearchInput;
@@ -124,6 +125,7 @@ public class paneInterface extends DisplayController {
 		tabInterface.getChildren().add(graphBackground);
 		initTextField();
 		initGeSearchLabels();
+		//chart.drawChart();
 		group.getChildren().add(tabInterface);
 		tabInterface.setVisible(true);
 	}
@@ -397,23 +399,11 @@ public class paneInterface extends DisplayController {
 	}
 
 	protected void initGeSearchLabels() {
-		int iconWidth  =  65;
-		int iconHeight =  65;
+		int iconWidth  =  65;		int iconHeight 	=  65;
+		int sizeX 	   = 175;		int sizeY 		= 50;
 		
-		int sizeX = 175;
-		int sizeY = 50;
-		
-		row1X = 14;
-		row2X = 190;
-		row3X = 366;
-		row4X = 542;
-		
-		row1Y = 435;
-		row2Y = 495;
-		row3Y = 555;
-		
-
-		
+		row1X = 14;		row2X = 190;	row3X = 366;	row4X = 542;
+		row1Y = 435;	row2Y = 495;	row3Y = 555;	
 
 		img1.setFitWidth(iconWidth); 		img1.setFitHeight(iconHeight);
 		img2.setFitWidth(iconWidth);		img2.setFitHeight(iconHeight);

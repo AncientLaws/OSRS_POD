@@ -129,7 +129,6 @@ public class GET extends Connect {
 	
 	protected String[][] returnItemListArray () {
 		
-		System.out.println(itemListArray[0][2]);
 		return itemListArray;
 		
 	}
@@ -165,7 +164,7 @@ public class GET extends Connect {
 
 		JSONArray jsonArray =  searchJSONObj.getJSONArray("items");
 		
-		System.out.println("itemListArray.length = "+ itemListArray.length + " itemListArray[0].length = "+ itemListArray[0].length );
+		//System.out.println("itemListArray.length = "+ itemListArray.length + " itemListArray[0].length = "+ itemListArray[0].length );
 		
 		for(int i = 0, x = itemListArray.length - 1; i < x; i++) {
 			for(int j = 0, y = itemListArray[x].length - 1; j < y; j++)
@@ -191,7 +190,7 @@ public class GET extends Connect {
 			//System.out.println(itemListArray[i][1]);
 
 			}
-		System.out.println(itemListArray[0][0] +"" +itemListArray[0][1]+"" +itemListArray[0][2]);
+		System.out.println(itemListArray[10][2] +"" +itemListArray[10][2]);
 		}
 		catch(Exception e)
 		{

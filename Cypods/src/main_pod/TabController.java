@@ -266,6 +266,10 @@ public class TabController extends paneInterface {
 		geSearchResult7.setText("");
 		geSearchResult8.setText("");
 		geSearchResult9.setText("");
+		geSearchResult10.setText("");
+		geSearchResult11.setText("");
+		geSearchResult12.setText("");
+		
 		
 		img1.setImage(null);
 		img2.setImage(null);
@@ -276,6 +280,9 @@ public class TabController extends paneInterface {
 		img7.setImage(null);
 		img8.setImage(null);
 		img9.setImage(null);
+		img10.setImage(null);
+		img11.setImage(null);
+		img12.setImage(null);
 	}
 	
 	private void geSearchResults() {
@@ -284,62 +291,69 @@ public class TabController extends paneInterface {
 		
 		tc_itemListArray = Get.returnItemListArray() ;
 		
-		geSearchResult1.setText(tc_itemListArray[0][2]);
-		geSearchResult2.setText(tc_itemListArray[1][2]);
-		geSearchResult3.setText(tc_itemListArray[2][2]);
-		geSearchResult4.setText(tc_itemListArray[3][2]);
-		geSearchResult5.setText(tc_itemListArray[4][2]);
-		geSearchResult6.setText(tc_itemListArray[5][2]);
-		geSearchResult7.setText(tc_itemListArray[6][2]);
-		geSearchResult8.setText(tc_itemListArray[7][2]);
-		geSearchResult9.setText(tc_itemListArray[8][2]);
-		
-
-		
-		try {
+		try { //Open stream to grab the image for each of the returned items
+			geSearchResult1.setText(tc_itemListArray[0][2]);
 			input = new URL (tc_itemListArray[0][0]).openStream();
 	     	image = new Image(input); 
 	     	img1.setImage(image);
-			
+
+	     	
+			geSearchResult2.setText(tc_itemListArray[1][2]);			
 			input = new URL (tc_itemListArray[1][0]).openStream();
 	     	image = new Image(input); 
 	     	img2.setImage(image);
-			
-			
+
+	     	
+			geSearchResult3.setText(tc_itemListArray[2][2]);			
 			input = new URL (tc_itemListArray[2][0]).openStream();
 	     	image = new Image(input); 
 	     	img3.setImage(image);
-			
-			
+
+	     	
+			geSearchResult4.setText(tc_itemListArray[3][2]);			
 			input = new URL (tc_itemListArray[3][0]).openStream();
 	     	image = new Image(input); 
 	     	img4.setImage(image);
-			
-			
-			
+
+			geSearchResult5.setText(tc_itemListArray[4][2]);			
 			input = new URL (tc_itemListArray[4][0]).openStream();
 	     	image = new Image(input); 
 	     	img5.setImage(image);
-			
-			
-			
+	     	
+			geSearchResult6.setText(tc_itemListArray[5][2]);			
 			input = new URL (tc_itemListArray[5][0]).openStream();
 	     	image = new Image(input); 
 	     	img6.setImage(image);
-			
-			
+
+			geSearchResult7.setText(tc_itemListArray[6][2]);			
 			input = new URL (tc_itemListArray[6][0]).openStream();
 	     	image = new Image(input); 
 	     	img7.setImage(image);
-			
+   	
+			geSearchResult8.setText(tc_itemListArray[7][2]);			
 			input = new URL (tc_itemListArray[7][0]).openStream();
 	     	image = new Image(input); 
 	     	img8.setImage(image);
-			
+
+			geSearchResult9.setText(tc_itemListArray[8][2]);			
 			input = new URL (tc_itemListArray[8][0]).openStream();
 	     	image = new Image(input); 
 	     	img9.setImage(image);
-		
+	     	
+			geSearchResult10.setText(tc_itemListArray[9][2]);	   	     	
+			input = new URL (tc_itemListArray[9][0]).openStream();
+	     	image = new Image(input); 
+	     	img10.setImage(image);	
+	     	
+			geSearchResult11.setText(tc_itemListArray[10][2]);	     	
+			input = new URL (tc_itemListArray[10][0]).openStream();
+	     	image = new Image(input); 
+	     	img11.setImage(image);	
+ 	     	
+			geSearchResult12.setText(tc_itemListArray[11][2]);	     	
+			input = new URL (tc_itemListArray[11][0]).openStream();
+	     	image = new Image(input); 
+	     	img12.setImage(image);	
 	     	
 			
 		}

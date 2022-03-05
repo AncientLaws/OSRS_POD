@@ -113,7 +113,7 @@
     src: url('/runescape_uf.ttf');
 }
 .label {
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-font-weight: bold;
     -fx-font-size: 12;
     -fx-font-family:'runescape';
