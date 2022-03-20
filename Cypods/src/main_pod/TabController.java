@@ -6,6 +6,10 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.ChartPanel;
+
+import javafx.embed.swing.SwingNode;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.effect.DropShadow;
@@ -62,6 +66,9 @@ public class TabController extends paneInterface {
 	int Y;
 	
 /**End Tab icon Settings*/
+	
+	final SwingNode chartSwingNode = new SwingNode();
+	chartPane cp = new chartPane();
 	
 	TabController (String s){
 		 imageView = new ImageView();
@@ -237,6 +244,7 @@ public class TabController extends paneInterface {
 		        				 			,itemInfoArr[17]						//180 day change
   		        				 );
 		        		 itemSearchInput.positionCaret(itemSearchInput.getText().length());  //
+		        		 tab_createChart();
 	        	 	 }
 	        	 catch(Exception e) {
 		        		 System.out.println("Error in setInterfaceLabels()");
@@ -361,6 +369,19 @@ public class TabController extends paneInterface {
 			System.out.println("Error grabbing Icon Images");
 			
 		}
+		
+		
+	}
+	
+	protected void tab_createChart() {
+		
+		chartSwingNode.setContent(new ChartPanel(cp.createChart()));
+		chartSwingNode.setLayoutX(05);
+		chartSwingNode.setLayoutY(-5);
+		//chartSwingNode.setScaleX(1);
+		chartSwingNode.setScaleY(.97);
+
+		tabInterface.getChildren().add(chartSwingNode);
 		
 		
 	}

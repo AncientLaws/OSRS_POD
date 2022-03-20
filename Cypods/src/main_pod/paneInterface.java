@@ -7,6 +7,7 @@ import java.net.URL;
 import java.nio.channels.NonWritableChannelException;
 
 import javafx.application.Platform;
+import javafx.embed.swing.SwingNode;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -25,6 +26,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
+
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+
 
 public class paneInterface extends DisplayController {
 
@@ -96,13 +102,16 @@ public class paneInterface extends DisplayController {
 	private EventHandler<KeyEvent> textInputListener ;
 	
 	protected Pane tabInterface = new Pane();
-	chartPane chart = new chartPane();
+	//chartPane chart = new chartPane();
 	protected Tooltip pane_Tooltip;
 	
 	TextField itemSearchInput;
 	String pane_ItemSearchInputText;
 	Font f;
 	
+	//chartPane cp = new chartPane();
+	ChartFrame frame;
+	//final SwingNode chartSwingNode = new SwingNode();
 /**************************Variable Declaration**************************/	
 	
 	public paneInterface()	{
@@ -458,4 +467,6 @@ public class paneInterface extends DisplayController {
 
 		
 	}
+	
+	
 }
