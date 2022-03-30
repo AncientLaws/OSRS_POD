@@ -15,6 +15,7 @@ public class GET extends Connect {
 	private int[] grabno;
 	JSONObject obj;
 	JSONObject searchJSONObj;
+	JSONObject itemPriceJSON;
 	
 	/***********Item key values*************/
 	private String name;
@@ -196,6 +197,70 @@ public class GET extends Connect {
 		{
 			System.out.println("Error parsing ItemJsonList: " + e.getMessage());
 		}
+		
+	}
+	
+	
+	protected String[][] getItemJsonPrice_RuneLine(String url) {
+		String s = "";
+		try {
+			HttpURLConnection http = httpStringURL(url); 
+			if (HttpURLConnection.HTTP_OK == responseCode) { // Success: Status = 200
+				BufferedReader in = new BufferedReader(new InputStreamReader(http.getInputStream()));
+				StringBuffer response = new StringBuffer();
+				String READ_INPUT_LINE_FROM_SITE;
+				while ((READ_INPUT_LINE_FROM_SITE = in.readLine()) != null) {
+						response.append(READ_INPUT_LINE_FROM_SITE);
+				}
+				in.close();
+				String jsonString = response.toString();
+				itemPriceJSON = new JSONObject(jsonString);
+				
+				System.out.println("getItemJsonPrice_RuneLine");
+				
+			}
+		}
+		catch (Exception e) {
+			System.out.println("Error in Method: getItemJsonList() "
+		+ " " + e.getMessage());
+		}
+		return parseRuneLinePrice();
+	}
+	
+	private String[][] parseRuneLinePrice() {
+		JSONArray jsonArray =  itemPriceJSON.getJSONArray("data");
+		String [][] itemPriceArray = new String [jsonArray.length()][3];
+		try {
+			System.out.println("getItemJsonPrice_RuneLine");
+			/*Clearing old item data (if applicable)*/
+			//for(int i = 0, x = itemListArray.length - 1; i < x; i++) {
+			//	for(int j = 0, y = itemListArray[x].length - 1; j < y; j++)
+		//		itemListArray[i][j] = null;
+		//	}
+			
+			/*Looping through the prices*/
+			for(int i = 0, size = jsonArray.length(); i < size; i++) {
+				JSONObject arrayParserJSONObject =  jsonArray.getJSONObject(i);
+				
+				String[] itemPriceNode = new String [3];
+				itemPriceNode [0] = String.valueOf(arrayParserJSONObject.get("timestamp"));
+				itemPriceNode [1] = String.valueOf(arrayParserJSONObject.getInt("avgHighPrice")); 
+				itemPriceNode [2] = String.valueOf(arrayParserJSONObject.get("avgLowPrice"));
+				itemPriceNode [3] = String.valueOf(arrayParserJSONObject.get("highPriceVolume"));
+				itemPriceNode [4] = String.valueOf(arrayParserJSONObject.get("lowPriceVolume"));
+				
+				
+				itemPriceArray[i] = itemPriceNode;
+
+				}
+			System.out.println(itemPriceArray[10][2] +"" +itemPriceArray[10][2]);
+			//return itemPriceArray;
+			}
+			catch(Exception e)
+			{
+				System.out.println("Error parsing ItemJsonList: " + e.getMessage());
+			}
+		return itemPriceArray;
 		
 	}
 }

@@ -27,9 +27,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
-import org.jfree.chart.ChartFrame;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
 
 
 public class paneInterface extends DisplayController {
@@ -102,7 +99,7 @@ public class paneInterface extends DisplayController {
 	private EventHandler<KeyEvent> textInputListener ;
 	
 	protected Pane tabInterface = new Pane();
-	//chartPane chart = new chartPane();
+	chartPane cp = new chartPane();
 	protected Tooltip pane_Tooltip;
 	
 	TextField itemSearchInput;
@@ -110,7 +107,7 @@ public class paneInterface extends DisplayController {
 	Font f;
 	
 	//chartPane cp = new chartPane();
-	ChartFrame frame;
+
 	//final SwingNode chartSwingNode = new SwingNode();
 /**************************Variable Declaration**************************/	
 	
@@ -134,7 +131,7 @@ public class paneInterface extends DisplayController {
 		tabInterface.getChildren().add(graphBackground);
 		initTextField();
 		initGeSearchLabels();
-		//chart.drawChart();
+		pane_createChart();
 		group.getChildren().add(tabInterface);
 		tabInterface.setVisible(true);
 	}
@@ -227,6 +224,13 @@ public class paneInterface extends DisplayController {
 		pane_Tooltip = new Tooltip(s);
 		pane_Tooltip.setShowDelay(Duration.millis(100));
 		pane_Tooltip.install(itemIconPaneImage, pane_Tooltip);
+		
+	}
+	
+	protected void pane_createChart() {
+		
+		
+        tabInterface.getChildren().add(cp.createChart());
 		
 	}
 /**

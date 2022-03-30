@@ -115,3 +115,8 @@ yourJSonObject.getJSONObject("cover").getJSONObject("content").getJSONObject("ar
 
 Method2:
 json.getJSONArray("content").getJSONObject(0).getString("article")
+
+
+-----------Line chart-----------
+Tooltip: https://stackoverflow.com/questions/25892695/tooltip-on-line-chart-showing-date
+LineChart: https://docs.oracle.com/javafx/2/charts/line-chart.htm

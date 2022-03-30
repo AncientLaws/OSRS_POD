@@ -25,7 +25,7 @@ public class DisplayController extends Window implements ChangeListener{
 	TabController tab9 ;
 	TabController tab10;
 	 String tabNo;
-	 double opacity = .4;
+
 	 
 	 DisplayController (){
 		
@@ -83,7 +83,6 @@ public class DisplayController extends Window implements ChangeListener{
 	}
 	protected void setListners()
 	{
-
 		tab1.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab1"));
 		tab2.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab2"));
 		tab3.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab3"));
@@ -114,7 +113,8 @@ public class DisplayController extends Window implements ChangeListener{
 	//addChangelistener to the 1Tab label
 	private void setInterfaceInvisible(String s)
 	{
-		
+		double opacity = .4;
+		 
 		tab1.setInterfaceVisible(false);
 		tab2.setInterfaceVisible(false);
 		tab3.setInterfaceVisible(false);

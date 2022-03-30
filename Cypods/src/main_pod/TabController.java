@@ -6,10 +6,13 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.jfree.chart.ChartFrame;
-import org.jfree.chart.ChartPanel;
-
 import javafx.embed.swing.SwingNode;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.effect.DropShadow;
@@ -38,37 +41,14 @@ public class TabController extends paneInterface {
 	GET Get =  new GET(); 
 	private String[] itemInfoArr = new String [18];
 	private String[][] tc_itemListArray = new String[100][6];
-	/** name  				//0		
-	,id    				//1	
-	,icon 				//2	
-	,icon_large  		//3	
-	,type  				//4	
-	,typeIcon  			//5	
-	,description 		//6	
-	,members 			//7	
-
-	,currentPrice		//8	
-	,currentTrend		//9	
-
-	,todayPrice			//10	
-	,todayTrend			//11	
-
-	,day30_trend 		//12	
-	,day30_change 		//13	
-	,day90_trend 		//14	
-	,day90_change 		//15
-	,day180_trend 		//16	
-	,day180_change};	//17	
-	*/
 
 	/**Tab icon settings*/
 	int X;
 	int Y;
+	/**End Tab icon Settings*/
 	
-/**End Tab icon Settings*/
 	
-	final SwingNode chartSwingNode = new SwingNode();
-	chartPane cp = new chartPane();
+	//chartPane cp = new chartPane();
 	
 	TabController (String s){
 		 imageView = new ImageView();
@@ -244,7 +224,7 @@ public class TabController extends paneInterface {
 		        				 			,itemInfoArr[17]						//180 day change
   		        				 );
 		        		 itemSearchInput.positionCaret(itemSearchInput.getText().length());  //
-		        		 tab_createChart();
+		        		 //pane_createChart();
 	        	 	 }
 	        	 catch(Exception e) {
 		        		 System.out.println("Error in setInterfaceLabels()");
@@ -373,18 +353,7 @@ public class TabController extends paneInterface {
 		
 	}
 	
-	protected void tab_createChart() {
-		
-		chartSwingNode.setContent(new ChartPanel(cp.createChart()));
-		chartSwingNode.setLayoutX(05);
-		chartSwingNode.setLayoutY(-5);
-		//chartSwingNode.setScaleX(1);
-		chartSwingNode.setScaleY(.97);
 
-		tabInterface.getChildren().add(chartSwingNode);
-		
-		
-	}
 
 	private void addLabelActionListeners() {
 		geSearchResult1.setOnMouseEntered((mouseEvent)-> {geSearchResult1.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
