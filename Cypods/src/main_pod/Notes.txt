@@ -120,3 +120,7 @@ json.getJSONArray("content").getJSONObject(0).getString("article")
 -----------Line chart-----------
 Tooltip: https://stackoverflow.com/questions/25892695/tooltip-on-line-chart-showing-date
 LineChart: https://docs.oracle.com/javafx/2/charts/line-chart.htm
+
+
+--------ZoomManager--------------
+https://github.com/kerner1000/javafx-chart-zooming/blob/master/src/main/java/com/github/javafx/charts/zooming/ZoomManager.java
