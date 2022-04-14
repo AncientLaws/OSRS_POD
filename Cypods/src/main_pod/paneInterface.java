@@ -229,8 +229,8 @@ public class paneInterface extends DisplayController {
 	
 	protected void pane_createChart() {
 		
-		new ZoomManager(tabInterface,cp.lineChart, cp.series);
-        tabInterface.getChildren().add(cp.createChart());
+		
+        //tabInterface.getChildren().add(cp.createChart());
 		
 	}
 /**
