@@ -28,46 +28,38 @@ import javafx.util.Duration;
 public class TabController extends paneInterface {
 	
 	
-	private String ItemSpriteUrl = "";
-	private String itemToolTip = "Item Tool Tip";
-	private String tabActive;
-	protected ImageView imageView;
-	private Image image;
-	protected InputStream error;
-	public InputStream input;
+/***************Interface variables********************/
 	protected Label lTab;
 	static String instanceActiveTab; 
+	private String tabActive;
+	private Image image;
+	protected ImageView imageView;
 	Tooltip tooltip;
+	private String itemToolTip = "Item Tool Tip";
+	
+/***************Connect and get data********************/
 	GET Get =  new GET(); 
+	private String ItemSpriteUrl = "";
+	protected InputStream error;
+	public InputStream input;	
 	private String[] itemInfoArr = new String [18];
 	private String[][] tc_itemListArray = new String[100][6];
 
-	/**Tab icon settings*/
+/***************Tab icon settings********************/
 	int X;
 	int Y;
-	/**End Tab icon Settings*/
-	
-	
-	//chartPane cp = new chartPane();
-	
-	TabController (String s){
-		 imageView = new ImageView();
-		tabSettings(s);
-		try {
-			
-			itemSearchListener();
-			
-		}
-		catch(Exception e)
-		{
-			catchError();
-		}
 
+/***************End variable declaration**************/			
+	
+TabController (String s){
+		imageView = new ImageView();
+		tabSettings(s);
+		try { itemSearchListener();
+		}
+		catch(Exception e) {catchError();
+		}
 	}
 	
-	
-	//paneInterface pi  = new paneInterface();
-	    
 	public void tabSettings(String tab) {
 		System.out.println("tabSettings");
 		switch (tab){

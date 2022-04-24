@@ -31,15 +31,29 @@ import javafx.util.Duration;
 
 public class paneInterface extends DisplayController {
 
-/**************************Variable Declaration**************************/
+/**************************Images**************************/
+	Image image;
 	ImageView imageView ;
 	ImageView geSearch;
 	ImageView inventory;
 	ImageView graphBackground;
+	ImageView itemTopMenu;
 	ImageView itemIconPaneImage;
-	Image image;
+	ImageView img1 = new ImageView(image);
+	ImageView img2 = new ImageView(image);
+	ImageView img3 = new ImageView(image);
+	ImageView img4 = new ImageView(image);
+	ImageView img5 = new ImageView(image);
+	ImageView img6 = new ImageView(image);
+	ImageView img7 = new ImageView(image);
+	ImageView img8 = new ImageView(image);
+	ImageView img9 = new ImageView(image);
+	ImageView img10 = new ImageView(image);
+	ImageView img11 = new ImageView(image);
+	ImageView img12 = new ImageView(image);
 
 
+/**************************Labels**************************/
 	Label name;
 	Label id;
 	Label type;
@@ -72,20 +86,8 @@ public class paneInterface extends DisplayController {
 	Label geSearchResult11;
 	Label geSearchResult12;
 	
-	ImageView img1 = new ImageView(image);
-	ImageView img2 = new ImageView(image);
-	ImageView img3 = new ImageView(image);
-	ImageView img4 = new ImageView(image);
-	ImageView img5 = new ImageView(image);
-	ImageView img6 = new ImageView(image);
-	ImageView img7 = new ImageView(image);
-	ImageView img8 = new ImageView(image);
-	ImageView img9 = new ImageView(image);
-	ImageView img10 = new ImageView(image);
-	ImageView img11 = new ImageView(image);
-	ImageView img12 = new ImageView(image);
-
-	
+	String pane_ItemSearchInputText;
+/***************Ge search area locations********************/	
 	int row1X;
 	int row2X;
 	int row3X;
@@ -94,22 +96,23 @@ public class paneInterface extends DisplayController {
 	int row1Y;
 	int row2Y;
 	int row3Y;	
-	
+
+/***************Event handlers********************/
 	private EventHandler<MouseEvent> mouseMovedHandler ;
 	private EventHandler<KeyEvent> textInputListener ;
+
+
+/***************Classes /other declarations**********/		
+	protected Tooltip pane_Tooltip;
+	TextField itemSearchInput;
+	Font f;
 	
 	protected Pane tabInterface = new Pane();
 	chartPane cp = new chartPane();
-	protected Tooltip pane_Tooltip;
 	
-	TextField itemSearchInput;
-	String pane_ItemSearchInputText;
-	Font f;
-	
-	//chartPane cp = new chartPane();
 
-	//final SwingNode chartSwingNode = new SwingNode();
-/**************************Variable Declaration**************************/	
+/***************End variable declaration**************/			
+	
 	
 	public paneInterface()	{
 		pane_activateInterface();
@@ -125,10 +128,12 @@ public class paneInterface extends DisplayController {
 		pane_drawItemScrollArea();
 		pane_drawInventoryMenu();
 		pane_drawItemTopMenu();
+		pane_drawChartArea();
 		initLabels();
 		tabInterface.getChildren().add(geSearch);
 		tabInterface.getChildren().add(inventory);
 		tabInterface.getChildren().add(graphBackground);
+		tabInterface.getChildren().add(itemTopMenu);
 		initTextField();
 		initGeSearchLabels();
 		pane_createChart();
@@ -159,20 +164,29 @@ public class paneInterface extends DisplayController {
 	}
 	
 	private void pane_drawInventoryMenu() {
-		inventory = new ImageView(new Image("Inventory_2.PNG"));
-		inventory.setX(746);
-		inventory.setY(110);
-		inventory.setFitWidth(325);
-		inventory.setFitHeight(525); //425
+		inventory = new ImageView(new Image("gePriceGuideSidebar3.png"));
+		inventory.setX(747);
+		inventory.setY(404);
+		inventory.setFitWidth(321);
+		inventory.setFitHeight(223); //425
 	}
 
 	private void pane_drawItemTopMenu() {
 		//Item Menu Border
-		graphBackground = new ImageView(new Image("Inventory_2.PNG"));
-		graphBackground.setX(746);
+		itemTopMenu = new ImageView(new Image("Inventory_2.PNG"));
+		itemTopMenu.setX(746);
+		itemTopMenu.setY(0);
+		itemTopMenu.setFitWidth(325);
+		itemTopMenu.setFitHeight(115); //215
+	}
+	
+	private void pane_drawChartArea() {
+		//Item Menu Border
+		graphBackground = new ImageView(new Image("geChartArea2.png"));
+		graphBackground.setX(4);
 		graphBackground.setY(0);
-		graphBackground.setFitWidth(325);
-		graphBackground.setFitHeight(115); //215
+		graphBackground.setFitWidth(1065);
+		graphBackground.setFitHeight(404); //215
 	}
 	
 	protected void pane_setItemTopMenu(Image input) {
