@@ -230,7 +230,7 @@ TabController (String s){
 	
 	private void tab_IconTooltip (String s) {
 		tooltip = new Tooltip(s);
-		tooltip.setShowDelay(Duration.millis(100));
+		//tooltip.setShowDelay(Duration.millis(100));
 		tooltip.setId("tooltip");
 		tooltip.install(imageView, tooltip);
 	}
@@ -338,7 +338,9 @@ TabController (String s){
 			
 		}
 		catch(Exception e) {
-			System.out.println("Error grabbing Icon Images");
+			
+			System.out.println("Error grabbing Icon Images in TabController>geSearchResults");
+			System.out.println(e);
 			
 		}
 		

@@ -124,3 +124,19 @@ LineChart: https://docs.oracle.com/javafx/2/charts/line-chart.htm
 
 --------ZoomManager--------------
 https://github.com/kerner1000/javafx-chart-zooming/blob/master/src/main/java/com/github/javafx/charts/zooming/ZoomManager.java
+
+---------Scientific charts for JavaFX - Hansolo------------
+https://github.com/HanSolo/charts
+
+
+---------Hansolo toolbox-----
+https://github.com/HanSolo/toolbox/releases/tag/17.0.23
+https://github.com/HanSolo/toolboxfx/releases/tag/17.0.28
+
+
+
+-------Module path------------
+--module-path "A:\JavaFx\javafx-sdk-17.0.1\lib" --add-modules javafx.controls,javafx.fxml --add-modules=javafx.swing,javafx.graphics,javafx.fxml,javafx.media,javafx.web --add-reads javafx.graphics=ALL-UNNAMED --add-opens javafx.controls/com.sun.javafx.charts=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.iio=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.iio.common=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.css=ALL-UNNAMED --add-opens javafx.base/com.sun.javafx.runtime=ALL-UNNAMED
+
+-------
+

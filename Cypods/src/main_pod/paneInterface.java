@@ -127,16 +127,14 @@ public class paneInterface extends DisplayController {
 		
 		pane_drawItemScrollArea();
 		pane_drawInventoryMenu();
-		pane_drawItemTopMenu();
+		
 		pane_drawChartArea();
+		//pane_drawItemTopMenuArea();
 		initLabels();
-		tabInterface.getChildren().add(geSearch);
-		tabInterface.getChildren().add(inventory);
-		tabInterface.getChildren().add(graphBackground);
-		tabInterface.getChildren().add(itemTopMenu);
 		initTextField();
 		initGeSearchLabels();
 		pane_createChart();
+		
 		group.getChildren().add(tabInterface);
 		tabInterface.setVisible(true);
 	}
@@ -161,6 +159,7 @@ public class paneInterface extends DisplayController {
 		geSearch.setFitWidth(750);
 		geSearch.setFitHeight(225);
 		geSearch.setRotate(180);
+		tabInterface.getChildren().add(geSearch);
 	}
 	
 	private void pane_drawInventoryMenu() {
@@ -169,24 +168,28 @@ public class paneInterface extends DisplayController {
 		inventory.setY(404);
 		inventory.setFitWidth(321);
 		inventory.setFitHeight(223); //425
+		tabInterface.getChildren().add(inventory);
 	}
 
-	private void pane_drawItemTopMenu() {
+	private void pane_drawItemTopMenuArea() {
 		//Item Menu Border
 		itemTopMenu = new ImageView(new Image("Inventory_2.PNG"));
 		itemTopMenu.setX(746);
 		itemTopMenu.setY(0);
 		itemTopMenu.setFitWidth(325);
 		itemTopMenu.setFitHeight(115); //215
+		tabInterface.getChildren().add(itemTopMenu);
 	}
 	
 	private void pane_drawChartArea() {
-		//Item Menu Border
+		
 		graphBackground = new ImageView(new Image("geChartArea2.png"));
 		graphBackground.setX(4);
 		graphBackground.setY(0);
 		graphBackground.setFitWidth(1065);
 		graphBackground.setFitHeight(404); //215
+		graphBackground.rotateProperty().setValue(180);
+		tabInterface.getChildren().add(graphBackground);
 	}
 	
 	protected void pane_setItemTopMenu(Image input) {
@@ -236,7 +239,7 @@ public class paneInterface extends DisplayController {
 	protected void pane_iconTooltip (String s)
 	{
 		pane_Tooltip = new Tooltip(s);
-		pane_Tooltip.setShowDelay(Duration.millis(100));
+		//pane_Tooltip.setShowDelay(Duration.millis(100));
 		pane_Tooltip.install(itemIconPaneImage, pane_Tooltip);
 		
 	}
@@ -248,7 +251,7 @@ public class paneInterface extends DisplayController {
 		
 	}
 /**
- * Initializes input text field and adds mouse listener that will remove the initial prompt text	
+ * Initializes input text field in the Ge search bar and adds mouse listener that will remove the initial prompt text	
  */
 	private void initTextField() {
 		f = new Font("runescape_uf.ttf", 12);
@@ -274,6 +277,9 @@ public class paneInterface extends DisplayController {
 			
 	}
 
+	/**
+	 * A method that initializes all the labels in the main pane interface (Location, style, etc)
+	 * **/
 	private void initLabels() {
 		 xyCoordinates = new Label("Coordinates");
 		 xyCoordinates.setTranslateX(5);
@@ -281,12 +287,12 @@ public class paneInterface extends DisplayController {
 		 xyCoordinates.setStyle("-fx-text-fill: orange; -fx-font-size: 20px; -fx-font-weight: bold");
 		
 		
-		 name  = new Label("-");
+		 name  = new Label(null);
 		 name.setTranslateX(763);
 		 name.setTranslateY(10);
 		 name.setStyle("-fx-text-fill: orange; -fx-font-size: 20px; -fx-font-weight: bold");
 		 
-		 currentPrice = new Label("-");
+		 currentPrice = new Label(null);
 		 currentPrice.setTranslateX(980);
 		 currentPrice.setTranslateY(85);
 		 currentPrice.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold");
@@ -296,7 +302,7 @@ public class paneInterface extends DisplayController {
 		 id.setTranslateY(190);
 		 
 		 
-		 description  = new Label("-");
+		 description  = new Label(null);
 		 description.setTranslateX(763);
 		 description.setTranslateY(50);
 		 description.setWrapText(true);
@@ -308,37 +314,37 @@ public class paneInterface extends DisplayController {
 		 members.setTranslateX(990);
 		 members.setTranslateY(135);
 		 
-		 todayPrice = new Label("-");
-		 todayPrice.setTranslateX(850);
-		 todayPrice.setTranslateY(135);
+		 todayPrice = new Label(null);
+		 todayPrice.setTranslateX(842);
+		 todayPrice.setTranslateY(450);
 		 
 		 changeToday = new Label("Change today:");
-		 changeToday.setTranslateX(763);
-		 changeToday.setTranslateY(135);
+		 changeToday.setTranslateX(755);
+		 changeToday.setTranslateY(450);
 		 
-		 day30_change  = new Label("-");
-		 day30_change.setTranslateX(820);
-		 day30_change.setTranslateY(165);   
+		 day30_change  = new Label(null);
+		 day30_change.setTranslateX(812);
+		 day30_change.setTranslateY(475);   
 		 
 		 change30Days = new Label("30 days: ");
-		 change30Days.setTranslateX(763);
-		 change30Days.setTranslateY(165);   
+		 change30Days.setTranslateX(755);
+		 change30Days.setTranslateY(475);   
 
-		 day90_change  = new Label("-");
-		 day90_change.setTranslateX(820);
-		 day90_change.setTranslateY(195);
+		 day90_change  = new Label(null);
+		 day90_change.setTranslateX(812);
+		 day90_change.setTranslateY(500);
 
 		 change90Days = new Label("90 days: ");
-		 change90Days.setTranslateX(763);
-		 change90Days.setTranslateY(195);
+		 change90Days.setTranslateX(755);
+		 change90Days.setTranslateY(500);
 		 
-		 day180_change  = new Label("-");
-		 day180_change.setTranslateX(820);
-		 day180_change.setTranslateY(225);
+		 day180_change  = new Label(null);
+		 day180_change.setTranslateX(812);
+		 day180_change.setTranslateY(528);
 		 
 		 change180Days = new Label("180 days: ");
-		 change180Days.setTranslateX(763);
-		 change180Days.setTranslateY(225);
+		 change180Days.setTranslateX(755);
+		 change180Days.setTranslateY(528);
 		 
 		 tabInterface.getChildren().addAll(name
 				 ,id
@@ -358,6 +364,9 @@ public class paneInterface extends DisplayController {
 				 ,xyCoordinates	);
 		 
 	}
+	/**
+	 * A method that sets the labels in the main pane interface.
+	 * **/
 	
 	protected void setLabels(
 			 String name1
