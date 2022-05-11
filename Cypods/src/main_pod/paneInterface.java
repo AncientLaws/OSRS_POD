@@ -124,6 +124,9 @@ public class paneInterface extends DisplayController {
 	
 	protected void pane_activateInterface() {
 		System.out.println("activateInterface");
+		tabInterface.setTranslateX(0);
+		tabInterface.setTranslateY(91);
+		//tabInterface.setPrefSize(2000, 2000);
 		
 		pane_drawItemScrollArea();
 		pane_drawInventoryMenu();
@@ -152,8 +155,6 @@ public class paneInterface extends DisplayController {
 	
 	private void pane_drawItemScrollArea() {
 		geSearch = new ImageView(new Image("GE_SEARCH_V6.png"));
-		tabInterface.setTranslateX(0);
-		tabInterface.setTranslateY(91);
 		geSearch.setX(0);
 		geSearch.setY(405);
 		geSearch.setFitWidth(750);
@@ -247,7 +248,7 @@ public class paneInterface extends DisplayController {
 	protected void pane_createChart() {
 		
 		
-        //tabInterface.getChildren().add(cp.createChart());
+        tabInterface.getChildren().add(new chartPane());
 		
 	}
 /**
