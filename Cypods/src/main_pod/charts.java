@@ -40,9 +40,10 @@ public class charts implements ChartMouseListenerFX {
 
 	private Crosshair yCrosshair;
 	JFreeChart chart;
+	XYDataset dataset;
 
 	public charts() {
-		XYDataset dataset = createDataset();
+		dataset = createDataset();
 		chart = createChart(dataset);
 
 		this.chartViewer = new ChartViewer(chart);
@@ -53,7 +54,7 @@ public class charts implements ChartMouseListenerFX {
 		// getChildren().add(this.chartViewer);
 
 		CrosshairOverlayFX crosshairOverlay = new CrosshairOverlayFX();
-		this.xCrosshair = new Crosshair(Double.NaN, Color.WHITE, new BasicStroke(0f));
+		/*this.xCrosshair = new Crosshair(Double.NaN, Color.WHITE, new BasicStroke(0f));
 		this.xCrosshair.setStroke(
 				new BasicStroke(1.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[] { 2.0f, 2.0f }, 0));
 		this.xCrosshair.setLabelVisible(true);
@@ -62,7 +63,7 @@ public class charts implements ChartMouseListenerFX {
 				new BasicStroke(1.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[] { 2.0f, 2.0f }, 0));
 		this.yCrosshair.setLabelVisible(true);
 		crosshairOverlay.addDomainCrosshair(xCrosshair);
-		crosshairOverlay.addRangeCrosshair(yCrosshair);
+		crosshairOverlay.addRangeCrosshair(yCrosshair);*/
         chart.getXYPlot().getRenderer().setSeriesVisibleInLegend(0, false, false); //Makes legend invisible
         Color chartBackgroundColor = new Color(126, 102, 64); //new Color(124, 101, 61);
         Color chartSeriesColor = new Color(120, 173, 255);
@@ -72,8 +73,8 @@ public class charts implements ChartMouseListenerFX {
         chart.getXYPlot().getRenderer().setSeriesVisible(0, true);
 
 		
-		 Platform.runLater(() -> {
-		 this.chartViewer.getCanvas().addOverlay(crosshairOverlay); });
+		 /*Platform.runLater(() -> {
+		 this.chartViewer.getCanvas().addOverlay(crosshairOverlay); });*/
 		 
 	}
 
@@ -82,9 +83,8 @@ public class charts implements ChartMouseListenerFX {
 	  }
 	 
 
-    @Override
-    public void chartMouseMoved(ChartMouseEventFX event) {
-        Rectangle2D dataArea = this.chartViewer.getCanvas().getRenderingInfo().getPlotInfo().getDataArea();
+     public void chartMouseMoved(ChartMouseEventFX event) {
+        /*Rectangle2D dataArea = this.chartViewer.getCanvas().getRenderingInfo().getPlotInfo().getDataArea();
         JFreeChart chart = event.getChart();
         XYPlot plot = (XYPlot) chart.getPlot();
         ValueAxis xAxis = plot.getDomainAxis();
@@ -95,15 +95,30 @@ public class charts implements ChartMouseListenerFX {
             x = Double.NaN;                  
         }
         double y = DatasetUtils.findYValue(plot.getDataset(), 0, x);
-        this.xCrosshair.setValue(x);
-        this.yCrosshair.setValue(y);
+        //this.xCrosshair.setValue(x);
+        //this.yCrosshair.setValue(y);*/
 
     }
-    
-
+    protected void runchart(String url) {
+    	dataset = createItemPriceDataset(url);
+		chart = createChart(dataset);
+		chartViewer = new ChartViewer(chart);
+		chartViewer.setPrefSize(1063, 351);
+		chartViewer.setLayoutX(4);
+		chartViewer.setLayoutY(52);
+		chartViewer.addChartMouseListener(this);
+		
+        chart.getXYPlot().getRenderer().setSeriesVisibleInLegend(0, false, false); //Makes legend invisible
+        Color chartBackgroundColor = new Color(126, 102, 64); //new Color(124, 101, 61);
+        Color chartSeriesColor = new Color(120, 173, 255);
+        chart.getPlot().setBackgroundPaint( chartBackgroundColor);//0x866b46
+        chart.getXYPlot().getRenderer().setSeriesPaint(0, chartSeriesColor);
+        chart.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(3.0f));
+        chart.getXYPlot().getRenderer().setSeriesVisible(0, true);
+    	
+    }
 	private static XYDataset createDataset() {
 		XYSeries series = new XYSeries("S1");
-		series.setDescription("hello what");
 		for (int x = 0; x < 10; x++) {
 			series.add(x, x + Math.random() * 4.0);
 		}
@@ -119,6 +134,26 @@ public class charts implements ChartMouseListenerFX {
 
 	protected ChartViewer charts_chartViewer() {
 		return chartViewer;
+	}
+	
+	protected XYDataset createItemPriceDataset(String url) {
+		XYSeries series = new XYSeries("Item Price");
+		GET getDataGet = new GET();
+		String [][] itemPriceArrayStrings;
+		itemPriceArrayStrings = getDataGet.getItemJsonPrice_RuneLine(url);
+		
+		
+		
+		for(int i = 0; i < itemPriceArrayStrings.length-1;i++) {
+			
+			Double x = Double.parseDouble(itemPriceArrayStrings[i][0]);
+			Double y = Double.parseDouble(itemPriceArrayStrings[i][3]); 
+			
+			series.add(x, y);
+		}
+		
+		XYSeriesCollection itemDatasetCollection = new XYSeriesCollection(series);
+		return itemDatasetCollection;
 	}
 	
 

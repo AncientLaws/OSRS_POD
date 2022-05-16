@@ -242,18 +242,30 @@ public class GET extends Connect {
 			for(int i = 0, size = jsonArray.length(); i < size; i++) {
 				JSONObject arrayParserJSONObject =  jsonArray.getJSONObject(i);
 				
-				String[] itemPriceNode = new String [3];
+				String[] itemPriceNode = new String [5];
 				itemPriceNode [0] = String.valueOf(arrayParserJSONObject.get("timestamp"));
-				itemPriceNode [1] = String.valueOf(arrayParserJSONObject.getInt("avgHighPrice")); 
+				itemPriceNode [1] = String.valueOf(arrayParserJSONObject.get("avgHighPrice"));
 				itemPriceNode [2] = String.valueOf(arrayParserJSONObject.get("avgLowPrice"));
-				itemPriceNode [3] = String.valueOf(arrayParserJSONObject.get("highPriceVolume"));
+				itemPriceNode [3] = String.valueOf(arrayParserJSONObject.get("highPriceVolume"));	
 				itemPriceNode [4] = String.valueOf(arrayParserJSONObject.get("lowPriceVolume"));
 				
+				
+				if(itemPriceNode [0] == "null") {itemPriceNode [0]="0";}
+				if(itemPriceNode [1] == "null") {itemPriceNode [1]="0";}
+				if(itemPriceNode [2] == "null") {itemPriceNode [2]="0";}
+				if(itemPriceNode [3] == "null") {itemPriceNode [3]="0";}
+				if(itemPriceNode [4] == "null") {itemPriceNode [4]="0";}
+
+				/*System.out.println("timestamp: " +"\t " 			+itemPriceNode [0] 
+									+"\navgHighPrice: " + "\t " 	+itemPriceNode [1]
+									+"\navgLowPrice: " + "\t " 		+itemPriceNode [2]
+									+"\nhighPriceVolume: " + "\t "  +itemPriceNode [3]
+									+"\nlowPriceVolume: " + "\t "   +itemPriceNode [4]);*/
 				
 				itemPriceArray[i] = itemPriceNode;
 
 				}
-			System.out.println(itemPriceArray[10][2] +"" +itemPriceArray[10][2]);
+			//System.out.println("avgHighPrice" +" " +itemPriceArray[10][1]);
 			//return itemPriceArray;
 			}
 			catch(Exception e)

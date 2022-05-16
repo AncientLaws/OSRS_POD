@@ -135,6 +135,8 @@ TabController (String s){
 		itemInfoArr = Get.getItemInfo();		//Getting chosen Item Json Data
 		setIcon();
 		setInterfaceLabels();					//Drawing everything
+		pane_updateChart("https://prices.runescape.wiki/api/v1/osrs/timeseries?timestep=5m&id=" + itemID);
+		
 	}
 	
 	private void catchError(){

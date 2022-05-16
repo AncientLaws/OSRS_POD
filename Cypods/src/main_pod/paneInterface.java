@@ -253,6 +253,12 @@ public class paneInterface extends DisplayController {
 		
 		tabInterface.getChildren().addAll(cp.charts_chartViewer());
 	}
+	
+	public void pane_updateChart(String url) {
+		tabInterface.getChildren().remove(cp.charts_chartViewer());
+		cp.runchart(url);
+		tabInterface.getChildren().addAll(cp.charts_chartViewer());
+	}
 
 	/**
 	 * Initializes input text field in the Ge search bar and adds mouse listener
