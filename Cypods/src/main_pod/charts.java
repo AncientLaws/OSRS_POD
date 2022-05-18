@@ -3,6 +3,16 @@ package main_pod;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.geom.Rectangle2D;
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
+
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.application.Platform;
@@ -16,6 +26,7 @@ import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
 import org.jfree.chart.LegendItemSource;
 import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.date.SerialDate;
 import org.jfree.chart.fx.ChartViewer;
 import org.jfree.chart.fx.interaction.ChartMouseEventFX;
 import org.jfree.chart.fx.interaction.ChartMouseListenerFX;
@@ -26,9 +37,16 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.chart.ui.RectangleEdge;
 import org.jfree.data.general.DatasetUtils;
+import org.jfree.data.time.TimeSeries;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.RegularTimePeriod;
+import org.jfree.data.time.Second; 
+import org.jfree.data.time.TimeSeries; 
+import org.jfree.data.time.TimeSeriesCollection; 
+import org.jfree.data.xy.XYDataset; 
 
 //import org.jfree.chart.fx.ChartViewer;
 
@@ -127,7 +145,7 @@ public class charts implements ChartMouseListenerFX {
 	}
 
 	private static JFreeChart createChart(XYDataset dataset) {
-		JFreeChart chart = ChartFactory.createXYLineChart(null, null, null, dataset);
+		JFreeChart chart = ChartFactory.createTimeSeriesChart(null, null, null, dataset);//createXYLineChart(null, null, null, dataset);
 		
 		return chart;
 	}
@@ -137,23 +155,70 @@ public class charts implements ChartMouseListenerFX {
 	}
 	
 	protected XYDataset createItemPriceDataset(String url) {
-		XYSeries series = new XYSeries("Item Price");
+		TimeSeries series = new TimeSeries( "Item Data" );
+		
+		
 		GET getDataGet = new GET();
 		String [][] itemPriceArrayStrings;
 		itemPriceArrayStrings = getDataGet.getItemJsonPrice_RuneLine(url);
-		
+	    Date date = new Date();
+
 		
 		
 		for(int i = 0; i < itemPriceArrayStrings.length-1;i++) {
 			
-			Double x = Double.parseDouble(itemPriceArrayStrings[i][0]);
+			String x = itemPriceArrayStrings[i][0]; //timestamp
 			Double y = Double.parseDouble(itemPriceArrayStrings[i][3]); 
 			
-			series.add(x, y);
+			series.add((epochToDateTime(x)), y);
+			
+			System.out.println("\nnew Day(epochToDateTime(x)) \t: " + new Day(epochToDateTime(x)) + "\nepochToDateTime(x): \t" + epochToDateTime(x));
 		}
 		
-		XYSeriesCollection itemDatasetCollection = new XYSeriesCollection(series);
-		return itemDatasetCollection;
+		//XYSeriesCollection itemDatasetCollection = new XYSeriesCollection(series);
+		return new TimeSeriesCollection(series);
+	}
+	
+	private Date epochToDateTime(String epoch) {
+		
+		Long longEpoch = Long.parseLong(epoch);  
+		LocalDateTime localDateTime = Instant.ofEpochMilli(longEpoch).atZone(ZoneId.systemDefault()).toLocalDateTime();
+		//LocalDate date =Instant.ofEpochMilli(longEpoch).atZone(ZoneId.systemDefault()).toLocalDate();
+              
+		Instant i = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
+		
+		java.util.Date date1 = Date.from(i);
+		
+		//System.out.println("Date: " + date1);
+		//String string = localDateTime.toString();
+		
+		/*
+		//System.out.println("LocalDateTime: " + localDateTime);
+		
+		
+		//Date myDate = null;
+		SimpleDateFormat standardDateFormat = new SimpleDateFormat("dd-M-yyyy-hh:mm:ss");
+		String strDate = standardDateFormat.format(string); 
+		System.out.println("strDate before formatting: " + strDate);
+		Date myDate = null;
+		try {
+			myDate = standardDateFormat.parse(strDate );
+			System.out.println("\nLocalDateFormat.toString(): " + string + "\nmyDate Parse: \t" + myDate + "\nstrDate: \t");
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			 myDate = standardDateFormat.parse(localDateTime.toString());
+			System.out.println("epochToDateTimeTryCatchBlock myDate: " + myDate);
+		} catch (ParseException e) {
+			System.out.println("standarDateFormat Parse Error in epochToDateTime");
+			e.printStackTrace();
+		}
+		*/
+		
+		return  date1;
 	}
 	
 
