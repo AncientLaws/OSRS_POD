@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 import java.sql.Time;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -25,6 +26,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
 import org.jfree.chart.LegendItemSource;
+import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.date.SerialDate;
 import org.jfree.chart.fx.ChartViewer;
@@ -63,6 +65,8 @@ public class charts implements ChartMouseListenerFX {
 	public charts() {
 		dataset = createDataset();
 		chart = createChart(dataset);
+		DateAxis axis = (DateAxis) chart.getDomainAxis();
+		axis.setDateFormatOverride(DateFormat.getDateInstance());
 
 		this.chartViewer = new ChartViewer(chart);
 		chartViewer.setPrefSize(1063, 351);
