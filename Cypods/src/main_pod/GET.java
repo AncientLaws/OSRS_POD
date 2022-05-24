@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Iterator;
 
+import org.graalvm.compiler.debug.DebugCloseable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -43,8 +44,7 @@ public class GET extends Connect {
 	
 	private String[] itemInfoArr1 = new String [18];
 	private String[][] itemListArray = new String [100][6];
-	//private Object[] itemListNode = new String [6];
-	//JSONObject arrayParserJSONObject;
+	public static boolean DEBUG = false;
 
 	GET() {
 	}
@@ -191,7 +191,7 @@ public class GET extends Connect {
 			//System.out.println(itemListArray[i][1]);
 
 			}
-		System.out.println(itemListArray[10][2] +"" +itemListArray[10][2]);
+		if(DEBUG == true) {System.out.println(itemListArray[10][2] +"" +itemListArray[10][2]);}
 		}
 		catch(Exception e)
 		{
@@ -216,7 +216,7 @@ public class GET extends Connect {
 				String jsonString = response.toString();
 				itemPriceJSON = new JSONObject(jsonString);
 				
-				System.out.println("getItemJsonPrice_RuneLine");
+				if(DEBUG == true) {System.out.println("getItemJsonPrice_RuneLine");}
 				
 			}
 		}
@@ -231,7 +231,7 @@ public class GET extends Connect {
 		JSONArray jsonArray =  itemPriceJSON.getJSONArray("data");
 		String [][] itemPriceArray = new String [jsonArray.length()][3];
 		try {
-			System.out.println("getItemJsonPrice_RuneLine");
+			if(DEBUG == true) {System.out.println("getItemJsonPrice_RuneLine");}
 			/*Clearing old item data (if applicable)*/
 			//for(int i = 0, x = itemListArray.length - 1; i < x; i++) {
 			//	for(int j = 0, y = itemListArray[x].length - 1; j < y; j++)

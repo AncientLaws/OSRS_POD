@@ -3,6 +3,8 @@ package main_pod;
 import java.io.InputStream;
 import java.net.URL;
 
+import org.graalvm.compiler.nodes.StaticDeoptimizingNode;
+import org.jfree.chart.renderer.category.StatisticalBarRenderer;
 import org.w3c.dom.html.HTMLTableCaptionElement;
 
 import javafx.beans.value.ChangeListener;
@@ -24,7 +26,9 @@ public class DisplayController extends Window implements ChangeListener{
 	TabController tab8 ;
 	TabController tab9 ;
 	TabController tab10;
-	 String tabNo;
+	String tabNo;
+	
+	public static boolean DEBUG = false;
 
 	 
 	 DisplayController (){
@@ -35,36 +39,36 @@ public class DisplayController extends Window implements ChangeListener{
 		try {
 			
 
-		   System.out.println("Called tab1");
+			if(DEBUG == true) {System.out.println("Called tab1");}
 		   tab1 = new TabController("Tab1"); 
 		    
-		   System.out.println("Called tab2");
+		   if(DEBUG == true) {System.out.println("Called tab2");}
 		   tab2 = new TabController("Tab2"); 
 
-		    System.out.println("Called tab2");
+		   if(DEBUG == true) { System.out.println("Called tab2");}
 	
-		   System.out.println("Called tab3");
+		   if(DEBUG == true) { System.out.println("Called tab3");}
 		   tab3 = new TabController("Tab3"); 
 		  
-		   System.out.println("Called tab4");		   
+		   if(DEBUG == true) {System.out.println("Called tab4");}		   
 		   tab4 = new TabController("Tab4"); 
 		   
-		   System.out.println("Called tab5");
+		   if(DEBUG == true) {System.out.println("Called tab5");}
 		   tab5 = new TabController("Tab5"); 
 		   
-		   System.out.println("Called tab6");		   
+		   if(DEBUG == true) {System.out.println("Called tab6");}		   
 		   tab6 = new TabController("Tab6"); 
 		   
-		   System.out.println("Called tab7");		   
+		   if(DEBUG == true) {System.out.println("Called tab7");}		   
 		   tab7 = new TabController("Tab7"); 
 		  
-		   System.out.println("Called tab8");		   
+		   if(DEBUG == true) {System.out.println("Called tab8");}		   
 		   tab8 = new TabController("Tab8"); 
 		  
-		   System.out.println("Called tab9");		   
+		   if(DEBUG == true) {System.out.println("Called tab9");}		   
 		   tab9 = new TabController("Tab9"); 
 		   
-		   System.out.println("Called tab10");		   
+		   if(DEBUG == true) {System.out.println("Called tab10");}		   
 		   tab10 = new TabController("Tab10"); 
 		   setTabActiveOnStart();
    
@@ -141,8 +145,8 @@ public class DisplayController extends Window implements ChangeListener{
 
 
 	private void dc_enableActiveInterface() {
-		
-		System.out.println("dc_enableActiveInterface, tab no: " + tabNo);
+		if(DEBUG == true) {
+		System.out.println("dc_enableActiveInterface, tab no: " + tabNo);}
 	    switch(tabNo)
 		{
 			case "Tab1": tab1.setActive(); break;

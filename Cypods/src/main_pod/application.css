@@ -115,8 +115,13 @@
 .label {
     -fx-text-fill: black;
     -fx-font-weight: bold;
-    -fx-font-size: 12;
     -fx-font-family:'runescape';
+    
+}
+.labelAll {
+    -fx-font-weight: bold;
+    -fx-font-family:'runescape';
+    -fx-effect: dropshadow(three-pass-box, black, 10, .3, 1, 1);
 
 }
 .menu-bar {

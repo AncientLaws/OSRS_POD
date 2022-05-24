@@ -61,7 +61,7 @@ TabController (String s){
 	}
 	
 	public void tabSettings(String tab) {
-		System.out.println("tabSettings");
+		if(DEBUG == true) {System.out.println("tabSettings");}
 		switch (tab){
 			case "Tab1":{ X = 100; Y = 12; tabActive = tab; break; }
 			case "Tab2":{ X = 189; Y = 12; tabActive = tab; break;}
@@ -107,7 +107,7 @@ TabController (String s){
 		setInterfaceVisible(true); 				//Setting current Objects paneInterface to be visible
 		root.setId(tabActive);					//changing background to simulate tab change
 		imageView.setOpacity(1);            	//returns item to full opacity
-		System.out.println("setActive: " + tabActive);
+		if(DEBUG == true) {System.out.println("setActive: " + tabActive);}
 		}
 	
 	private void itemSearchListener() {
@@ -135,7 +135,7 @@ TabController (String s){
 		itemInfoArr = Get.getItemInfo();		//Getting chosen Item Json Data
 		setIcon();
 		setInterfaceLabels();					//Drawing everything
-		pane_updateChart("https://prices.runescape.wiki/api/v1/osrs/timeseries?timestep=5m&id=" + itemID);
+		pane_updateChart("https://prices.runescape.wiki/api/v1/osrs/timeseries?timestep=6h&id=" + itemID);
 		
 	}
 	
@@ -157,7 +157,7 @@ TabController (String s){
 	}
 	
 	private void iconImageSettings() {
-		 System.out.println("iconImageSettings InputStream: ");
+		if(DEBUG == true) {System.out.println("iconImageSettings InputStream: ");}
 		 imageView.setLayoutX(X);
 		 imageView.setLayoutY(Y);
 		 imageView.setPreserveRatio(true);
