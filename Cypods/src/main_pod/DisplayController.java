@@ -28,7 +28,7 @@ public class DisplayController extends Window implements ChangeListener{
 	TabController tab10;
 	String tabNo;
 	
-	public static boolean DEBUG = false;
+	public static boolean DEBUG = true;
 
 	 
 	 DisplayController (){

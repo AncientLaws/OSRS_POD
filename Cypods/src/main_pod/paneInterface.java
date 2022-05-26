@@ -137,9 +137,9 @@ public class paneInterface extends DisplayController {
 
 		pane_drawChartArea();
 		// pane_drawItemTopMenuArea();
-		initLabels();
+		pane_initLabels();
 		initTextField();
-		initGeSearchLabels();
+		pane_initGeSearchLabels();
 		pane_createChart();
 
 		group.getChildren().add(tabInterface);
@@ -158,6 +158,7 @@ public class paneInterface extends DisplayController {
 	}
 
 	private void pane_drawItemScrollArea() {
+		if(DEBUG == true) {System.out.println("pane_drawItemScrollArea");}
 		geSearch = new ImageView(new Image("GE_SEARCH_V6.png"));
 		geSearch.setX(0);
 		geSearch.setY(405);
@@ -168,6 +169,7 @@ public class paneInterface extends DisplayController {
 	}
 
 	private void pane_drawInventoryMenu() {
+		if(DEBUG == true) {System.out.println("pane_drawInventoryMenu");}
 		inventory = new ImageView(new Image("gePriceGuideSidebar3.png"));
 		inventory.setX(747);
 		inventory.setY(404);
@@ -178,6 +180,7 @@ public class paneInterface extends DisplayController {
 
 	private void pane_drawItemTopMenuArea() {
 		// Item Menu Border
+		if(DEBUG == true) {System.out.println("pane_drawItemTopMenuArea");}
 		itemTopMenu = new ImageView(new Image("Inventory_2.PNG"));
 		itemTopMenu.setX(746);
 		itemTopMenu.setY(0);
@@ -187,14 +190,19 @@ public class paneInterface extends DisplayController {
 	}
 
 	private void pane_drawChartArea() {
-
-		graphBackground = new ImageView(new Image("geChartArea2.png"));
+		if(DEBUG == true) {System.out.println("pane_drawChartArea");}
+		graphBackground = new ImageView(new Image("chartArea3.png"));
 		graphBackground.setX(4);
 		graphBackground.setY(0);
 		graphBackground.setFitWidth(1065);
 		graphBackground.setFitHeight(404); // 215
 		//graphBackground.rotateProperty().setValue(180);
-		tabInterface.getChildren().add(graphBackground);
+		try {tabInterface.getChildren().add(graphBackground);
+			
+		} catch (Exception e) {
+			System.out.println("Error adding background to tabInterface in method pane_drawChartArea");
+		}
+		if(DEBUG == true) {System.out.println("end pane_drawChartArea");}
 	}
 
 	protected void pane_setItemTopMenu(Image input) {
@@ -253,6 +261,7 @@ public class paneInterface extends DisplayController {
 	}
 
 	protected void pane_createChart() {
+		if(DEBUG == true) {System.out.println("pane_createChart()");}
 		
 		tabInterface.getChildren().addAll(cp.charts_chartViewer());
 	}
@@ -268,6 +277,7 @@ public class paneInterface extends DisplayController {
 	 * that will remove the initial prompt text
 	 */
 	private void initTextField() {
+		if(DEBUG == true) {System.out.println("initTextField()");}
 		f = new Font("runescape_uf.ttf", 12);
 		itemSearchInput = new TextField("What would you like to buy?");
 		itemSearchInput.end();
@@ -295,7 +305,8 @@ public class paneInterface extends DisplayController {
 	 * A method that initializes all the labels in the main pane interface
 	 * (Location, style, etc)
 	 **/
-	private void initLabels() {
+	private void pane_initLabels() {
+		if(DEBUG == true) {System.out.println("pane_initLabels");}
 		xyCoordinates = new Label("Coordinates");
 		xyCoordinates.setTranslateX(10);
 		//xyCoordinates.setTranslateY(375);
@@ -322,9 +333,9 @@ public class paneInterface extends DisplayController {
 		//description.setTranslateX(763);
 		//description.setTranslateY(50);
 		description.setTranslateX(800);
-		description.setTranslateY(410);
+		description.setTranslateY(405);
 		description.setWrapText(true);
-		description.setStyle("-fx-text-fill: white; -fx-font-size: 15px;");
+		description.setStyle("-fx-text-fill: white; -fx-font-size: 13px;");
 		description.setMaxWidth(260);
 		description.getStyleClass().add("labelAll");
 
@@ -345,12 +356,12 @@ public class paneInterface extends DisplayController {
 		
 		todayPrice = new Label(null);
 		todayPrice.setTranslateX(842);
-		todayPrice.setTranslateY(475);
+		todayPrice.setTranslateY(473);
 		todayPrice.getStyleClass().add("labelAll");
 
 		changeToday = new Label("Change today:");
 		changeToday.setTranslateX(755);
-		changeToday.setTranslateY(475);
+		changeToday.setTranslateY(472);
 		changeToday.setStyle("-fx-text-fill: orange;");
 		changeToday.getStyleClass().add("labelAll");
 
@@ -464,7 +475,8 @@ public class paneInterface extends DisplayController {
 
 	}
 
-	protected void initGeSearchLabels() {
+	protected void pane_initGeSearchLabels() {
+		if(DEBUG == true) {System.out.println("pane_initGeSearchLabels()");}
 		int iconWidth = 65;
 		int iconHeight = 65;
 		int sizeX = 175;
