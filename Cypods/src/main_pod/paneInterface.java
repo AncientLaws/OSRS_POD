@@ -15,10 +15,15 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -27,6 +32,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -62,7 +68,9 @@ public class paneInterface extends DisplayController {
 	Label typeIcon;
 	Label description;
 	Label members;
-	Label currentPrice;
+	Label currentPrice_bigLabel;
+	Label currentPrice_priceLabel;
+	Label currentPrice_descLabel;
 	Label todayPrice;
 	Label day30_change;
 	Label day90_change;
@@ -89,6 +97,17 @@ public class paneInterface extends DisplayController {
 	Label geSearchResult12;
 
 	String pane_ItemSearchInputText;
+	/*************** Buttons ********************/
+	ToggleButton day;
+	ToggleButton week;
+	ToggleButton month;
+	ToggleButton months3;
+	ToggleButton months6;
+	ToggleGroup toggleGroup;
+	HBox box;
+	ButtonBar buttonBarLeft;
+	ButtonBar buttonBarRight;
+	
 	/*************** Ge search area locations ********************/
 	int row1X;
 	int row2X;
@@ -124,7 +143,7 @@ public class paneInterface extends DisplayController {
 	}
 
 	protected void pane_activateInterface() {
-		System.out.println("activateInterface");
+		if(DEBUG == true) {System.out.println("activateInterface");}
 		tabInterface.setTranslateX(0);
 		tabInterface.setTranslateY(91);
 		// tabInterface.setPrefSize(2000, 2000);
@@ -134,10 +153,12 @@ public class paneInterface extends DisplayController {
 
 		pane_drawChartArea();
 		// pane_drawItemTopMenuArea();
-		initLabels();
+		pane_initLabels();
 		initTextField();
-		initGeSearchLabels();
+		pane_initGeSearchLabels();
 		pane_createChart();
+		
+		pane_createButtons();
 
 		group.getChildren().add(tabInterface);
 		tabInterface.setVisible(true);
@@ -155,6 +176,7 @@ public class paneInterface extends DisplayController {
 	}
 
 	private void pane_drawItemScrollArea() {
+		if(DEBUG == true) {System.out.println("pane_drawItemScrollArea");}
 		geSearch = new ImageView(new Image("GE_SEARCH_V6.png"));
 		geSearch.setX(0);
 		geSearch.setY(405);
@@ -165,6 +187,7 @@ public class paneInterface extends DisplayController {
 	}
 
 	private void pane_drawInventoryMenu() {
+		if(DEBUG == true) {System.out.println("pane_drawInventoryMenu");}
 		inventory = new ImageView(new Image("gePriceGuideSidebar3.png"));
 		inventory.setX(747);
 		inventory.setY(404);
@@ -175,6 +198,7 @@ public class paneInterface extends DisplayController {
 
 	private void pane_drawItemTopMenuArea() {
 		// Item Menu Border
+		if(DEBUG == true) {System.out.println("pane_drawItemTopMenuArea");}
 		itemTopMenu = new ImageView(new Image("Inventory_2.PNG"));
 		itemTopMenu.setX(746);
 		itemTopMenu.setY(0);
@@ -184,36 +208,37 @@ public class paneInterface extends DisplayController {
 	}
 
 	private void pane_drawChartArea() {
-
-		graphBackground = new ImageView(new Image("geChartArea2.png"));
+		if(DEBUG == true) {System.out.println("pane_drawChartArea");}
+		graphBackground = new ImageView(new Image("chartArea3.png"));
 		graphBackground.setX(4);
 		graphBackground.setY(0);
 		graphBackground.setFitWidth(1065);
 		graphBackground.setFitHeight(404); // 215
-		//graphBackground.rotateProperty().setValue(180);
-		tabInterface.getChildren().add(graphBackground);
+		try {tabInterface.getChildren().add(graphBackground);
+			
+		} catch (Exception e) {
+			System.out.println("Error adding background to tabInterface in method pane_drawChartArea");
+		}
+		if(DEBUG == true) {System.out.println("end pane_drawChartArea");}
 	}
-
+	
+	
 	protected void pane_setItemTopMenu(Image input) {
-		// Item Menu Icon
-		System.out.println("START - pane_setItemTopMenu(Image input)");
+		// Item Menu Icon 
+		if(DEBUG == true) {System.out.println("START - pane_setItemTopMenu(Image input)");}
 		tabInterface.getChildren().remove(itemIconPaneImage);
 		try {
-			System.out.println("setItemTopMenu InputStream: " + input);
+			if(DEBUG == true) {System.out.println("setItemTopMenu InputStream: " + input);}
 			itemIconPaneImage = new ImageView(input);
 			itemIconPaneImage.setPreserveRatio(true);
-			//itemIconPaneImage.setFitHeight(100);
-			//itemIconPaneImage.setFitWidth(100);
 			itemIconPaneImage.setFitHeight(50);
 			itemIconPaneImage.setFitWidth(50);
-			//itemIconPaneImage.setLayoutX(960);
-			//itemIconPaneImage.setLayoutY(-5);
 			itemIconPaneImage.setLayoutX(750);
 			itemIconPaneImage.setLayoutY(400);
 			tabInterface.getChildren().add(itemIconPaneImage);
 			itemIconPaneImage.setOnMousePressed((mouseEvent) -> System.out.println("Teeehee clicked me"));
 			pane_iconTooltip("Icon!");
-			System.out.println("END - pane_setItemTopMenu(Image input)");
+			if(DEBUG == true) {System.out.println("END - pane_setItemTopMenu(Image input)");}
 		} catch (Exception e) {
 			System.out.println("ERROR - pane_setItemTopMenu(Image input)");
 			pane_setItemTopMenuError();
@@ -222,7 +247,7 @@ public class paneInterface extends DisplayController {
 
 	protected void pane_setItemTopMenuError() {
 
-		System.out.println("pane_setItemTopMenuError()");
+		if(DEBUG == true) {System.out.println("pane_setItemTopMenuError()");}
 		tabInterface.getChildren().remove(itemIconPaneImage);
 		image = new Image("Item_UnAvailable.png");
 		itemIconPaneImage = new ImageView(image);
@@ -234,7 +259,7 @@ public class paneInterface extends DisplayController {
 		itemIconPaneImage.setLayoutY(5);
 		itemIconPaneImage.setCache(true);
 		tabInterface.getChildren().add(itemIconPaneImage);
-		pane_iconTooltip("Item unavailable or unable to retrieve item");
+		if(DEBUG == true) {pane_iconTooltip("Item unavailable or unable to retrieve item");}
 	}
 
 	protected void pane_setItemTopMenuVisible(boolean b) {
@@ -250,13 +275,14 @@ public class paneInterface extends DisplayController {
 	}
 
 	protected void pane_createChart() {
+		if(DEBUG == true) {System.out.println("pane_createChart()");}
 		
 		tabInterface.getChildren().addAll(cp.charts_chartViewer());
 	}
 	
-	public void pane_updateChart(String url) {
+	public void pane_updateChart(int itemID, String timePeriod) {
 		tabInterface.getChildren().remove(cp.charts_chartViewer());
-		cp.runchart(url);
+		cp.runchart(itemID, timePeriod);
 		tabInterface.getChildren().addAll(cp.charts_chartViewer());
 	}
 
@@ -265,6 +291,7 @@ public class paneInterface extends DisplayController {
 	 * that will remove the initial prompt text
 	 */
 	private void initTextField() {
+		if(DEBUG == true) {System.out.println("initTextField()");}
 		f = new Font("runescape_uf.ttf", 12);
 		itemSearchInput = new TextField("What would you like to buy?");
 		itemSearchInput.end();
@@ -276,7 +303,7 @@ public class paneInterface extends DisplayController {
 		itemSearchInput.setFont(f);
 		itemSearchInput.setAlignment(Pos.CENTER);
 		itemSearchInput.setPromptText("What would you like to buy?");
-		System.out.println("Caret Position: " + itemSearchInput.getCaretPosition());
+		if(DEBUG == true) {System.out.println("Caret Position: " + itemSearchInput.getCaretPosition());}
 		itemSearchInput.setStyle(
 				"-fx-text-fill: black; -fx-font-size: 13px; -fx-font-weight: bold;-fx-font-family: runescape_uf");
 		// itemSearchInput.setOnMousePressed((mouseEvent) -> {
@@ -292,7 +319,8 @@ public class paneInterface extends DisplayController {
 	 * A method that initializes all the labels in the main pane interface
 	 * (Location, style, etc)
 	 **/
-	private void initLabels() {
+	private void pane_initLabels() {
+		if(DEBUG == true) {System.out.println("pane_initLabels");}
 		xyCoordinates = new Label("Coordinates");
 		xyCoordinates.setTranslateX(10);
 		//xyCoordinates.setTranslateY(375);
@@ -303,11 +331,13 @@ public class paneInterface extends DisplayController {
 		name.setTranslateX(500);
 		name.setTranslateY(4);
 		name.setStyle("-fx-text-fill: orange; -fx-font-size: 30px; -fx-font-weight: bold");
+		name.getStyleClass().add("labelAll");
 
-		currentPrice = new Label(null);
-		currentPrice.setTranslateX(980);
-		currentPrice.setTranslateY(85);
-		currentPrice.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold");
+		currentPrice_bigLabel = new Label(null);
+		currentPrice_bigLabel.setTranslateX(980);
+		currentPrice_bigLabel.setTranslateY(85);
+		currentPrice_bigLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold");
+		currentPrice_bigLabel.getStyleClass().add("labelAll");
 
 		id = new Label("");
 		id.setTranslateX(825);
@@ -317,48 +347,72 @@ public class paneInterface extends DisplayController {
 		//description.setTranslateX(763);
 		//description.setTranslateY(50);
 		description.setTranslateX(800);
-		description.setTranslateY(410);
+		description.setTranslateY(405);
 		description.setWrapText(true);
-		description.setStyle("-fx-text-fill: white; -fx-font-size: 15px;");
+		description.setStyle("-fx-text-fill: white; -fx-font-size: 13px;");
 		description.setMaxWidth(260);
+		description.getStyleClass().add("labelAll");
 
 		members = new Label("");
 		members.setTranslateX(990);
 		members.setTranslateY(135);
-
+		
+		currentPrice_descLabel = new Label("Current Price: ");
+		currentPrice_descLabel.setTranslateX(755);
+		currentPrice_descLabel.setTranslateY(447);
+		currentPrice_descLabel.setStyle("-fx-text-fill: orange;");
+		currentPrice_descLabel.getStyleClass().add("labelAll");
+		
+		currentPrice_priceLabel = new Label(null);
+		currentPrice_priceLabel.setTranslateX(842);
+		currentPrice_priceLabel.setTranslateY(447);
+		currentPrice_priceLabel.getStyleClass().add("labelAll");
+		
 		todayPrice = new Label(null);
 		todayPrice.setTranslateX(842);
-		todayPrice.setTranslateY(450);
+		todayPrice.setTranslateY(473);
+		todayPrice.getStyleClass().add("labelAll");
 
 		changeToday = new Label("Change today:");
 		changeToday.setTranslateX(755);
-		changeToday.setTranslateY(450);
+		changeToday.setTranslateY(472);
+		changeToday.setStyle("-fx-text-fill: orange;");
+		changeToday.getStyleClass().add("labelAll");
 
 		day30_change = new Label(null);
 		day30_change.setTranslateX(812);
-		day30_change.setTranslateY(475);
+		day30_change.setTranslateY(500);
+		day30_change.getStyleClass().add("labelAll");
 
 		change30Days = new Label("30 days: ");
 		change30Days.setTranslateX(755);
-		change30Days.setTranslateY(475);
+		change30Days.setTranslateY(500);
+		change30Days.setStyle("-fx-text-fill: orange;");
+		change30Days.getStyleClass().add("labelAll");
 
 		day90_change = new Label(null);
 		day90_change.setTranslateX(812);
-		day90_change.setTranslateY(500);
+		day90_change.setTranslateY(528);
+		day90_change.getStyleClass().add("labelAll");
 
 		change90Days = new Label("90 days: ");
 		change90Days.setTranslateX(755);
-		change90Days.setTranslateY(500);
+		change90Days.setTranslateY(528);
+		change90Days.setStyle("-fx-text-fill: orange;");
+		change90Days.getStyleClass().add("labelAll");
 
 		day180_change = new Label(null);
 		day180_change.setTranslateX(812);
-		day180_change.setTranslateY(528);
+		day180_change.setTranslateY(556);
+		day180_change.getStyleClass().add("labelAll");
 
 		change180Days = new Label("180 days: ");
 		change180Days.setTranslateX(755);
-		change180Days.setTranslateY(528);
+		change180Days.setTranslateY(556);
+		change180Days.setStyle("-fx-text-fill: orange;");
+		change180Days.getStyleClass().add("labelAll");
 
-		tabInterface.getChildren().addAll(name, id, description, members, currentPrice, todayPrice, day30_change,
+		tabInterface.getChildren().addAll(name, id, description, members, currentPrice_bigLabel,currentPrice_descLabel,currentPrice_priceLabel ,todayPrice, day30_change,
 				day90_change, day180_change
 
 				, changeToday, change30Days, change90Days, change180Days
@@ -379,7 +433,8 @@ public class paneInterface extends DisplayController {
 		name.setText(name1);
 		name.setLayoutX(-((name.getText().length()*10)/2)); //Attempt at centering title
 		description.setText(description1);
-		currentPrice.setText(currentPrice1);
+		currentPrice_bigLabel.setText(currentPrice1);
+		currentPrice_priceLabel.setText(currentPrice1);
 
 		if (members1.equals("true")) {
 			members.setText("Members");
@@ -392,7 +447,7 @@ public class paneInterface extends DisplayController {
 			todayPrice.setStyle("-fx-text-fill: red;");
 		} else {
 			todayPrice.setText(todayPrice1);
-			todayPrice.setStyle("-fx-text-fill: green;");
+			todayPrice.setStyle("-fx-text-fill: rgb(0,255,0);");
 		}
 		;
 
@@ -401,7 +456,7 @@ public class paneInterface extends DisplayController {
 			day30_change.setStyle("-fx-text-fill: red;");
 		} else {
 			day30_change.setText(day30_change1);
-			day30_change.setStyle("-fx-text-fill: green;");
+			day30_change.setStyle("-fx-text-fill: rgb(0,255,0);");
 		}
 		;
 
@@ -410,7 +465,7 @@ public class paneInterface extends DisplayController {
 			day90_change.setStyle("-fx-text-fill: red;");
 		} else {
 			day90_change.setText(day90_change1);
-			day90_change.setStyle("-fx-text-fill: green;");
+			day90_change.setStyle("-fx-text-fill: rgb(0,255,0);");
 		}
 		;
 
@@ -419,13 +474,23 @@ public class paneInterface extends DisplayController {
 			day180_change.setStyle("-fx-text-fill: red;");
 		} else {
 			day180_change.setText(day180_change1);
-			day180_change.setStyle("-fx-text-fill: green;");
+			day180_change.setStyle("-fx-text-fill: rgb(0,255,0);");
+		}
+		;
+		
+		if (currentPrice1.equals("negative")) {
+			currentPrice_priceLabel.setText(currentPrice1);
+			currentPrice_priceLabel.setStyle("-fx-text-fill: white;");
+		} else {
+			currentPrice_priceLabel.setText(currentPrice1);
+			currentPrice_priceLabel.setStyle("-fx-text-fill: white;");
 		}
 		;
 
 	}
 
-	protected void initGeSearchLabels() {
+	protected void pane_initGeSearchLabels() {
+		if(DEBUG == true) {System.out.println("pane_initGeSearchLabels()");}
 		int iconWidth = 65;
 		int iconHeight = 65;
 		int sizeX = 175;
@@ -544,5 +609,57 @@ public class paneInterface extends DisplayController {
 				geSearchResult11, geSearchResult12);
 
 	}
+	
+	private void pane_createButtons() {
+		day 		= new ToggleButton("1 Day");
+		week		= new ToggleButton("1 Week");
+		month		= new ToggleButton("1 Month");
+		months3		= new ToggleButton("3 Months");
+		months6		= new ToggleButton("6 Months");
+			
+		day.setPrefSize(70, 10);
+		week.setPrefSize(70, 10);
+		month.setPrefSize(70, 10);
+		months3.setPrefSize(80, 10);
+		months6.setPrefSize(70, 10);
+		
+		day.getStyleClass().add("button");
+		week.getStyleClass().add("button");
+		month.getStyleClass().add("button");
+		months3.getStyleClass().add("button");
+		months6.getStyleClass().add("button");
+		
+		day.setToggleGroup(toggleGroup);
+		week.setToggleGroup(toggleGroup);
+		month.setToggleGroup(toggleGroup);
+		months3.setToggleGroup(toggleGroup);
+		months6.setToggleGroup(toggleGroup);
+		
+		buttonBarLeft = new ButtonBar();
+		buttonBarLeft.setButtonData(month, ButtonData.APPLY);
+		buttonBarLeft.setButtonData(months3, ButtonData.APPLY);
+		buttonBarLeft.setButtonData(months6, ButtonData.APPLY);
+		
+		buttonBarRight = new ButtonBar();
+		buttonBarRight.setButtonData(day, ButtonData.APPLY);
+		buttonBarRight.setButtonData(week, ButtonData.APPLY);
+
+		buttonBarLeft.getButtons().addAll(day,week,month);
+		buttonBarRight.getButtons().addAll(months3,months6);
+		
+
+		
+		buttonBarRight.setTranslateX(870);
+		buttonBarRight.setTranslateY(13);
+		
+		buttonBarLeft.setTranslateX(-5);
+		buttonBarLeft.setTranslateY(13);
+		
+		tabInterface.getChildren().addAll(buttonBarLeft,buttonBarRight);
+		
+	}
+	
+
+
 
 }

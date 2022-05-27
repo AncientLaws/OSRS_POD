@@ -36,6 +36,7 @@ public class TabController extends paneInterface {
 	protected ImageView imageView;
 	Tooltip tooltip;
 	private String itemToolTip = "Item Tool Tip";
+	protected int tab_itemID;
 	
 /***************Connect and get data********************/
 	GET Get =  new GET(); 
@@ -61,7 +62,7 @@ TabController (String s){
 	}
 	
 	public void tabSettings(String tab) {
-		System.out.println("tabSettings");
+		if(DEBUG == true) {System.out.println("tabSettings");}
 		switch (tab){
 			case "Tab1":{ X = 100; Y = 12; tabActive = tab; break; }
 			case "Tab2":{ X = 189; Y = 12; tabActive = tab; break;}
@@ -107,7 +108,7 @@ TabController (String s){
 		setInterfaceVisible(true); 				//Setting current Objects paneInterface to be visible
 		root.setId(tabActive);					//changing background to simulate tab change
 		imageView.setOpacity(1);            	//returns item to full opacity
-		System.out.println("setActive: " + tabActive);
+		if(DEBUG == true) {System.out.println("setActive: " + tabActive);}
 		}
 	
 	private void itemSearchListener() {
@@ -115,7 +116,6 @@ TabController (String s){
 			{
 				if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
 				pane_ItemSearchInputText = itemSearchInput.getText();
-				
 				Get.getItemJsonList("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/items.json?category=1&alpha=" + pane_ItemSearchInputText);
 				geSearchResults();
 			}
@@ -132,10 +132,14 @@ TabController (String s){
 	
 	private void itemSearchSelectionListener(int itemID) {
 		Get.getItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + itemID);
+		tab_itemID = itemID;
 		itemInfoArr = Get.getItemInfo();		//Getting chosen Item Json Data
 		setIcon();
 		setInterfaceLabels();					//Drawing everything
-		pane_updateChart("https://prices.runescape.wiki/api/v1/osrs/timeseries?timestep=6h&id=" + itemID);
+		pane_updateChart(itemID, "1h");
+		addButtonListeners();
+		resetButtonClickedStyle();
+		setButtonClickedStyleWeek();
 		
 	}
 	
@@ -157,7 +161,7 @@ TabController (String s){
 	}
 	
 	private void iconImageSettings() {
-		 System.out.println("iconImageSettings InputStream: ");
+		if(DEBUG == true) {System.out.println("iconImageSettings InputStream: ");}
 		 imageView.setLayoutX(X);
 		 imageView.setLayoutY(Y);
 		 imageView.setPreserveRatio(true);
@@ -430,7 +434,45 @@ TabController (String s){
 		geSearchResult12.setOnMouseClicked((mouseEvent)->{});
 	}
 	
-	
+	private void addButtonListeners() {
 
+			day.setOnMouseClicked((mouseEvent) -> {
+				resetButtonClickedStyle();
+				pane_updateChart(tab_itemID, "5m");
+				day.setStyle("-fx-background-color: grey");			
+			});
+			week.setOnMouseClicked((mouseEvent) -> {
+				resetButtonClickedStyle();
+				pane_updateChart(tab_itemID, "1h");
+				week.setStyle("-fx-background-color: grey");	
+			});
+			month.setOnMouseClicked((mouseEvent) -> {
+				resetButtonClickedStyle();
+				pane_updateChart(tab_itemID, "6h");
+				month.setStyle("-fx-background-color: grey");
+			});
+			months3.setOnMouseClicked((mouseEvent) -> {
+				resetButtonClickedStyle();
+				pane_updateChart(tab_itemID, "6h");
+				months3.setStyle("-fx-background-color: grey");
+			});
+			months6.setOnMouseClicked((mouseEvent) -> {
+				resetButtonClickedStyle();
+				pane_updateChart(tab_itemID, "6Month");
+				months6.setStyle("-fx-background-color: grey");
+			});
+	}
+	private void resetButtonClickedStyle() {
+		day.setStyle("-fx-background-color: black");
+		week.setStyle("-fx-background-color: black");
+		month.setStyle("-fx-background-color: black");
+		months3.setStyle("-fx-background-color: black");
+		months6.setStyle("-fx-background-color: black");
+		
+	}
+	
+	private void setButtonClickedStyleWeek() {
+		week.setStyle("-fx-background-color: grey");
+	}
 
 }

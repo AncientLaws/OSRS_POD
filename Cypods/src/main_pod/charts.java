@@ -3,40 +3,25 @@ package main_pod;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.geom.Rectangle2D;
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.ParseException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Date;
 
-import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.application.Platform;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Paint;
-import javafx.stage.Stage;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.LegendItem;
-import org.jfree.chart.LegendItemCollection;
-import org.jfree.chart.LegendItemSource;
-import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.date.SerialDate;
 import org.jfree.chart.fx.ChartViewer;
 import org.jfree.chart.fx.interaction.ChartMouseEventFX;
 import org.jfree.chart.fx.interaction.ChartMouseListenerFX;
 import org.jfree.chart.fx.overlay.CrosshairOverlayFX;
-import org.jfree.chart.labels.XYToolTipGenerator;
+import org.jfree.chart.labels.StandardXYToolTipGenerator;
 import org.jfree.chart.plot.Crosshair;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.title.LegendTitle;
+import org.jfree.chart.renderer.xy.HighLowRenderer;
 import org.jfree.chart.ui.RectangleEdge;
 import org.jfree.data.general.DatasetUtils;
 import org.jfree.data.time.TimeSeries;
@@ -45,16 +30,54 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.Minute;
-import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.Second; 
-import org.jfree.data.time.TimeSeries; 
 import org.jfree.data.time.TimeSeriesCollection; 
-import org.jfree.data.xy.XYDataset; 
+import org.jfree.chart.labels.StandardXYToolTipGenerator;
+
+
+
+import java.awt.Color;
+import java.awt.Point;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.StringTokenizer;
+
+import javax.swing.JLabel;
+
+import org.jfree.chart.ChartColor;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartMouseEvent;
+import org.jfree.chart.ChartMouseListener;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.AxisSpace;
+import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.labels.StandardXYToolTipGenerator;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.HighLowRenderer;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.ohlc.OHLCSeries;
+import org.jfree.data.time.ohlc.OHLCSeriesCollection;
+import org.jfree.data.xy.OHLCDataset;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 //import org.jfree.chart.fx.ChartViewer;
-
+//test commit dev branch
 public class charts implements ChartMouseListenerFX {
 
+	public static boolean DEBUG = false;
+	
 	private ChartViewer chartViewer;
 
 	private Crosshair xCrosshair;
@@ -122,15 +145,14 @@ public class charts implements ChartMouseListenerFX {
         if (!xAxis.getRange().contains(x)) { 
             x = Double.NaN;                  
         }
-        
-        xAxis.setLabel("test ");
+
         double y = DatasetUtils.findYValue(plot.getDataset(), 0, x);
         this.xCrosshair.setValue(x);
         this.yCrosshair.setValue(y);
 
     }
-    protected void runchart(String url) {
-    	dataset = createItemPriceDataset(url);
+    protected void runchart(int itemID, String timePeriod) {
+    	dataset = createItemPriceDataset(itemID, timePeriod);
 		chart = createChart(dataset);
 		chartViewer = new ChartViewer(chart);
 		chartViewer.setPrefSize(1063, 351);
@@ -145,9 +167,19 @@ public class charts implements ChartMouseListenerFX {
         chart.getXYPlot().getRenderer().setSeriesPaint(0, chartSeriesColor);
         chart.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(3.0f));
         chart.getXYPlot().getRenderer().setSeriesVisible(0, true);
+        chart.getXYPlot().setRangePannable(true);
+        chart.getXYPlot().setRangeCrosshairLockedOnData(true);
+        
+        AxisSpace as = new AxisSpace();
+        final RectangleEdge TOP = chart.getXYPlot().getDomainAxisEdge();
+
+        chart.getXYPlot().setDomainPannable(true);
+
         
         crosshairOverlay = new CrosshairOverlayFX();
 		this.xCrosshair = new Crosshair(Double.NaN, Color.WHITE, new BasicStroke(0f));
+		Crosshair zCrosshair;
+		zCrosshair  = new Crosshair();
 		this.xCrosshair.setStroke(
 				new BasicStroke(1.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[] { 2.0f, 2.0f }, 0));
 		this.xCrosshair.setLabelVisible(false);
@@ -182,7 +214,17 @@ public class charts implements ChartMouseListenerFX {
 		return chartViewer;
 	}
 	
-	protected XYDataset createItemPriceDataset(String url) {
+	protected XYDataset createItemPriceDataset(int itemID, String timePeriod) {
+		String url = "";
+		
+		if (timePeriod =="6Month") 
+			{ url = "https://services.runescape.com/m=itemdb_oldschool/api/graph/" + itemID + ".json";}
+		else 
+			{  url = "https://prices.runescape.wiki/api/v1/osrs/timeseries?timestep=" + timePeriod+"&id=" + itemID;}
+		
+
+		
+		//https://services.runescape.com/m=itemdb_oldschool/api/graph/26382.json
 		TimeSeries series = new TimeSeries( "Item Data" );
 		GET getDataGet = new GET();
 		String [][] itemPriceArrayStrings;
@@ -200,10 +242,13 @@ public class charts implements ChartMouseListenerFX {
 			
 			if(y > maxValue) {maxValue = y;	}
 			
+
+			if(DEBUG == true) {   
 			System.out.println("\nnew Day(epochToDateTime(x)) \t: " + new Day(epochToDateTime(x)) + 
 			"\nnew Minute (epochToDateTime(x)): \t" + new Minute (epochToDateTime(x)) 
 			+ "\nnew Second (epochToDateTime(x)): \\t" + new Second (epochToDateTime(x)));
-			
+			}
+
 			
 		}
 
@@ -221,3 +266,4 @@ public class charts implements ChartMouseListenerFX {
 	
 
 }
+
