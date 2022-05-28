@@ -236,11 +236,11 @@ public class charts implements ChartMouseListenerFX {
 				continue;
 			}
 			String x = itemPriceArrayStrings[i][0]; //timestamp
-			Double y = Double.parseDouble(itemPriceArrayStrings[i][1])/1000; //item price
+			Double y = Double.parseDouble(itemPriceArrayStrings[i][1]); //item price
 			
 			series.addOrUpdate(new Second(epochToDateTime(x)), y);
 			
-			if(y > maxValue) {maxValue = y;	}
+			
 			
 
 			if(DEBUG == true) {   
