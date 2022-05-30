@@ -116,7 +116,7 @@ TabController (String s){
 			{
 				if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
 				pane_ItemSearchInputText = itemSearchInput.getText();
-				Get.getItemJsonList("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/items.json?category=1&alpha=" + pane_ItemSearchInputText);
+				Get.get_osrs_api_parseItemJsonList("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/items.json?category=1&alpha=" + pane_ItemSearchInputText);
 				geSearchResults();
 			}
 				
@@ -131,7 +131,7 @@ TabController (String s){
 	}
 	
 	private void itemSearchSelectionListener(int itemID) {
-		Get.getItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + itemID);
+		Get.get_osrs_api_parseItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + itemID);
 		tab_itemID = itemID;
 		itemInfoArr = Get.getItemInfo();		//Getting chosen Item Json Data
 		setIcon();
@@ -140,7 +140,8 @@ TabController (String s){
 		addButtonListeners();
 		resetButtonClickedStyle();
 		setButtonClickedStyleWeek();
-		
+		//System.out.println("=========================================Epoch Key values===================================");
+		//Get.get_osrs_api_parseItemGraph("https://services.runescape.com/m=itemdb_oldschool/api/graph/26374.json");
 	}
 	
 	private void catchError(){
@@ -453,12 +454,12 @@ TabController (String s){
 			});
 			months3.setOnMouseClicked((mouseEvent) -> {
 				resetButtonClickedStyle();
-				pane_updateChart(tab_itemID, "6h");
+				pane_updateChart(tab_itemID, "6Month");
 				months3.setStyle("-fx-background-color: grey");
 			});
 			months6.setOnMouseClicked((mouseEvent) -> {
 				resetButtonClickedStyle();
-				pane_updateChart(tab_itemID, "6Month");
+				pane_updateChart(tab_itemID, "24h");
 				months6.setStyle("-fx-background-color: grey");
 			});
 	}

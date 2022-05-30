@@ -86,6 +86,7 @@ public class charts implements ChartMouseListenerFX {
 	JFreeChart chart;
 	XYDataset dataset;
 	CrosshairOverlayFX crosshairOverlay;
+	TimeSeries series;
 	
 	private double maxValue = 0;
 
@@ -133,7 +134,9 @@ public class charts implements ChartMouseListenerFX {
 	  @Override public void chartMouseClicked(ChartMouseEventFX event) { // ignore
 	  }
 	 
-
+/**
+ * Exists to keeep the crosshair on the datapoint in the graph
+ * */
      public void chartMouseMoved(ChartMouseEventFX event) {
         Rectangle2D dataArea = this.chartViewer.getCanvas().getRenderingInfo().getPlotInfo().getDataArea();
         JFreeChart chart = event.getChart();
@@ -151,6 +154,10 @@ public class charts implements ChartMouseListenerFX {
         this.yCrosshair.setValue(y);
 
     }
+
+/**
+ * Method to create a price/volume/etc chart once the item is selected by the user.
+ * */
     protected void runchart(int itemID, String timePeriod) {
     	dataset = createItemPriceDataset(itemID, timePeriod);
 		chart = createChart(dataset);
@@ -195,6 +202,11 @@ public class charts implements ChartMouseListenerFX {
 		 this.chartViewer.getCanvas().addOverlay(crosshairOverlay); });
 
     }
+/**
+ * Creates randomized data
+ * Exists because when the program start, it looks better when there is data in the graph
+ * @return XYDataset
+ * */
 	private static XYDataset createDataset() {
 		XYSeries series = new XYSeries("S1");
 		for (int x = 0; x < 10; x++) {
@@ -203,6 +215,7 @@ public class charts implements ChartMouseListenerFX {
 		XYSeriesCollection dataset = new XYSeriesCollection(series);
 		return dataset;
 	}
+
 
 	private static JFreeChart createChart(XYDataset dataset) {
 		JFreeChart chart = ChartFactory.createTimeSeriesChart(null, null, null, dataset);//createXYLineChart(null, null, null, dataset);
@@ -213,49 +226,80 @@ public class charts implements ChartMouseListenerFX {
 	protected ChartViewer charts_chartViewer() {
 		return chartViewer;
 	}
+
+/**
+ * Method that creates the dataset used to populate the graph
+ * Input: ItemID, timeperiod 
+ * @return XYDataset
+ * */
 	
 	protected XYDataset createItemPriceDataset(int itemID, String timePeriod) {
 		String url = "";
-		
-		if (timePeriod =="6Month") 
-			{ url = "https://services.runescape.com/m=itemdb_oldschool/api/graph/" + itemID + ".json";}
-		else 
-			{  url = "https://prices.runescape.wiki/api/v1/osrs/timeseries?timestep=" + timePeriod+"&id=" + itemID;}
-		
-
-		
-		//https://services.runescape.com/m=itemdb_oldschool/api/graph/26382.json
-		TimeSeries series = new TimeSeries( "Item Data" );
+		series = new TimeSeries( "Item Data" );
 		GET getDataGet = new GET();
 		String [][] itemPriceArrayStrings;
-		itemPriceArrayStrings = getDataGet.getItemJsonPrice_RuneLine(url);
-	   		
-		for(int i = 0; i < itemPriceArrayStrings.length-1;i++) {
-			//If item price value isn't available, don't add it to the dataset
-			if(Double.parseDouble(itemPriceArrayStrings[i][1]) == 0) {
-				continue;
+		String x = null;
+		Double y;
+		
+		if (timePeriod =="6Month") //If time period is 6 months, use OSRS official API
+			{ 
+				url = "https://services.runescape.com/m=itemdb_oldschool/api/graph/" + itemID + ".json";
+				itemPriceArrayStrings = getDataGet.get_osrs_api_parseItemGraph(url);
+				for(int i = 0; i < itemPriceArrayStrings.length-1;i++) {
+					//If item price value isn't available, don't add it to the dataset
+					if(Double.parseDouble(itemPriceArrayStrings[i][1]) == 0) {
+						continue;
+					}
+			
+					x = itemPriceArrayStrings[i][0]; //timestamp
+					y = Double.parseDouble(itemPriceArrayStrings[i][1]); //item price
+				
+					series.addOrUpdate(new Second(epochToDateTime(x)), y);	
+					if(DEBUG == true) {   
+						System.out.println("\nnew Day(epochToDateTime(x)) \t: " + new Day(epochToDateTime(x)) + 
+						"\nnew Minute (epochToDateTime(x)): \t" + new Minute (epochToDateTime(x)) 
+						+ "\nnew Second (epochToDateTime(x)): \\t" + new Second (epochToDateTime(x)));
+						}		
+				
+				}
+			
 			}
-			String x = itemPriceArrayStrings[i][0]; //timestamp
-			Double y = Double.parseDouble(itemPriceArrayStrings[i][1]); //item price
-			
-			series.addOrUpdate(new Second(epochToDateTime(x)), y);
-			
-			
-			
-
-			if(DEBUG == true) {   
-			System.out.println("\nnew Day(epochToDateTime(x)) \t: " + new Day(epochToDateTime(x)) + 
-			"\nnew Minute (epochToDateTime(x)): \t" + new Minute (epochToDateTime(x)) 
-			+ "\nnew Second (epochToDateTime(x)): \\t" + new Second (epochToDateTime(x)));
+		else  //If time period is less than 6 months use RuneLite's API
+			{  
+				url = "https://prices.runescape.wiki/api/v1/osrs/timeseries?timestep=" + timePeriod+"&id=" + itemID;
+				itemPriceArrayStrings = getDataGet.get_api_parseRuneLitePrice(url);
+				for(int i = 0; i < itemPriceArrayStrings.length-1;i++) {
+						//If item price value isn't available, don't add it to the dataset
+						if(Double.parseDouble(itemPriceArrayStrings[i][1]) == 0) {
+							continue;
+						}
+				
+						x = itemPriceArrayStrings[i][0]; //timestamp
+						y = Double.parseDouble(itemPriceArrayStrings[i][1]); //item price
+					
+						series.addOrUpdate(new Second(epochToDateTime_x1000(x)), y);	
+						
+						if(DEBUG == true) {   
+							System.out.println("\nnew Day(epochToDateTime_x1000(x)) \t: " + new Day(epochToDateTime_x1000(x)) + 
+							"\nnew Minute (epochToDateTime_x1000(x)): \t" + new Minute (epochToDateTime_x1000(x)) 
+							+ "\nnew Second (epochToDateTime_x1000(x)): \\t" + new Second (epochToDateTime_x1000(x)));
+							}					
+				
+				}
 			}
-
 			
-		}
+		
+		
 
 		return new TimeSeriesCollection(series);
 	}
 	
-	private Date epochToDateTime(String epoch) {
+	/**
+	 * Method to convert epoch time to date with adding 1000 multiplier
+	 * Exists because runelite's price timeseries API returns epoch time divided by a 1000
+	 * @return Date
+	 * */
+	private Date epochToDateTime_x1000(String epoch) {
 		
 		Long longEpoch = Long.parseLong(epoch)*1000;  
 		LocalDateTime localDateTime = Instant.ofEpochMilli(longEpoch).atZone(ZoneId.systemDefault()).toLocalDateTime();
@@ -264,6 +308,21 @@ public class charts implements ChartMouseListenerFX {
 		return  date1;
 	}
 	
+	/**
+	 * Method to convert epoch time to date without adding 1000 multiplier
+	 * Exists because osrs graph API returns correct epoch time
+	 * @return Date
+	 * */
+	private Date epochToDateTime(String epoch) {
+		
+		Long longEpoch = Long.parseLong(epoch);  
+		LocalDateTime localDateTime = Instant.ofEpochMilli(longEpoch).atZone(ZoneId.systemDefault()).toLocalDateTime();
+		Instant i = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
+		java.util.Date date1 = Date.from(i);
+		return  date1;
+	}
+		
+
 
 }
 

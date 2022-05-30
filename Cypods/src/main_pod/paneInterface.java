@@ -612,10 +612,10 @@ public class paneInterface extends DisplayController {
 	
 	private void pane_createButtons() {
 		day 		= new ToggleButton("1 Day");
-		week		= new ToggleButton("1 Week");
-		month		= new ToggleButton("1 Month");
-		months3		= new ToggleButton("3 Months");
-		months6		= new ToggleButton("6 Months");
+		week		= new ToggleButton("2 Week");
+		month		= new ToggleButton("Quarter");
+		months3		= new ToggleButton("6 Months");
+		months6		= new ToggleButton("1 Year");
 			
 		day.setPrefSize(70, 10);
 		week.setPrefSize(70, 10);
