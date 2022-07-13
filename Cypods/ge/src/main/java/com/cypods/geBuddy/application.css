@@ -1,0 +1,173 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+
+#RSGIF1{
+    -fx-background-image: url("/images/RunescapeLoginScreen.gif");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: 1080 720;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}
+
+#RSGIF2{
+    -fx-background-image: url("/images/RunescapeLogoGIFCustom.gif");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: 1080 720;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}
+
+
+#GE-Screen{
+    -fx-background-image: url("/images/GE-Screen_2.gif");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: 1080 720;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}
+#Bank-Screen{
+    -fx-background-image: url("/images/Bank_Interface.PNG");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: 1080 720;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}
+#Tab1{
+    -fx-background-image: url("/images/Bank_Interface_tab1.PNG");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: 1080 720;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}
+#Tab2{
+    -fx-background-image: url("/images/Bank_Interface_tab2.PNG");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: 1080 720;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}
+#Tab3{
+    -fx-background-image: url("/images/Bank_Interface_tab3.PNG");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: 1080 720;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}
+#Tab4{
+    -fx-background-image: url("/images/Bank_Interface_tab4.PNG");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: 1080 720;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}
+#Tab5{
+    -fx-background-image: url("/images/Bank_Interface_tab5.PNG");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: 1080 720;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}
+#Tab6{
+    -fx-background-image: url("/images/Bank_Interface_tab6.PNG");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: 1080 720;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}
+#Tab7{
+    -fx-background-image: url("/images/Bank_Interface_tab7.PNG");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: 1080 720;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}
+#Tab8{
+    -fx-background-image: url("/images/Bank_Interface_tab8.PNG");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: 1080 720;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}
+#Tab9{
+    -fx-background-image: url("/images/Bank_Interface_tab9.PNG");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: 1080 720;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}
+#Tab10{
+    -fx-background-image: url("/images/Bank_Interface_tab10.PNG");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: 1080 720;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}
+/*#tabInterface{
+    -fx-background-image: url("Bank_Interface_Pane_V2.png");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: 1080 720;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}*/
+@font-face {
+    src: url('/runescape_uf.ttf');
+}
+.label {
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-font-size: 12;
+    -fx-font-family:'runescape';
+    
+}
+.labelAll {
+    -fx-font-weight: bold;
+    -fx-font-family:'runescape';
+    -fx-effect: dropshadow(three-pass-box, black, 10, .3, 1, 1);
+
+}
+.menu-bar {
+  -fx-background-color: derive(#FF1d1d,20%); 
+  
+  }
+#tooltip {
+    -fx-background: rgba(30,30,30);
+    -fx-text-fill: white;
+    -fx-background-color: rgba(30,30,30,0.8);
+    -fx-background-radius: 6px;
+    -fx-background-insets: 0;
+    -fx-padding: 0.667em 0.75em 0.667em 0.75em; /* 10px */
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.5) , 10, 0.0 , 0 , 3 );
+    -fx-font-size: 0.85em;
+}
+ .text-field {
+    -fx-background-color: rgba(201,182,147,.1);
+    -fx-prompt-text-fill: black;
+   /*  -fx-effect: dropshadow( two-pass-box , blue , .5, 10 , 1 , 1); */
+}
+.text-field:empty .text {
+    -fx-effect: null ;
+}
+
+.button{
+		-fx-background-color: black;
+	    -fx-text-fill:  rgb(100,255,0);
+    	-fx-font-size: 14px;
+}
+.button:hover {
+        -fx-background-color: black;
+        /*-fx-text-fill: white;*/
+        -fx-underline: true;
+
+}
+.button:pressed  {
+        -fx-background-color: black;
+        -fx-text-fill: white;
+        -fx-underline: true;
+        -fx-scale-y: 0.95;
+    	-fx-scale-x: 0.95;
+
+}
+/* Tool tip for chart area */
+.onHover{
+    -fx-background-color: ORANGE;
+}
