@@ -7,6 +7,10 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import javafx.embed.swing.SwingNode;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -26,6 +30,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
+@Component
+//@Scope ("Prototype")
 public class TabController extends PaneInterface {
 	
 	
@@ -52,17 +58,21 @@ public class TabController extends PaneInterface {
 	int Y;
 
 /***************End variable declaration**************/			
-	
+//@Autowired
+TabController() {
+	imageView = new ImageView();
+	initLabel();
+	initImage();
+}
+
+//@Autowired
 TabController (String s){
-		imageView = new ImageView();
+	imageView = new ImageView();
 		tabSettings(s);
-		try { itemSearchListener();
-		}
-		catch(Exception e) {catchError();
-		}
+
 	}
-	
-	public void tabSettings(String tab) {
+//@Autowired
+	public int tabSettings(String tab) {
 		if(DEBUG == true) {System.out.println("tabSettings");}
 		switch (tab){
 			case "Tab1":{ X = 100; Y = 12; tabActive = tab; break; }
@@ -78,6 +88,11 @@ TabController (String s){
 		}
 		initLabel();
 		initImage();
+		try { itemSearchListener();
+		}
+		catch(Exception e) {catchError();
+		}
+		return 1;
 	}
 	
 	protected void setInterfaceVisible(boolean b){

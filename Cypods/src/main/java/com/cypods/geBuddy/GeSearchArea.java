@@ -1,8 +1,10 @@
 package com.cypods.geBuddy;
 
+import org.springframework.stereotype.Component;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
+//@Component
 public class GeSearchArea extends PaneInterface {
 
 ImageView geSearch;

@@ -6,88 +6,131 @@ import java.net.URL;
 
 
 import org.jfree.chart.renderer.category.StatisticalBarRenderer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import org.w3c.dom.html.HTMLTableCaptionElement;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 
-public class DisplayController extends Window implements ChangeListener{
+@Component
+@Primary
+public class DisplayController implements ChangeListener{
 	
-	 
-	TabController tab1  ;
-	TabController tab2 ;
+	//@Autowired
+	Window w;
+	protected Pane root = new Pane();
+	protected  Group group = new Group(root);
+	
+
+	//@Autowired 
+	TabController tab1;// = applicationContext.getBean(TabController.class);
+	//@Autowired 
+	TabController tab2;
+	//@Autowired 
 	TabController tab3 ;
+	//@Autowired 
 	TabController tab4 ;
+	//@Autowired 
 	TabController tab5 ;
-	TabController tab6 ;
-	TabController tab7 ;
+	//@Autowired 
+	TabController tab6;
+	//@Autowired 
+	TabController tab7;
+	//@Autowired 
 	TabController tab8 ;
+	//@Autowired 
 	TabController tab9 ;
-	TabController tab10;
+	//@Autowired 
+	TabController tab10 ;
 	String tabNo;
+	
+	//Window w;
+	//Pane root = new Pane();
+	//Group group = new Group(root);
 	
 	public static boolean DEBUG = true;
 
-	 
+	
 	 DisplayController (){
+		 w = new Window();
+		 this.root = w.root;
+		 this.group = w.group;
+		 //w.ac.getBean(null);
 		
 	 }
 
 	public void getTab() {
 		try {
 			
-
 			if(DEBUG == true) {System.out.println("Called tab1");}
-		   tab1 = new TabController("Tab1"); 
-		    
-		   if(DEBUG == true) {System.out.println("Called tab2");}
-		   tab2 = new TabController("Tab2"); 
+			//tab1 = applicationContext.getBean(TabController.class, TabController.class);
+			  
+				tab1 = new TabController("Tab1");
+				//tab1 = w.ac.getBean(TabController.class);
+			   if(DEBUG == true) {System.out.println("Called tab2");}
+			   tab2 = new TabController("Tab2"); 
+			   //tab2.tabSettings("tab2");
 
-		   if(DEBUG == true) { System.out.println("Called tab2");}
-	
-		   if(DEBUG == true) { System.out.println("Called tab3");}
-		   tab3 = new TabController("Tab3"); 
-		  
-		   if(DEBUG == true) {System.out.println("Called tab4");}		   
-		   tab4 = new TabController("Tab4"); 
-		   
-		   if(DEBUG == true) {System.out.println("Called tab5");}
-		   tab5 = new TabController("Tab5"); 
-		   
-		   if(DEBUG == true) {System.out.println("Called tab6");}		   
-		   tab6 = new TabController("Tab6"); 
-		   
-		   if(DEBUG == true) {System.out.println("Called tab7");}		   
-		   tab7 = new TabController("Tab7"); 
-		  
-		   if(DEBUG == true) {System.out.println("Called tab8");}		   
-		   tab8 = new TabController("Tab8"); 
-		  
-		   if(DEBUG == true) {System.out.println("Called tab9");}		   
-		   tab9 = new TabController("Tab9"); 
-		   
-		   if(DEBUG == true) {System.out.println("Called tab10");}		   
-		   tab10 = new TabController("Tab10"); 
-		   setTabActiveOnStart();
+			   if(DEBUG == true) { System.out.println("Called tab2");}
+		
+			   if(DEBUG == true) { System.out.println("Called tab3");}
+			   tab3 = new TabController("Tab3"); 
+			   //tab3.tabSettings("tab3");
+			  
+			   if(DEBUG == true) {System.out.println("Called tab4");}		   
+			   tab4 = new TabController("Tab4"); 
+			   
+			   if(DEBUG == true) {System.out.println("Called tab5");}
+			   tab5 = new TabController("Tab5"); 
+			   
+			   if(DEBUG == true) {System.out.println("Called tab6");}		   
+			   tab6 = new TabController("Tab6"); 
+			   
+			   if(DEBUG == true) {System.out.println("Called tab7");}		   
+			   tab7 = new TabController("Tab7"); 
+			  
+			   if(DEBUG == true) {System.out.println("Called tab8");}		   
+			   tab8 = new TabController("Tab8"); 
+			  
+			   if(DEBUG == true) {System.out.println("Called tab9");}		   
+			   tab9 = new TabController("Tab9"); 
+			   
+			   if(DEBUG == true) {System.out.println("Called tab10");}		   
+			   tab10 = new TabController("Tab10"); 
+			   setTabActiveOnStart();
+			   setListeners();
+
    
 		}
 		catch(Exception e) {
 			System.out.println("Display Controller: Error in calling one of the tabs");
+			e.printStackTrace();
 		}
 		
 	}
-	protected void initListners() {
-		tab1.lTab.setOnMousePressed((mouseEvent) -> tab1.setActive());
-	}
+
+	/*
+	 * protected void initListners() { tab1.lTab.setOnMousePressed((mouseEvent) ->
+	 * tab1.setActive()); }
+	 */
 	protected void setTabActiveOnStart() {
 		tab1.setActive();
 		setInterfaceInvisible(tabNo = "Tab1");
+		//setListners();
 	}
-	protected void setListners()
+	protected void setListeners()
 	{
+		try {
 		tab1.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab1"));
 		tab2.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab2"));
 		tab3.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab3"));
@@ -109,17 +152,18 @@ public class DisplayController extends Window implements ChangeListener{
 	    tab8.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab8"));
 	    tab9.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab9"));
 	   tab10.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab10"));
-	   
-	   
-	    
-		
+		}
+		catch(Exception e) {
+			System.out.println("Unable to add listners on the method DisplayController.setListners -> " );
+			e.printStackTrace();
+		}
 		
 	}
 	//addChangelistener to the 1Tab label
 	private void setInterfaceInvisible(String s)
 	{
 		double opacity = .4;
-		 
+		
 		tab1.setInterfaceVisible(false);
 		tab2.setInterfaceVisible(false);
 		tab3.setInterfaceVisible(false);

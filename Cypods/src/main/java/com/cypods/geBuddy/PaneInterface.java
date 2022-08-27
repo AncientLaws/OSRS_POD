@@ -8,6 +8,8 @@ import java.nio.channels.NonWritableChannelException;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.fx.ChartViewer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javafx.application.Platform;
 import javafx.embed.swing.SwingNode;
@@ -38,6 +40,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
+@Component
 public class PaneInterface extends DisplayController {
 
 	/************************** Images **************************/
@@ -129,12 +132,17 @@ public class PaneInterface extends DisplayController {
 
 	protected Pane tabInterface = new Pane();
 	protected Pane chartPane = new Pane();
-	charts cp = new charts();
+	
+	@Autowired
+	Charts cp = new Charts();
 	//ChartViewer chartViewer;
 
 	/*************** End variable declaration **************/
 
 	public PaneInterface() {
+		System.out.println("Attempting to add application context........");
+		 //cp = applicationContext.getBean(Charts.class);
+		 System.out.println("added application context........");
 		pane_activateInterface();
 	}
 

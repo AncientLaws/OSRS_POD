@@ -1,6 +1,7 @@
 package com.cypods.geBuddy;
 
 import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -8,7 +9,17 @@ import java.net.URL;
 
 import javax.swing.JButton;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -26,19 +37,26 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+
+@Component
+@ComponentScan("com.cypods.geBuddy")
+
 public class Window extends Application {
 	
-	
-	static Pane root = new Pane();
-	static Group group = new Group(root);
+	public static Pane root = new Pane();
+	public static Group group = new Group(root);
 	Scene scene;
 	Button bt  = new Button("");
-	   
+
+	@Autowired
+	public  ConfigurableApplicationContext ac;
 	
+    //@Autowired
+    DisplayController dc; 
+		
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			
 			primaryStage.setTitle("Grand Exchange Central");
 			Image icon = new Image ("/images/icon.png");
 			primaryStage.getIcons().add(icon);
@@ -46,10 +64,10 @@ public class Window extends Application {
 			root.setPrefSize(1080, 720);
 			root.setId("Bank-Screen");
             scene = new Scene(group, 1080, 720,Color.BEIGE);
-
-            DisplayController dc = new DisplayController();
+          
+            dc = ac.getBean(DisplayController.class);
 			dc.getTab();
-			dc.setListners();
+			dc.setListeners();
 			
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
@@ -62,6 +80,26 @@ public class Window extends Application {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	@Override
+	public void init() throws Exception{
+		ac = new SpringApplicationBuilder(Window.class).run();
+		System.out.println("Init");
+	}
+	
+	@Override
+	public void stop() throws Exception{
+		ac.close();
+		Platform.exit();
+	}
+	static class StageReadyEvent extends ApplicationEvent {
+
+		public StageReadyEvent(Stage primaryStage) {
+			super(primaryStage);
+			// TODO Auto-generated constructor stub
+		}
+
 	}
 
 }

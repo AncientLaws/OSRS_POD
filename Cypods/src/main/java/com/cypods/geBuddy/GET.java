@@ -11,9 +11,10 @@ import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.stereotype.Component;
 
 
-
+@Component
 public class GET extends Connect {
 	private URL GET_1;
 	private Object grab;

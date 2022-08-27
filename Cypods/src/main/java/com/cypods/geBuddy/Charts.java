@@ -28,6 +28,7 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import org.springframework.stereotype.Component;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.Minute;
 import org.jfree.data.time.Second; 
@@ -74,7 +75,8 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 //import org.jfree.chart.fx.ChartViewer;
 //test commit dev branch
-public class charts implements ChartMouseListenerFX {
+@Component
+public class Charts implements ChartMouseListenerFX {
 
 	public static boolean DEBUG = false;
 	
@@ -90,7 +92,7 @@ public class charts implements ChartMouseListenerFX {
 	
 	private double maxValue = 0;
 
-	public charts() {
+	public Charts() {
 		dataset = createDataset();
 		chart = createChart(dataset);
 		
