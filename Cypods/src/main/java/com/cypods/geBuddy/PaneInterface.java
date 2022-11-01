@@ -185,7 +185,7 @@ public class PaneInterface extends DisplayController {
 
 	private void pane_drawItemScrollArea() {
 		if(DEBUG == true) {System.out.println("pane_drawItemScrollArea");}
-		geSearch = new ImageView(new Image("/images/GE_SEARCH_V6.png"));
+		geSearch = new ImageView(new Image(getClass().getClassLoader().getResource("images/GE_SEARCH_V6.png").toString(),true));
 		geSearch.setX(0);
 		geSearch.setY(405);
 		geSearch.setFitWidth(750);
@@ -196,7 +196,7 @@ public class PaneInterface extends DisplayController {
 
 	private void pane_drawInventoryMenu() {
 		if(DEBUG == true) {System.out.println("pane_drawInventoryMenu");}
-		inventory = new ImageView(new Image("/images/gePriceGuideSidebar3.png"));
+		inventory = new ImageView(new Image(getClass().getClassLoader().getResource("images/gePriceGuideSidebar3.png").toString(),true));
 		inventory.setX(747);
 		inventory.setY(404);
 		inventory.setFitWidth(321);
@@ -207,7 +207,7 @@ public class PaneInterface extends DisplayController {
 	private void pane_drawItemTopMenuArea() {
 		// Item Menu Border
 		if(DEBUG == true) {System.out.println("pane_drawItemTopMenuArea");}
-		itemTopMenu = new ImageView(new Image("/images/Inventory_2.PNG"));
+		itemTopMenu = new ImageView(new Image(getClass().getClassLoader().getResource("images/Inventory_2.PNG").toString(),true));
 		itemTopMenu.setX(746);
 		itemTopMenu.setY(0);
 		itemTopMenu.setFitWidth(325);
@@ -217,7 +217,7 @@ public class PaneInterface extends DisplayController {
 
 	private void pane_drawChartArea() {
 		if(DEBUG == true) {System.out.println("pane_drawChartArea");}
-		graphBackground = new ImageView(new Image("/images/chartArea3.png"));
+		graphBackground = new ImageView(new Image(getClass().getClassLoader().getResource("images/chartArea3.png").toString(),true));
 		graphBackground.setX(4);
 		graphBackground.setY(0);
 		graphBackground.setFitWidth(1065);
@@ -257,7 +257,7 @@ public class PaneInterface extends DisplayController {
 
 		if(DEBUG == true) {System.out.println("pane_setItemTopMenuError()");}
 		tabInterface.getChildren().remove(itemIconPaneImage);
-		image = new Image("/images/Item_UnAvailable.png");
+		image = new Image(getClass().getClassLoader().getResource("images/Item_UnAvailable.png").toString(),true);
 		itemIconPaneImage = new ImageView(image);
 		itemIconPaneImage.setPreserveRatio(true);
 		itemIconPaneImage.setFitHeight(75);

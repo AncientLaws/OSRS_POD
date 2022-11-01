@@ -58,13 +58,38 @@ public class Window extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			primaryStage.setTitle("Grand Exchange Central");
-			Image icon = new Image ("/images/icon.png");
+			Image icon = new Image 	(getClass().getClassLoader().getResource("images/icon.png").toString(), true);
 			primaryStage.getIcons().add(icon);
 			
-			root.setPrefSize(1080, 720);
+			/*
+			Platform.runLater(new Runnable() {
+			    @Override
+			    public void run() {
+			    	//root.setLayoutX(primaryStage.getX() + primaryStage.getWidth() / 2 - primaryStage.getWidth() / 2); //dialog.getWidth() = NaN
+			    	//root.setLayoutY(primaryStage.getY() + primaryStage.getHeight() / 2 - primaryStage.getHeight() / 2); //dialog.getHeight() = NaN
+			    	root.setPrefSize(
+			    			primaryStage.getX() , 
+			    			primaryStage.getY() );
+			    	primaryStage.show(); //it is better to showAndWait();
+			    }
+			});*/
+			//primaryStage.showAndWait();
+			//primaryStage.getWidth();
+			//root.setPrefSize(1080, 720);
+			
+			Platform.runLater(new Runnable() {
+			    @Override
+			    public void run() {
+			    	root.setPrefSize( primaryStage.getWidth(),primaryStage.getHeight()-28);
+			    	System.out.println("PrimaryStage Height: "+ (primaryStage.getHeight()-28)+ " PrimaryStage Width: " + primaryStage.getWidth());
+			    	
+			    	//scene = new Scene(group, primaryStage.getWidth(), primaryStage.getHeight()-28,Color.BEIGE);
+			    }
+			});
 			root.setId("Bank-Screen");
-            scene = new Scene(group, 1080, 720,Color.BEIGE);
-          
+            
+			scene = new Scene(group, primaryStage.getWidth(), primaryStage.getHeight()-28,Color.BEIGE);
+			root.autosize();
             dc = ac.getBean(DisplayController.class);
 			dc.getTab();
 			dc.setListeners();
@@ -73,7 +98,7 @@ public class Window extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setAlwaysOnTop(false);
 			
-			primaryStage.setResizable(false);
+			primaryStage.setResizable(true);
 			primaryStage.show();
 	
 		} catch (Exception e) {

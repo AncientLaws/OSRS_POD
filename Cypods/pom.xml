@@ -20,11 +20,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
+		</dependency>  
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+	   </dependency> 
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -35,51 +35,61 @@
 		<dependency>
     		<groupId>org.openjfx</groupId>
     		<artifactId>javafx</artifactId>
-    		<version>19-ea+8</version>
+    		<version>17</version>
     		<type>pom</type>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
+		
+		
+		
+  <dependency>
+    <groupId>org.openjfx</groupId>
+    <artifactId>javafx-controls</artifactId>
+    <version>17</version>
+  </dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls 
+		
 		<dependency>
     		<groupId>org.openjfx</groupId>
     		<artifactId>javafx-controls</artifactId>
     		<version>19-ea+8</version>
-		</dependency>
+		</dependency>-->
 		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-base -->
 		<dependency>
    		 	<groupId>org.openjfx</groupId>
    		 	<artifactId>javafx-base</artifactId>
-   		 	<version>19-ea+8</version>
+   		 	<version>17</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-graphics -->
 		<dependency>
     		<groupId>org.openjfx</groupId>
     		<artifactId>javafx-graphics</artifactId>
-    		<version>19-ea+8</version>
+    		<version>17</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
 		<dependency>
     		<groupId>org.openjfx</groupId>
    			<artifactId>javafx-fxml</artifactId>
-    		<version>19-ea+8</version>
+    		<version>17</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing -->
 		<dependency>
 		    <groupId>org.openjfx</groupId>
 		    <artifactId>javafx-swing</artifactId>
-		    <version>19-ea+8</version>
+		    <version>17</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-web -->
 		<dependency>
 		    <groupId>org.openjfx</groupId>
 		    <artifactId>javafx-web</artifactId>
-		    <version>19-ea+8</version>
+		    <version>17</version>
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-media -->
 		<dependency>
 		    <groupId>org.openjfx</groupId>
 		    <artifactId>javafx-media</artifactId>
-		    <version>19-ea+8</version>
+		    <version>17</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>

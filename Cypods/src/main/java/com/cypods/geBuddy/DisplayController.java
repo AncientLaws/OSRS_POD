@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.w3c.dom.html.HTMLTableCaptionElement;
+//import org.w3c.dom.html.HTMLTableCaptionElement;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -58,7 +58,7 @@ public class DisplayController implements ChangeListener{
 	//Pane root = new Pane();
 	//Group group = new Group(root);
 	
-	public static boolean DEBUG = true;
+	public static boolean DEBUG = false;
 
 	
 	 DisplayController (){

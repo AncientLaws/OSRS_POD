@@ -162,7 +162,7 @@ TabController (String s){
 	
 	private void catchError(){
 		 //root.getChildren().remove(lTab);
-		 image = new Image("/images/Item_UnAvailable.png"); 
+		 image = new Image(getClass().getClassLoader().getResource("/images/Item_UnAvailable.png").toString(),true); 
 		 imageView.setImage(image);
 		 imageView.setPreserveRatio(true);
 		 imageView.setFitHeight(75);
