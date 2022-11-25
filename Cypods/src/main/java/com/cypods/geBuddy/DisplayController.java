@@ -1,26 +1,12 @@
 package com.cypods.geBuddy;
 
 
-import java.io.InputStream;
-import java.net.URL;
-
-
-import org.jfree.chart.renderer.category.StatisticalBarRenderer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-//import org.w3c.dom.html.HTMLTableCaptionElement;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
 
 @Component
 @Primary
@@ -30,6 +16,8 @@ public class DisplayController implements ChangeListener{
 	Window w;
 	protected Pane root = new Pane();
 	protected  Group group = new Group(root);
+	protected static double stageWidth = 0;
+	protected static double stageHeight = 0;
 	
 
 	//@Autowired 
@@ -66,6 +54,7 @@ public class DisplayController implements ChangeListener{
 		 this.root = w.root;
 		 this.group = w.group;
 		 //w.ac.getBean(null);
+
 		
 	 }
 
@@ -140,7 +129,7 @@ public class DisplayController implements ChangeListener{
 		tab7.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab7"));
 		tab8.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab8"));
 		tab9.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab9"));
-	   tab10.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab10"));
+	    tab10.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab10"));
 	    
 	    tab1.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab1"));
 	    tab2.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab2"));
@@ -151,7 +140,15 @@ public class DisplayController implements ChangeListener{
 	    tab7.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab7"));
 	    tab8.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab8"));
 	    tab9.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab9"));
-	   tab10.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab10"));
+	    tab10.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab10"));
+		/* w.primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
+		     this.stageWidth = (double) newVal;
+		     //System.out.println("Width: " + newVal);
+		});
+		 w.primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
+			 this.stageHeight = (double) newVal;
+			 //System.out.println("Height: " + newVal);
+		});*/
 		}
 		catch(Exception e) {
 			System.out.println("Unable to add listners on the method DisplayController.setListners -> " );

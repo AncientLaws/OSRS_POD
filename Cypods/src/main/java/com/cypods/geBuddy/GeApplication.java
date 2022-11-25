@@ -1,15 +1,9 @@
 package com.cypods.geBuddy;
 
+import javafx.application.Application;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-
-import javafx.application.Application;
 
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class }) 
 
@@ -21,6 +15,8 @@ public class GeApplication {
 		//SpringApplication.run(GeApplication.class, args);
 		
 		//test
+
+		//test2
 
 		Application.launch(Window.class, args);
 	}

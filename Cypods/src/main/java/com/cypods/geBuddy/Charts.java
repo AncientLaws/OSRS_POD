@@ -1,116 +1,85 @@
 package com.cypods.geBuddy;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.geom.Rectangle2D;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
-
 import javafx.application.Platform;
+import javafx.stage.Screen;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.AxisSpace;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.fx.ChartViewer;
 import org.jfree.chart.fx.interaction.ChartMouseEventFX;
 import org.jfree.chart.fx.interaction.ChartMouseListenerFX;
 import org.jfree.chart.fx.overlay.CrosshairOverlayFX;
-import org.jfree.chart.labels.StandardXYToolTipGenerator;
 import org.jfree.chart.plot.Crosshair;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.HighLowRenderer;
 import org.jfree.chart.ui.RectangleEdge;
 import org.jfree.data.general.DatasetUtils;
-import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.*;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.springframework.stereotype.Component;
-import org.jfree.data.time.Day;
-import org.jfree.data.time.Minute;
-import org.jfree.data.time.Second; 
-import org.jfree.data.time.TimeSeriesCollection; 
-import org.jfree.chart.labels.StandardXYToolTipGenerator;
 
-
-
-import java.awt.Color;
-import java.awt.Point;
-import java.awt.geom.Point2D;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
-import java.util.StringTokenizer;
 
-import javax.swing.JLabel;
-
-import org.jfree.chart.ChartColor;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartMouseEvent;
-import org.jfree.chart.ChartMouseListener;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.AxisSpace;
-import org.jfree.chart.axis.DateAxis;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.labels.StandardXYToolTipGenerator;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.HighLowRenderer;
-import org.jfree.data.time.Day;
-import org.jfree.data.time.ohlc.OHLCSeries;
-import org.jfree.data.time.ohlc.OHLCSeriesCollection;
-import org.jfree.data.xy.OHLCDataset;
-import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
 
 //import org.jfree.chart.fx.ChartViewer;
 //test commit dev branch
 @Component
+//@ComponentScan("com.cypods.geBuddy")
 public class Charts implements ChartMouseListenerFX {
 
 	public static boolean DEBUG = false;
 	
-	private ChartViewer chartViewer;
+	private ChartViewer chartViewerPrice;
+	private ChartViewer chartViewerVolume;
 
 	private Crosshair xCrosshair;
 
 	private Crosshair yCrosshair;
 	JFreeChart chart;
+	JFreeChart chart_volume;
 	XYDataset dataset;
 	CrosshairOverlayFX crosshairOverlay;
 	TimeSeries series;
 	
 	private double maxValue = 0;
-
+	
+	private double chartWidth;
+	private double chartHeight;
+	
+	javafx.geometry.Rectangle2D screenBounds; 
 	public Charts() {
+		
+	};
+	public Charts(double chartWidth, double chartHeight) {
+		this.chartWidth = chartWidth;
+		this.chartHeight = chartHeight;
+		
 		dataset = createDataset();
 		chart = createChart(dataset);
+		chart_volume = createChart(dataset);
+		screenBounds = Screen.getPrimary().getVisualBounds();
 		
-		chartViewer = new ChartViewer(chart);
-		chartViewer.setPrefSize(1063, 351);
-		chartViewer.setLayoutX(4);
-		chartViewer.setLayoutY(52);
-		//chartViewer.addChartMouseListener(this);
-		// getChildren().add(this.chartViewer);
+		chartViewerPrice = new ChartViewer(chart);
+		chartViewerPrice.setPrefSize(chartWidth-29, 250); //.setPrefSize(1063, 351)
+		chartViewerPrice.setLayoutX(4);  //setLayoutX(4);
+		chartViewerPrice.setLayoutY(52);  //setLayoutY(52); 
+		
+		chartViewerVolume = new ChartViewer(chart);
+		chartViewerVolume.setPrefSize(1063, 100); 
+		chartViewerVolume.setLayoutX(4);
+		chartViewerVolume.setLayoutY(301);
+		//chartViewerPrice.addChartMouseListener(this);
+		// getChildren().add(this.chartViewerPrice);
 
-
-        chart.getXYPlot().getRenderer().setSeriesVisibleInLegend(0, false, false); //Makes legend invisible
-        Color chartBackgroundColor = new Color(126, 102, 64); //new Color(124, 101, 61);
-        Color chartSeriesColor = new Color(120, 173, 255);
-        chart.getPlot().setBackgroundPaint( chartBackgroundColor);//0x866b46
-        chart.getXYPlot().getRenderer().setSeriesPaint(0, chartSeriesColor);
-        chart.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(3.0f));
-        chart.getXYPlot().getRenderer().setSeriesVisible(0, true);
+		initChart(chart);
+		initChart(chart_volume);
 
 		crosshairOverlay = new CrosshairOverlayFX();
 		Crosshair x = new Crosshair();
@@ -128,19 +97,33 @@ public class Charts implements ChartMouseListenerFX {
     	
 		
 		 Platform.runLater(() -> {
-		 this.chartViewer.getCanvas().addOverlay(crosshairOverlay); });
-		 
+		 this.chartViewerPrice.getCanvas().addOverlay(crosshairOverlay); });
+		 chartViewerPrice.setPrefSize(chartWidth, 250);
+		 Platform.runLater(() -> {
+		 this.chartViewerVolume.getCanvas().addOverlay(crosshairOverlay); });
 	}
 
 	
 	  @Override public void chartMouseClicked(ChartMouseEventFX event) { // ignore
+	  }
+	  
+	  private void initChart(JFreeChart chart)
+	  {
+
+	        chart.getXYPlot().getRenderer().setSeriesVisibleInLegend(0, false, false); //Makes legend invisible
+	        Color chartBackgroundColor = new Color(126, 102, 64); //new Color(124, 101, 61);
+	        Color chartSeriesColor = new Color(120, 173, 255);
+	        chart.getPlot().setBackgroundPaint( chartBackgroundColor);//0x866b46
+	        chart.getXYPlot().getRenderer().setSeriesPaint(0, chartSeriesColor);
+	        chart.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(3.0f));
+	        chart.getXYPlot().getRenderer().setSeriesVisible(0, true);
 	  }
 	 
 /**
  * Exists to keeep the crosshair on the datapoint in the graph
  * */
      public void chartMouseMoved(ChartMouseEventFX event) {
-        Rectangle2D dataArea = this.chartViewer.getCanvas().getRenderingInfo().getPlotInfo().getDataArea();
+        Rectangle2D dataArea = this.chartViewerPrice.getCanvas().getRenderingInfo().getPlotInfo().getDataArea();
         JFreeChart chart = event.getChart();
         XYPlot plot = (XYPlot) chart.getPlot();
         ValueAxis xAxis = plot.getDomainAxis();
@@ -163,11 +146,11 @@ public class Charts implements ChartMouseListenerFX {
     protected void runchart(int itemID, String timePeriod) {
     	dataset = createItemPriceDataset(itemID, timePeriod);
 		chart = createChart(dataset);
-		chartViewer = new ChartViewer(chart);
-		chartViewer.setPrefSize(1063, 351);
-		chartViewer.setLayoutX(4);
-		chartViewer.setLayoutY(52);
-		chartViewer.addChartMouseListener(this);
+		chartViewerPrice = new ChartViewer(chart);
+		chartViewerPrice.setPrefSize(1063, 351);
+		chartViewerPrice.setLayoutX(4);
+		chartViewerPrice.setLayoutY(52);
+		chartViewerPrice.addChartMouseListener(this);
 		
         chart.getXYPlot().getRenderer().setSeriesVisibleInLegend(0, false, false); //Makes legend invisible
         Color chartBackgroundColor = new Color(126, 102, 64); //new Color(124, 101, 61);
@@ -201,7 +184,8 @@ public class Charts implements ChartMouseListenerFX {
     	
 		
 		 Platform.runLater(() -> {
-		 this.chartViewer.getCanvas().addOverlay(crosshairOverlay); });
+		 this.chartViewerPrice.getCanvas().addOverlay(crosshairOverlay); });
+		 chartViewerPrice.setPrefSize(chartWidth, 250);
 
     }
 /**
@@ -225,8 +209,11 @@ public class Charts implements ChartMouseListenerFX {
 		return chart;
 	}
 
-	protected ChartViewer charts_chartViewer() {
-		return chartViewer;
+	protected ChartViewer charts_chartViewerPrice() {
+		return chartViewerPrice;
+	}
+	protected ChartViewer charts_chartViewerVolume() {
+		return chartViewerVolume;
 	}
 
 /**
@@ -323,8 +310,28 @@ public class Charts implements ChartMouseListenerFX {
 		java.util.Date date1 = Date.from(i);
 		return  date1;
 	}
+	
+	/**
+	 * Method that resizes chart width
+	 * Exists because an event listener needs to use this method to update chart size
+	 * @return nothing
+	 * */
+	protected void resizeChartW(ChartViewer chart, double w)
+	{
+		chart.setPrefWidth(w);
 		
-
+	}
+	/**
+	 * Method that resizes chart Height
+	 * Exists because an event listener needs to use this method to update chart size
+	 * @return nothing
+	 * */
+	protected void resizeChartH(ChartViewer chart, double H)
+	{
+		chart.setPrefHeight(H);
+		
+	}
+	
 
 }
 

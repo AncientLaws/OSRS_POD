@@ -1,34 +1,19 @@
 package com.cypods.geBuddy;
 
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
-import javafx.embed.swing.SwingNode;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
+import org.springframework.stereotype.Component;
+
+import java.io.InputStream;
+import java.net.URL;
 
 @Component
 //@Scope ("Prototype")
@@ -52,6 +37,7 @@ public class TabController extends PaneInterface {
 	public InputStream input;	
 	private String[] itemInfoArr = new String [18];
 	private String[][] tc_itemListArray = new String[100][6];
+	private String osrsItemSearch = "https://services.runescape.com/m=itemdb_oldschool/api/catalogue/items.json?category=1&alpha=";
 
 /***************Tab icon settings********************/
 	int X;
@@ -126,16 +112,24 @@ TabController (String s){
 		imageView.setOpacity(1);            	//returns item to full opacity
 		if(DEBUG == true) {System.out.println("setActive: " + tabActive);}
 		}
-	
+	/**
+	 * Handles user search input
+	 * Thread is created whenever a user attempts to search for an Item. This is to enhance the application performance.
+	 * */
 	private void itemSearchListener() {
 		itemSearchInput.setOnKeyPressed(KeyEvent ->
 			{
 				if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
-				pane_ItemSearchInputText = itemSearchInput.getText();
-				Get.get_osrs_api_parseItemJsonList("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/items.json?category=1&alpha=" + pane_ItemSearchInputText);
-				geSearchResults();
+					//Thread thread = new Thread(() -> {
+						pane_ItemSearchInputText = itemSearchInput.getText();
+						Get.get_osrs_api_parseItemJsonList(osrsItemSearch ,pane_ItemSearchInputText);
+						geSearchResults(); //clear search results and adds resulting item search images/labels
+					//});
+					//thread.start();
+
+
 			}
-				
+			});
 		itemSearchInput.setOnMousePressed((mouseEvent) -> {
 			itemSearchInput.setText("");
 			clearGeSearchResults();
@@ -143,21 +137,30 @@ TabController (String s){
 				
 				
 
-		});
+
 	}
 	
 	private void itemSearchSelectionListener(int itemID) {
-		Get.get_osrs_api_parseItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + itemID);
-		tab_itemID = itemID;
-		itemInfoArr = Get.getItemInfo();		//Getting chosen Item Json Data
-		setIcon();
-		setInterfaceLabels();					//Drawing everything
-		pane_updateChart(itemID, "1h");
-		addButtonListeners();
-		resetButtonClickedStyle();
-		setButtonClickedStyleWeek();
-		//System.out.println("=========================================Epoch Key values===================================");
-		//Get.get_osrs_api_parseItemGraph("https://services.runescape.com/m=itemdb_oldschool/api/graph/26374.json");
+		//new Thread(() -> {
+		Platform.runLater(new Runnable() {
+		    @Override
+		    public void run() {
+		    	//new Thread(() -> {
+			Get.get_osrs_api_parseItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + itemID);
+			tab_itemID = itemID;
+			itemInfoArr = Get.getItemInfo();		//Getting chosen Item Json Data
+			setIcon();
+			setInterfaceLabels();					//Drawing everything
+			pane_updateChart(itemID, "1h");
+			addButtonListeners();
+			resetButtonClickedStyle();
+			setButtonClickedStyleWeek();
+			//System.out.println("=========================================Epoch Key values===================================");
+			//Get.get_osrs_api_parseItemGraph("https://services.runescape.com/m=itemdb_oldschool/api/graph/26374.json");
+		    	//}).start();
+		    }
+		    
+		});
 	}
 	
 	private void catchError(){
@@ -257,200 +260,137 @@ TabController (String s){
 		tooltip.setId("tooltip");
 		tooltip.install(imageView, tooltip);
 	}
-	
+
+	/**
+	 * @Purpose
+	 * Clears Ge search results and images from ge search area
+	 * */
 	private void clearGeSearchResults() {
 		removeLabelActionListeners();
-		geSearchResult1.setText("");
-		geSearchResult2.setText("");
-		geSearchResult3.setText("");
-		geSearchResult4.setText("");
-		geSearchResult5.setText("");
-		geSearchResult6.setText("");
-		geSearchResult7.setText("");
-		geSearchResult8.setText("");
-		geSearchResult9.setText("");
-		geSearchResult10.setText("");
-		geSearchResult11.setText("");
-		geSearchResult12.setText("");
-		
-		
-		img1.setImage(null);
-		img2.setImage(null);
-		img3.setImage(null);
-		img4.setImage(null);
-		img5.setImage(null);
-		img6.setImage(null);
-		img7.setImage(null);
-		img8.setImage(null);
-		img9.setImage(null);
-		img10.setImage(null);
-		img11.setImage(null);
-		img12.setImage(null);
+		addGeSearchResultDefaultItemImageViewsToArray();
+		addGeSearchResultLabelsToArray();
+
+		for(int i = 0; i<11 ; i++)
+		{
+			geSearchResultLabels[i].setText(null);
+			geSearchResultImages[i].setImage(null);
+		}
 	}
-	
+
+	/**
+	 * @Purpose
+	 * Dynamically add Ge search result item name and image to the ge search area
+	 *
+	 * @Steps
+	 * - Clear previous ge search
+	 * - Re-add label action listeners @Refactor
+	 * - Get returned search item
+	 * - Add result to all labels
+	 * */
 	private void geSearchResults() {
 		clearGeSearchResults();		
 		addLabelActionListeners();
+		addGeSearchResultDefaultItemImageViewsToArray();
+		addGeSearchResultLabelsToArray();
 		
 		tc_itemListArray = Get.returnItemListArray() ;
-		
+
 		try { //Open stream to grab the image for each of the returned items
-			geSearchResult1.setText(tc_itemListArray[0][2]);
-			input = new URL (tc_itemListArray[0][0]).openStream();
-	     	image = new Image(input); 
-	     	img1.setImage(image);
 
-	     	
-			geSearchResult2.setText(tc_itemListArray[1][2]);			
-			input = new URL (tc_itemListArray[1][0]).openStream();
-	     	image = new Image(input); 
-	     	img2.setImage(image);
+			for(int i = 0; i < GET.get_getSearchResultSize() ; i++)
+			{
+				geSearchResultLabels[i].setText(tc_itemListArray[i][2]);
+				input = new URL (tc_itemListArray[i][0]).openStream();
+				//image = ;
+				geSearchResultImages[i].setImage(new Image(input));
 
-	     	
-			geSearchResult3.setText(tc_itemListArray[2][2]);			
-			input = new URL (tc_itemListArray[2][0]).openStream();
-	     	image = new Image(input); 
-	     	img3.setImage(image);
+			}
 
-	     	
-			geSearchResult4.setText(tc_itemListArray[3][2]);			
-			input = new URL (tc_itemListArray[3][0]).openStream();
-	     	image = new Image(input); 
-	     	img4.setImage(image);
 
-			geSearchResult5.setText(tc_itemListArray[4][2]);			
-			input = new URL (tc_itemListArray[4][0]).openStream();
-	     	image = new Image(input); 
-	     	img5.setImage(image);
-	     	
-			geSearchResult6.setText(tc_itemListArray[5][2]);			
-			input = new URL (tc_itemListArray[5][0]).openStream();
-	     	image = new Image(input); 
-	     	img6.setImage(image);
-
-			geSearchResult7.setText(tc_itemListArray[6][2]);			
-			input = new URL (tc_itemListArray[6][0]).openStream();
-	     	image = new Image(input); 
-	     	img7.setImage(image);
-   	
-			geSearchResult8.setText(tc_itemListArray[7][2]);			
-			input = new URL (tc_itemListArray[7][0]).openStream();
-	     	image = new Image(input); 
-	     	img8.setImage(image);
-
-			geSearchResult9.setText(tc_itemListArray[8][2]);			
-			input = new URL (tc_itemListArray[8][0]).openStream();
-	     	image = new Image(input); 
-	     	img9.setImage(image);
-	     	
-			geSearchResult10.setText(tc_itemListArray[9][2]);	   	     	
-			input = new URL (tc_itemListArray[9][0]).openStream();
-	     	image = new Image(input); 
-	     	img10.setImage(image);	
-	     	
-			geSearchResult11.setText(tc_itemListArray[10][2]);	     	
-			input = new URL (tc_itemListArray[10][0]).openStream();
-	     	image = new Image(input); 
-	     	img11.setImage(image);	
- 	     	
-			geSearchResult12.setText(tc_itemListArray[11][2]);	     	
-			input = new URL (tc_itemListArray[11][0]).openStream();
-	     	image = new Image(input); 
-	     	img12.setImage(image);	
-	     	
-			
 		}
 		catch(Exception e) {
-			
+			/**
+			 * When an Item is searched, if the resulting response is less than 12 items, the url list will not
+			 * be filled, hence, a null will be present in the url field. This exception 'handles' it by doing nothing
+			 */
 			System.out.println("Error grabbing Icon Images in TabController>geSearchResults");
-			System.out.println(e);
+			//System.out.println(e);
 			
 		}
 		
 		
 	}
-	
+
+	/**
+	 * @Purpose
+	 * - Dynamically add action listeners to labels based on search result size
+	 * - Enable mouse Enter/Exit animation
+	 * - Allow items to be selected and displayed
+	 * */
 
 
-	private void addLabelActionListeners() {
-		geSearchResult1.setOnMouseEntered((mouseEvent)-> {geSearchResult1.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
-		geSearchResult1.setOnMouseExited ((mouseEvent)-> {geSearchResult1.setBackground(new Background(new BackgroundFill(null, null, null)));});
-		geSearchResult1.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[0][1]));});
-		
-		geSearchResult2.setOnMouseEntered((mouseEvent)-> {geSearchResult2.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
-		geSearchResult2.setOnMouseExited ((mouseEvent)-> {geSearchResult2.setBackground(new Background(new BackgroundFill(null, null, null)));});
-		geSearchResult2.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[1][1]));});
-		
-		geSearchResult3.setOnMouseEntered((mouseEvent)-> {geSearchResult3.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
-		geSearchResult3.setOnMouseExited ((mouseEvent)-> {geSearchResult3.setBackground(new Background(new BackgroundFill(null, null, null)));});
-		geSearchResult3.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[2][1]));});
-		
-		geSearchResult4.setOnMouseEntered((mouseEvent)-> {geSearchResult4.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
-		geSearchResult4.setOnMouseExited ((mouseEvent)-> {geSearchResult4.setBackground(new Background(new BackgroundFill(null, null, null)));});
-		geSearchResult4.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[3][1]));});
-		
-		geSearchResult5.setOnMouseEntered((mouseEvent)-> {geSearchResult5.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
-		geSearchResult5.setOnMouseExited ((mouseEvent)-> {geSearchResult5.setBackground(new Background(new BackgroundFill(null, null, null)));});
-		geSearchResult5.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[4][1]));});
-		
-		geSearchResult6.setOnMouseEntered((mouseEvent)-> {geSearchResult6.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
-		geSearchResult6.setOnMouseExited ((mouseEvent)-> {geSearchResult6.setBackground(new Background(new BackgroundFill(null, null, null)));});
-		geSearchResult6.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[5][1]));});
-		
-		geSearchResult7.setOnMouseEntered((mouseEvent)-> {geSearchResult7.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
-		geSearchResult7.setOnMouseExited ((mouseEvent)-> {geSearchResult7.setBackground(new Background(new BackgroundFill(null, null, null)));});
-		geSearchResult7.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[6][1]));});
-		
-		geSearchResult8.setOnMouseEntered((mouseEvent)-> {geSearchResult8.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
-		geSearchResult8.setOnMouseExited ((mouseEvent)-> {geSearchResult8.setBackground(new Background(new BackgroundFill(null, null, null)));});
-		geSearchResult8.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[7][1]));});
-		
-		geSearchResult9.setOnMouseEntered((mouseEvent)-> {geSearchResult9.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
-		geSearchResult9.setOnMouseExited ((mouseEvent)-> {geSearchResult9.setBackground(new Background(new BackgroundFill(null, null, null)));});
-		geSearchResult9.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[8][1]));});
-		
-		geSearchResult10.setOnMouseEntered((mouseEvent)-> {geSearchResult10.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
-		geSearchResult10.setOnMouseExited ((mouseEvent)-> {geSearchResult10.setBackground(new Background(new BackgroundFill(null, null, null)));});
-		geSearchResult10.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[9][1]));});
-		
-		geSearchResult11.setOnMouseEntered((mouseEvent)-> {geSearchResult11.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
-		geSearchResult11.setOnMouseExited ((mouseEvent)-> {geSearchResult11.setBackground(new Background(new BackgroundFill(null, null, null)));});
-		geSearchResult11.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[10][1]));});
-		
-		geSearchResult12.setOnMouseEntered((mouseEvent)-> {geSearchResult12.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
-		geSearchResult12.setOnMouseExited ((mouseEvent)-> {geSearchResult12.setBackground(new Background(new BackgroundFill(null, null, null)));});
-		geSearchResult12.setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[11][1]));});
+	protected void addLabelActionListeners() {
+		int arrLength = GET.get_getSearchResultSize();
+		addGeSearchResultLabelsToArray();
+
+		for(int i = 0; i < arrLength ; i++)
+		{
+			Label label = geSearchResultLabels[i];
+			int j = i;
+			geSearchResultLabels[i].setOnMouseEntered((mouseEvent)-> {label.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
+			geSearchResultLabels[i].setOnMouseExited ((mouseEvent)-> {label.setBackground(new Background(new BackgroundFill(null, null, null)));});
+			geSearchResultLabels[i].setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[j][1]));});
+
+		}
+
+
 	}
 	
 	
 	private void removeLabelActionListeners() {
-		geSearchResult1.setOnMouseEntered((mouseEvent)-> {});
-		geSearchResult2.setOnMouseEntered((mouseEvent)-> {});
-		geSearchResult3.setOnMouseEntered((mouseEvent)-> {});
-		geSearchResult4.setOnMouseEntered((mouseEvent)-> {});
-		geSearchResult5.setOnMouseEntered((mouseEvent)-> {});
-		geSearchResult6.setOnMouseEntered((mouseEvent)-> {});
-		geSearchResult7.setOnMouseEntered((mouseEvent)-> {});
-		geSearchResult8.setOnMouseEntered((mouseEvent)-> {});
-		geSearchResult9.setOnMouseEntered((mouseEvent)-> {});
-		geSearchResult10.setOnMouseEntered((mouseEvent)-> {});
-		geSearchResult11.setOnMouseEntered((mouseEvent)-> {});
-		geSearchResult12.setOnMouseEntered((mouseEvent)-> {});
-		
-		geSearchResult1.setOnMouseClicked((mouseEvent)->{});
-		geSearchResult2.setOnMouseClicked((mouseEvent)->{});
-		geSearchResult3.setOnMouseClicked((mouseEvent)->{});
-		geSearchResult4.setOnMouseClicked((mouseEvent)->{});
-		geSearchResult5.setOnMouseClicked((mouseEvent)->{});
-		geSearchResult6.setOnMouseClicked((mouseEvent)->{});
-		geSearchResult7.setOnMouseClicked((mouseEvent)->{});
-		geSearchResult8.setOnMouseClicked((mouseEvent)->{});
-		geSearchResult9.setOnMouseClicked((mouseEvent)->{});
-		geSearchResult10.setOnMouseClicked((mouseEvent)->{});
-		geSearchResult11.setOnMouseClicked((mouseEvent)->{});
-		geSearchResult12.setOnMouseClicked((mouseEvent)->{});
+		int arrLength = GET.get_getSearchResultSize();
+		addGeSearchResultLabelsToArray();
+
+
+		for(int i = 0; i < arrLength ; i++)
+		{
+			Label l = geSearchResultLabels[i];
+			l.setOnMouseEntered((mouseEvent)-> {});
+			l.setOnMouseClicked((mouseEvent)->{});
+		}
+
 	}
-	
+
+	private void addGeSearchResultLabelsToArray() {
+		geSearchResultLabels[0] = geSearchResult1;
+		geSearchResultLabels[1] = geSearchResult2;
+		geSearchResultLabels[2] = geSearchResult3;
+		geSearchResultLabels[3] = geSearchResult4;
+		geSearchResultLabels[4] = geSearchResult5;
+		geSearchResultLabels[5] = geSearchResult6;
+		geSearchResultLabels[6] = geSearchResult7;
+		geSearchResultLabels[7] = geSearchResult8;
+		geSearchResultLabels[8] = geSearchResult9;
+		geSearchResultLabels[9] = geSearchResult10;
+		geSearchResultLabels[10] = geSearchResult11;
+		geSearchResultLabels[11] = geSearchResult12;
+	}
+
+	private void addGeSearchResultDefaultItemImageViewsToArray() {
+		geSearchResultImages[0] = img1;
+		geSearchResultImages[1] = img2;
+		geSearchResultImages[2] = img3;
+		geSearchResultImages[3] = img4;
+		geSearchResultImages[4] = img5;
+		geSearchResultImages[5] = img6;
+		geSearchResultImages[6] = img7;
+		geSearchResultImages[7] = img8;
+		geSearchResultImages[8] = img9;
+		geSearchResultImages[9] = img10;
+		geSearchResultImages[10] = img11;
+		geSearchResultImages[11] = img12;
+	}
+
 	private void addButtonListeners() {
 
 			day.setOnMouseClicked((mouseEvent) -> {

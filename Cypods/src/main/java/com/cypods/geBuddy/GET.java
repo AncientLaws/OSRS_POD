@@ -1,28 +1,30 @@
 package com.cypods.geBuddy;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Iterator;
+import java.util.Set;
+
 
 @Component
-public class GET extends Connect {
+public class GET extends Connect implements Runnable {
+	
+
+
 	private URL GET_1;
 	private Object grab;
 	private int[] grabno;
 	JSONObject obj;
 	JSONObject searchJSONObj;
 	JSONObject itemPriceJSON;
-
+	protected static int searchResultSize = 0;
 	/*********** Item key values *************/
 	private String name;
 	private String id;
@@ -57,6 +59,7 @@ public class GET extends Connect {
 	/**
 	 * Method takes an API endpoint as an input, and returns a JSONObject
 	 **/
+
 	private JSONObject getItemJson(String url) throws NullPointerException {
 		String s = "";
 		try {
@@ -82,6 +85,7 @@ public class GET extends Connect {
 
 		return obj;
 	}
+	
 
 	/**
 	 * Method parses the JSON response of the Runescape API (item price/info), and
@@ -153,20 +157,24 @@ public class GET extends Connect {
 	 * result), and adds it to an array
 	 **/
 
-	protected void get_osrs_api_parseItemJsonList(String url) {
+	protected void get_osrs_api_parseItemJsonList(String url , String params) {
 
 		try {
-			obj = getItemJson(url);
 
+			/**Fix 11/23/2022:- API update by Jagex forced the use of URL encoder
+			 * @Before:- passed query parameters in the url could be =dragon claws
+			 * @After:- Url must be encoded correctly by removing spaces =dragon+claws
+			 * */
+			url = url +  URLEncoder.encode(params, "UTF-8");
+			obj = getItemJson(url);
 			JSONArray jsonArray = obj.getJSONArray("items");
+
+			setSearchResultSize(jsonArray.length());
 
 			// System.out.println("itemListArray.length = "+ itemListArray.length + "
 			// itemListArray[0].length = "+ itemListArray[0].length );
 
-			for (int i = 0, x = itemListArray.length - 1; i < x; i++) {
-				for (int j = 0, y = itemListArray[x].length - 1; j < y; j++)
-					itemListArray[i][j] = null;
-			}
+			clearItemSearchResultArray();
 
 			for (int i = 0, size = jsonArray.length(); i < size; i++) {
 				JSONObject arrayParserJSONObject = jsonArray.getJSONObject(i);
@@ -185,12 +193,11 @@ public class GET extends Connect {
 
 				itemListArray[i] = itemListNode;
 
-				// System.out.println("\nIcon: "+itemListNode [0] +"\nID: "+ itemListNode
-				// [1]+"\nName: "+itemListNode [2]+"\n Price Today: "+itemListNode [3]+"\n Trend
-				// Today "+itemListNode [4]
-				// +"\nPrice Change Today: "+itemListNode [5]);
-
-				// System.out.println(itemListArray[i][1]);
+//				 System.out.println("\nIcon: "+itemListNode [0] +"\nID: "+ itemListNode
+//				 [1]+"\nName: "+itemListNode [2]+"\n Price Today: "+itemListNode [3]+"\n Trend Today "+ itemListNode [4]
+//				 +"\nPrice Change Today: "+itemListNode [5]);
+//
+//				 System.out.println(itemListArray[i][1]);
 
 			}
 			if (DEBUG == true) {
@@ -288,6 +295,33 @@ public class GET extends Connect {
 
 	}
 
+	@Override
+	public void run() {
+
+		
+	}
+
+	/**
+	 * Clears item data from the itemList array.
+	 * @Purpose If not done, previously searched items will show up if not overwritten
+	 * */
+	private void clearItemSearchResultArray(){
+		for (int i = 0, x = itemListArray.length - 1; i < x; i++) {
+			for (int j = 0, y = itemListArray[x].length - 1; j < y; j++)
+				itemListArray[i][j] = null;
+		}
+
+	}
+
+	protected static int get_getSearchResultSize()
+	{
+		return searchResultSize;
+	}
+
+	private void setSearchResultSize(int i){
+		searchResultSize = i;
+	}
+	
 
 
 

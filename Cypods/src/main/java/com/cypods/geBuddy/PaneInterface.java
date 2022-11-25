@@ -1,47 +1,25 @@
 package com.cypods.geBuddy;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.channels.NonWritableChannelException;
-
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.fx.ChartViewer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import javafx.application.Platform;
-import javafx.embed.swing.SwingNode;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.util.Duration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
-public class PaneInterface extends DisplayController {
+public class PaneInterface extends DisplayController implements Runnable {
 
 	/************************** Images **************************/
 	Image image;
@@ -100,6 +78,9 @@ public class PaneInterface extends DisplayController {
 	Label geSearchResult12;
 
 	String pane_ItemSearchInputText;
+
+	protected Label [] geSearchResultLabels = new Label[12];
+	protected ImageView [] geSearchResultImages = new ImageView[12];
 	/*************** Buttons ********************/
 	ToggleButton day;
 	ToggleButton week;
@@ -133,8 +114,15 @@ public class PaneInterface extends DisplayController {
 	protected Pane tabInterface = new Pane();
 	protected Pane chartPane = new Pane();
 	
+	protected double tabInterfaceWidth;
+	protected double tabInterfaceHeight;
+	
+	int delayW = 25;
+	
+	Thread thread_WSize = new Thread(this);
+	
 	@Autowired
-	Charts cp = new Charts();
+	Charts cp;
 	//ChartViewer chartViewer;
 
 	/*************** End variable declaration **************/
@@ -143,6 +131,8 @@ public class PaneInterface extends DisplayController {
 		System.out.println("Attempting to add application context........");
 		 //cp = applicationContext.getBean(Charts.class);
 		 System.out.println("added application context........");
+			
+
 		pane_activateInterface();
 	}
 
@@ -153,9 +143,20 @@ public class PaneInterface extends DisplayController {
 	protected void pane_activateInterface() {
 		if(DEBUG == true) {System.out.println("activateInterface");}
 		tabInterface.setTranslateX(0);
-		tabInterface.setTranslateY(91);
-		// tabInterface.setPrefSize(2000, 2000);
+		tabInterface.setTranslateY(91);		
 
+		tabInterface.setMinWidth(1000);
+		
+		
+
+		 tabInterfaceWidth  = group.getBoundsInLocal().getWidth();
+     	 tabInterfaceHeight = group.getBoundsInLocal().getHeight();
+     	 
+     	{System.out.println("InterfaceWidth: " + tabInterfaceWidth + " tabInterfaceHeight" + tabInterfaceHeight);}
+     	{System.out.println("group.getBoundsInLocal().getWidth(): " + group.getBoundsInLocal().getWidth() + " group.getBoundsInLocal().getHeight()" + group.getBoundsInLocal().getHeight());}
+     	 
+     	cp = new Charts(tabInterfaceWidth-12, tabInterfaceHeight);
+     	
 		pane_drawItemScrollArea();
 		pane_drawInventoryMenu();
 
@@ -170,6 +171,7 @@ public class PaneInterface extends DisplayController {
 
 		group.getChildren().add(tabInterface);
 		tabInterface.setVisible(true);
+		
 	}
 
 	private void createMonitoredLabel() {
@@ -281,17 +283,31 @@ public class PaneInterface extends DisplayController {
 		pane_Tooltip.install(itemIconPaneImage, pane_Tooltip);
 
 	}
+	
+	/**
+	 * Method to used to create charts with default settings.
+	 * Method created to handle dynamic chart size in cases where the user is resizing the window. This method is handled
+	 * by a new thread to increase performance
+	 * */
 
 	protected void pane_createChart() {
 		if(DEBUG == true) {System.out.println("pane_createChart()");}
+				
+		tabInterface.getChildren().addAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
 		
-		tabInterface.getChildren().addAll(cp.charts_chartViewer());
+		//syncChartSize();
+		
+		//new Thread(() -> {
+			thread_WSize.start();
+		//}).start();
+			
+		
 	}
 	
 	public void pane_updateChart(int itemID, String timePeriod) {
-		tabInterface.getChildren().remove(cp.charts_chartViewer());
+		tabInterface.getChildren().removeAll(cp.charts_chartViewerPrice());
 		cp.runchart(itemID, timePeriod);
-		tabInterface.getChildren().addAll(cp.charts_chartViewer());
+		tabInterface.getChildren().addAll(cp.charts_chartViewerPrice());
 	}
 
 	/**
@@ -313,7 +329,7 @@ public class PaneInterface extends DisplayController {
 		itemSearchInput.setPromptText("What would you like to buy?");
 		if(DEBUG == true) {System.out.println("Caret Position: " + itemSearchInput.getCaretPosition());}
 		itemSearchInput.setStyle(
-				"-fx-text-fill: black; -fx-font-size: 13px; -fx-font-weight: bold;-fx-font-family: runescape_uf");
+				"-fx-text-fill: black; -fx-font-size: 13px; -fx-font-weight: bold;-fx-font-family: 'runescape_uf.ttf'");
 		// itemSearchInput.setOnMousePressed((mouseEvent) -> {
 		// itemSearchInput.setText("");
 
@@ -667,7 +683,39 @@ public class PaneInterface extends DisplayController {
 		
 	}
 	
+	/**
+	 * Purpose: Update Chart size based on the size of the application (re-sizable mode)
+	 * Note: Platform.runLater is used so the listener is added after all dependencies are initialized
+	 * otherwise you get null pointer exception
+	 * */
+	public void syncChartSize() {
+	
+		
+	Platform.runLater(() -> {
+		 	w.primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
+		 		//new Thread(() -> {
+		 		delayW++;
+		 		if((delayW % 3) == 0) {
+		 			//System.out.println("Starting WidthProperty thread in synchCHartSize....");
+		 		cp.resizeChartW(cp.charts_chartViewerPrice(), (double)newVal - 8);
+		 		cp.resizeChartW(cp.charts_chartViewerVolume(), (double)newVal - 8);
+		 		//}).start();
+		 		}
+		 });
+//		 	w.primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
+//		 		//new Thread(() -> {
+//		 		cp.resizeChartH(cp.charts_chartViewerPrice(), (double)newVal);
+//		 		cp.resizeChartH(cp.charts_chartViewerVolume(), (double)newVal);
+//		 		//});
+//	 	 });
+		 	
+	});
+	
+	}
 
-
-
+	@Override
+	public void run() {
+		syncChartSize();
+		
+	}
 }
