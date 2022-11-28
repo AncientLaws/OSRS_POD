@@ -42,11 +42,13 @@ public class Charts implements ChartMouseListenerFX {
 	private Crosshair xCrosshair;
 
 	private Crosshair yCrosshair;
-	JFreeChart chart;
-	JFreeChart chart_volume;
+	JFreeChart priceChart;
+	JFreeChart volumeChart;
 	XYDataset dataset;
+	XYDataset XYDatasetTimeSeriesVolume;
 	CrosshairOverlayFX crosshairOverlay;
 	TimeSeries series;
+	TimeSeries volumeSeries;
 	
 	private double maxValue = 0;
 	
@@ -62,24 +64,24 @@ public class Charts implements ChartMouseListenerFX {
 		this.chartHeight = chartHeight;
 		
 		dataset = createDataset();
-		chart = createChart(dataset);
-		chart_volume = createChart(dataset);
+		priceChart = createChart(dataset);
+		volumeChart = createChart(dataset);
 		screenBounds = Screen.getPrimary().getVisualBounds();
 		
-		chartViewerPrice = new ChartViewer(chart);
+		chartViewerPrice = new ChartViewer(priceChart);
 		chartViewerPrice.setPrefSize(chartWidth-29, 250); //.setPrefSize(1063, 351)
 		chartViewerPrice.setLayoutX(4);  //setLayoutX(4);
 		chartViewerPrice.setLayoutY(52);  //setLayoutY(52); 
 		
-		chartViewerVolume = new ChartViewer(chart);
+		chartViewerVolume = new ChartViewer(volumeChart);
 		chartViewerVolume.setPrefSize(1063, 100); 
 		chartViewerVolume.setLayoutX(4);
 		chartViewerVolume.setLayoutY(301);
 		//chartViewerPrice.addChartMouseListener(this);
 		// getChildren().add(this.chartViewerPrice);
 
-		initChart(chart);
-		initChart(chart_volume);
+		initChart(priceChart);
+		initChart(volumeChart);
 
 		crosshairOverlay = new CrosshairOverlayFX();
 		Crosshair x = new Crosshair();
@@ -87,11 +89,14 @@ public class Charts implements ChartMouseListenerFX {
 		this.xCrosshair = new Crosshair(Double.NaN, Color.WHITE, new BasicStroke(0f));
 		this.xCrosshair.setStroke(
 				new BasicStroke(1.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[] { 2.0f, 2.0f }, 0));
-		this.xCrosshair.setLabelVisible(true);
+		//this.xCrosshair.setLabelVisible(true);
 		this.yCrosshair = new Crosshair(Double.NaN, Color.WHITE, new BasicStroke(0f));
 		this.yCrosshair.setStroke(
 				new BasicStroke(1.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[] { 2.0f, 2.0f }, 0));
-		this.yCrosshair.setLabelVisible(true);
+		//this.yCrosshair.setLabelVisible(true);
+		this.yCrosshair.setLabelPaint(Color.WHITE);
+		this.xCrosshair.setLabelPaint(Color.WHITE);
+
 		crosshairOverlay.addDomainCrosshair(xCrosshair);
 		crosshairOverlay.addRangeCrosshair(yCrosshair);
     	
@@ -136,7 +141,7 @@ public class Charts implements ChartMouseListenerFX {
 
         double y = DatasetUtils.findYValue(plot.getDataset(), 0, x);
         this.xCrosshair.setValue(x);
-        this.yCrosshair.setValue(y);
+        this.yCrosshair.setValue(Math.round(y));
 
     }
 
@@ -144,28 +149,47 @@ public class Charts implements ChartMouseListenerFX {
  * Method to create a price/volume/etc chart once the item is selected by the user.
  * */
     protected void runchart(int itemID, String timePeriod) {
-    	dataset = createItemPriceDataset(itemID, timePeriod);
-		chart = createChart(dataset);
-		chartViewerPrice = new ChartViewer(chart);
+		Color chartBackgroundColor = new Color(126, 102, 64); //new Color(124, 101, 61);
+		Color chartSeriesColor = new Color(120, 173, 255);
+		dataset = createItemPriceDataset(itemID, timePeriod);
+		priceChart = createChart(dataset);
+
+		chartViewerPrice = new ChartViewer(priceChart);
 		chartViewerPrice.setPrefSize(1063, 351);
 		chartViewerPrice.setLayoutX(4);
 		chartViewerPrice.setLayoutY(52);
 		chartViewerPrice.addChartMouseListener(this);
-		
-        chart.getXYPlot().getRenderer().setSeriesVisibleInLegend(0, false, false); //Makes legend invisible
-        Color chartBackgroundColor = new Color(126, 102, 64); //new Color(124, 101, 61);
-        Color chartSeriesColor = new Color(120, 173, 255);
-        chart.getPlot().setBackgroundPaint(chartBackgroundColor);//0x866b46
-        chart.getXYPlot().getRenderer().setSeriesPaint(0, chartSeriesColor);
-        chart.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(3.0f));
-        chart.getXYPlot().getRenderer().setSeriesVisible(0, true);
-        chart.getXYPlot().setRangePannable(true);
-        chart.getXYPlot().setRangeCrosshairLockedOnData(true);
+
+		volumeChart = createChart(XYDatasetTimeSeriesVolume);
+		chartViewerVolume = new ChartViewer(volumeChart);
+		chartViewerVolume.setPrefSize(1063, 100);
+		chartViewerVolume.setLayoutX(4);
+		chartViewerVolume.setLayoutY(301);
+		chartViewerVolume.addChartMouseListener(this);
+
+		priceChart.getXYPlot().getRenderer().setSeriesVisibleInLegend(0, false, false); //Makes legend invisible
+		priceChart.getPlot().setBackgroundPaint(chartBackgroundColor);//0x866b46
+		priceChart.getXYPlot().getRenderer().setSeriesPaint(0, chartSeriesColor);
+		priceChart.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(3.0f));
+		priceChart.getXYPlot().getRenderer().setSeriesVisible(0, true);
+		priceChart.getXYPlot().setRangePannable(true);
+		priceChart.getXYPlot().setRangeCrosshairLockedOnData(true);
+		//priceChart.getXYPlot().setDomainAxisLocation(500, volumeChart.getXYPlot().getRangeAxisLocation());
+		//System.out.println("volumeChart.getXYPlot().getRangeAxisLocation()   "+ volumeChart.getXYPlot().getRangeAxis());
+
+		volumeChart.getXYPlot().getRenderer().setSeriesVisibleInLegend(0, false, false); //Makes legend invisible
+		volumeChart.getPlot().setBackgroundPaint(chartBackgroundColor);//0x866b46
+		volumeChart.getXYPlot().getRenderer().setSeriesPaint(0, chartSeriesColor);
+		volumeChart.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(3.0f));
+		volumeChart.getXYPlot().getRenderer().setSeriesVisible(0, true);
+		volumeChart.getXYPlot().setRangePannable(true);
+		volumeChart.getXYPlot().setRangeCrosshairLockedOnData(true);
         
         AxisSpace as = new AxisSpace();
-        final RectangleEdge TOP = chart.getXYPlot().getDomainAxisEdge();
+        final RectangleEdge TOP = priceChart.getXYPlot().getDomainAxisEdge();
 
-        chart.getXYPlot().setDomainPannable(true);
+		priceChart.getXYPlot().setDomainPannable(true);
+		volumeChart.getXYPlot().setDomainPannable(true);
 
         
         crosshairOverlay = new CrosshairOverlayFX();
@@ -179,12 +203,20 @@ public class Charts implements ChartMouseListenerFX {
 		this.yCrosshair.setStroke(
 				new BasicStroke(1.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[] { 2.0f, 2.0f }, 0));
 		this.yCrosshair.setLabelVisible(true);
+
+		this.yCrosshair.setLabelPaint(Color.ORANGE);
+		this.yCrosshair.setLabelBackgroundPaint(new Color(126, 102, 64));
+
+
+
 		crosshairOverlay.addDomainCrosshair(xCrosshair);
 		crosshairOverlay.addRangeCrosshair(yCrosshair);
     	
 		
 		 Platform.runLater(() -> {
-		 this.chartViewerPrice.getCanvas().addOverlay(crosshairOverlay); });
+		 this.chartViewerPrice.getCanvas().addOverlay(crosshairOverlay);
+		 this.chartViewerVolume.getCanvas().addOverlay(crosshairOverlay);
+		 });
 		 chartViewerPrice.setPrefSize(chartWidth, 250);
 
     }
@@ -225,10 +257,12 @@ public class Charts implements ChartMouseListenerFX {
 	protected XYDataset createItemPriceDataset(int itemID, String timePeriod) {
 		String url = "";
 		series = new TimeSeries( "Item Data" );
+		volumeSeries = new TimeSeries("volume data");
 		GET getDataGet = new GET();
 		String [][] itemPriceArrayStrings;
 		String x = null;
 		Double y;
+		double z;
 		
 		if (timePeriod =="6Month") //If time period is 6 months, use OSRS official API
 			{ 
@@ -243,7 +277,8 @@ public class Charts implements ChartMouseListenerFX {
 					x = itemPriceArrayStrings[i][0]; //timestamp
 					y = Double.parseDouble(itemPriceArrayStrings[i][1]); //item price
 				
-					series.addOrUpdate(new Second(epochToDateTime(x)), y);	
+					series.addOrUpdate(new Second(epochToDateTime(x)), y);
+
 					if(DEBUG == true) {   
 						System.out.println("\nnew Day(epochToDateTime(x)) \t: " + new Day(epochToDateTime(x)) + 
 						"\nnew Minute (epochToDateTime(x)): \t" + new Minute (epochToDateTime(x)) 
@@ -262,11 +297,23 @@ public class Charts implements ChartMouseListenerFX {
 						if(Double.parseDouble(itemPriceArrayStrings[i][1]) == 0) {
 							continue;
 						}
+						else if (Double.parseDouble(itemPriceArrayStrings[i][2]) == 0){
+							continue;
+						}
+						else if (Double.parseDouble(itemPriceArrayStrings[i][3]) == 0){
+							continue;
+						}
+						else if (Double.parseDouble(itemPriceArrayStrings[i][4]) == 0){
+							continue;
+						}
 				
 						x = itemPriceArrayStrings[i][0]; //timestamp
-						y = Double.parseDouble(itemPriceArrayStrings[i][1]); //item price
-					
-						series.addOrUpdate(new Second(epochToDateTime_x1000(x)), y);	
+						y = avgPrice(Double.parseDouble(itemPriceArrayStrings[i][1]) ,
+									 Double.parseDouble(itemPriceArrayStrings[i][2])); //item price average
+						z = avgVolume(Double.parseDouble(itemPriceArrayStrings[i][3]) ,
+								Double.parseDouble(itemPriceArrayStrings[i][4])); //item price average
+						series.addOrUpdate(new Second(epochToDateTime_x1000(x)), y);
+						volumeSeries.addOrUpdate(new Second(epochToDateTime_x1000(x)), z);
 						
 						if(DEBUG == true) {   
 							System.out.println("\nnew Day(epochToDateTime_x1000(x)) \t: " + new Day(epochToDateTime_x1000(x)) + 
@@ -278,7 +325,7 @@ public class Charts implements ChartMouseListenerFX {
 			}
 			
 		
-		
+		XYDatasetTimeSeriesVolume = new TimeSeriesCollection(volumeSeries);
 
 		return new TimeSeriesCollection(series);
 	}
@@ -330,6 +377,16 @@ public class Charts implements ChartMouseListenerFX {
 	{
 		chart.setPrefHeight(H);
 		
+	}
+
+	private double avgPrice(double highPrice, double lowPrice){
+		double avgPrice = (highPrice + lowPrice)/2;
+		return avgPrice;
+	}
+
+	private double avgVolume(double highVolume, double lowVolume){
+		double avgVolume = (highVolume + lowVolume)/2;
+		return avgVolume;
 	}
 	
 
