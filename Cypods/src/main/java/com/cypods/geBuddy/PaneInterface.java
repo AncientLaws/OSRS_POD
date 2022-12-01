@@ -305,7 +305,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 	}
 	
 	public void pane_updateChart(int itemID, String timePeriod) {
-		tabInterface.getChildren().removeAll(cp.charts_chartViewerPrice());
+		tabInterface.getChildren().removeAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
 		cp.runchart(itemID, timePeriod);
 		tabInterface.getChildren().addAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
 	}
