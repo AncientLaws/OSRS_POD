@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/OSRS_POD.iml" filepath="$PROJECT_DIR$/.idea/OSRS_POD.iml" />
       <module fileurl="file://$PROJECT_DIR$/Cypods/ge.iml" filepath="$PROJECT_DIR$/Cypods/ge.iml" />
     </modules>
   </component>

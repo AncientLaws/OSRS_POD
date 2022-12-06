@@ -241,7 +241,7 @@ public class GET extends Connect implements Runnable {
 
 				for(int j = 0; j<itemPriceNode.length-1; j++)
 				{
-					if (itemPriceNode[j] == "null") {
+					if (itemPriceNode[j].equals("null")) {
 						itemPriceNode[j] = "0";
 					}
 					

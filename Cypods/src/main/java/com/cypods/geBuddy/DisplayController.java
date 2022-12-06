@@ -41,7 +41,8 @@ public class DisplayController implements ChangeListener{
 	//@Autowired 
 	TabController tab10 ;
 	String tabNo;
-	
+
+
 	//Window w;
 	//Pane root = new Pane();
 	//Group group = new Group(root);
@@ -64,10 +65,10 @@ public class DisplayController implements ChangeListener{
 			if(DEBUG == true) {System.out.println("Called tab1");}
 			//tab1 = applicationContext.getBean(TabController.class, TabController.class);
 			  
-				tab1 = new TabController("Tab1");
+			   tab1 = new TabController("Tab1");
 				//tab1 = w.ac.getBean(TabController.class);
 			   if(DEBUG == true) {System.out.println("Called tab2");}
-			   tab2 = new TabController("Tab2"); 
+			   tab2 = new TabController("Tab2");
 			   //tab2.tabSettings("tab2");
 
 			   if(DEBUG == true) { System.out.println("Called tab2");}

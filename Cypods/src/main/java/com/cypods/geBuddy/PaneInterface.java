@@ -45,8 +45,8 @@ public class PaneInterface extends DisplayController implements Runnable {
 	/************************** Labels **************************/
 	Label name;
 	Label id;
-	Label type;
-	Label typeIcon;
+	//Label type;
+	//Label typeIcon;
 	Label description;
 	Label members;
 	Label currentPrice_bigLabel;
@@ -88,7 +88,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 	ToggleButton months3;
 	ToggleButton months6;
 	ToggleGroup toggleGroup;
-	HBox box;
+	//HBox box;
 	ButtonBar buttonBarLeft;
 	ButtonBar buttonBarRight;
 	
@@ -112,7 +112,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 	Font f;
 
 	protected Pane tabInterface = new Pane();
-	protected Pane chartPane = new Pane();
+	//protected Pane chartPane = new Pane();
 	
 	protected double tabInterfaceWidth;
 	protected double tabInterfaceHeight;
@@ -292,7 +292,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 	protected void pane_createChart() {
 		if(DEBUG == true) {System.out.println("pane_createChart()");}
-				
+		tabInterface.getChildren().removeAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
 		tabInterface.getChildren().addAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
 		
 		//syncChartSize();
@@ -306,7 +306,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 	
 	public void pane_updateChart(int itemID, String timePeriod) {
 		tabInterface.getChildren().removeAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
-		cp.runchart(itemID, timePeriod);
+		cp.runChart(itemID, timePeriod);
 		tabInterface.getChildren().addAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
 	}
 
@@ -708,7 +708,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 //		 		cp.resizeChartH(cp.charts_chartViewerVolume(), (double)newVal);
 //		 		//});
 //	 	 });
-		 	
+
 	});
 	
 	}

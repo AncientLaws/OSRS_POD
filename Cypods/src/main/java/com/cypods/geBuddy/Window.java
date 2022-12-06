@@ -16,6 +16,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 @ComponentScan("com.cypods.geBuddy")
 
@@ -40,7 +42,8 @@ public class Window extends Application {
 			primaryStage.setTitle("Grand Exchange Central");
 			Image icon = new Image 	(getClass().getClassLoader().getResource("images/icon.png").toString(), true);
 			primaryStage.getIcons().add(icon);
-
+			//primaryStage.setWidth(1080);
+			//primaryStage.setHeight(720);
 			
 			root.setPrefSize(primaryStage.getWidth(),primaryStage.getHeight()-28);
 			
@@ -51,6 +54,7 @@ public class Window extends Application {
 			    	System.out.println("PrimaryStage Height: "+ (primaryStage.getHeight()-28)+ " PrimaryStage Width: " + primaryStage.getWidth());
 					root.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight()-28);
 					group.prefWidth(primaryStage.getWidth());
+
 			    	//scene = new Scene(group, primaryStage.getWidth(), primaryStage.getHeight()-28,Color.BEIGE);
 			    }
 			});
@@ -63,8 +67,11 @@ public class Window extends Application {
             dc = ac.getBean(DisplayController.class);
 			dc.getTab();
 			dc.setListeners();
+
 			
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			//scene.getStylesheets().add((getClass().getResource("application.css")).toExternalForm());
+			scene.getStylesheets().add((getClass().getResource("/application.css")).toExternalForm());
+			//scene.getStylesheets().add("application.css");
 			primaryStage.setScene(scene);
 			primaryStage.setAlwaysOnTop(false);
 			
