@@ -306,8 +306,8 @@ public class GET extends Connect implements Runnable {
 	 * @Purpose If not done, previously searched items will show up if not overwritten
 	 * */
 	private void clearItemSearchResultArray(){
-		for (int i = 0, x = itemListArray.length - 1; i < x; i++) {
-			for (int j = 0, y = itemListArray[x].length - 1; j < y; j++)
+		for (int i = 0, x = itemListArray.length - 1; i <= x; i++) {
+			for (int j = 0, y = itemListArray[x].length - 1; j <= y; j++)
 				itemListArray[i][j] = null;
 		}
 

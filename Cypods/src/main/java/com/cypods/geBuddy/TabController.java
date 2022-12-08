@@ -270,7 +270,7 @@ TabController (String s){
 		addGeSearchResultDefaultItemImageViewsToArray();
 		addGeSearchResultLabelsToArray();
 
-		for(int i = 0; i<11 ; i++)
+		for(int i = 0; i<12 ; i++)
 		{
 			geSearchResultLabels[i].setText(null);
 			geSearchResultImages[i].setImage(null);

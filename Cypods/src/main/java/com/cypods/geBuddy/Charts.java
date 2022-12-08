@@ -12,6 +12,7 @@ import org.jfree.chart.fx.interaction.ChartMouseEventFX;
 import org.jfree.chart.fx.interaction.ChartMouseListenerFX;
 import org.jfree.chart.fx.overlay.CrosshairOverlayFX;
 import org.jfree.chart.panel.CrosshairOverlay;
+import org.jfree.chart.plot.CombinedDomainXYPlot;
 import org.jfree.chart.plot.Crosshair;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.ui.RectangleEdge;
@@ -117,6 +118,7 @@ public class Charts implements ChartMouseListenerFX {
 //		Platform.runLater(() -> {
 //			this.chartViewerVolume.getCanvas().addOverlay(crosshairOverlay);
 //		});
+
 	}
 
 
@@ -187,8 +189,8 @@ public class Charts implements ChartMouseListenerFX {
 		//priceChart.getXYPlot().getRangeAxis().setNegativeArrowVisible(true);
 
 
-		priceChart.getXYPlot().getRangeAxis().setFixedDimension(35);
-		volumeChart.getXYPlot().getRangeAxis().setFixedDimension(35);
+		priceChart.getXYPlot().getRangeAxis().setFixedDimension(40);
+		volumeChart.getXYPlot().getRangeAxis().setFixedDimension(40);
 
 
 		//chartViewerVolume.getCanvas().getChart().
@@ -226,9 +228,10 @@ public class Charts implements ChartMouseListenerFX {
 
 
 		Platform.runLater(() -> {
-			yCrosshair.setLabelVisible(true);
+			this.yCrosshair.setLabelVisible(true);
 			crosshairOverlay.addDomainCrosshair(xCrosshair);
 			crosshairOverlay.addRangeCrosshair(yCrosshair);
+
 			this.chartViewerPrice.getCanvas().addOverlay(crosshairOverlay);
 			this.chartViewerVolume.getCanvas().addOverlay(crosshairOverlay);
 			//chartViewerVolume.setTranslateX(chartViewerPrice.getTranslateX());
@@ -574,22 +577,22 @@ public class Charts implements ChartMouseListenerFX {
 			@Override
 			public StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition pos) {
 
-				String temp =  number < THOUSAND ? String.valueOf(number) :
-						number < MILLION ?  (int)(number / THOUSAND) + " K" :
-								number < BILLION ?  (int)(number / MILLION) + " M" :
-										number < TRILLION ? (int)(number / BILLION) + " B" :
-												(int)(number / TRILLION) + " T";
+				String temp =  number < THOUSAND ? String.valueOf((number * 100.0) / 100.0) :
+						number < MILLION ?  ((double)((number / THOUSAND)* 100.0) / 100.0) + " K" :
+								number < BILLION ?  ((double)((number / MILLION)* 100.0) / 100.0) + " M" :
+										number < TRILLION ? Math.round(((double)(number / BILLION)* 100.0) / 100.0) + " B" :
+												((double)((number / TRILLION)* 100.0) / 100.0) + " T";
 				return new StringBuffer(temp);
 			}
 
 			@Override
 			public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
 
-				String temp =  number < THOUSAND ? String.valueOf(number) :
-						number < MILLION ?  (int)(number / THOUSAND) + " K" :
-								number < BILLION ?  (int)(number / MILLION) + " M" :
-										number < TRILLION ? (int)(number / BILLION) + " B" :
-												(int)(number / TRILLION) + " T";
+				String temp =  number < THOUSAND ? String.valueOf((number * 100.0) / 100.0) :
+						number < MILLION ?  (((number / THOUSAND) * 100.0) / 100.0) + " K" :
+								number < BILLION ?  (((number / MILLION)* 100.0) / 100.0) + " M" :
+										number < TRILLION ? (((number / BILLION)* 100.0) / 100.0) + " B" :
+												(((number / TRILLION)* 100.0) / 100.0) + " T";
 				return new StringBuffer(temp);
 			}
 		});

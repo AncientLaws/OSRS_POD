@@ -1,16 +1,5 @@
 
 
-
-
-
-
-/*#GE-Screen{*/
-/*    -fx-background-image: url("images/GE-Screen_2.gif");*/
-/*    -fx-background-repeat: stretch;   */
-/*    -fx-background-size: 2080 720;*/
-/*    -fx-background-position: center center;*/
-/*    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); */
-/*}*/
 #Bank-Screen{
     -fx-background-image: url("images/Bank_Interface.PNG");
     -fx-background-repeat: stretch;   
@@ -88,16 +77,6 @@
     -fx-background-position: center center;
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
 }
-/*#tabInterface{
-    -fx-background-image: url("Bank_Interface_Pane_V2.png");
-    -fx-background-repeat: stretch;   
-    -fx-background-size: 1080 720;
-    -fx-background-position: center center;
-    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
-}*/
-/*@font-face {
-    src: url('/runescape_uf.ttf');
-}*/
 .label {
     -fx-text-fill: black;
     -fx-font-weight: bold;

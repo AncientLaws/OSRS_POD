@@ -316,7 +316,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 	 */
 	private void initTextField() {
 		if(DEBUG == true) {System.out.println("initTextField()");}
-		f = new Font("runescape_uf.ttf", 12);
+		//f = new Font("runescape_uf.ttf", 12);
 		itemSearchInput = new TextField("What would you like to buy?");
 		itemSearchInput.end();
 		itemSearchInput.setOpacity(1);
@@ -324,7 +324,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 		itemSearchInput.setLayoutX(8);
 		itemSearchInput.setLayoutY(411);
 		itemSearchInput.setPrefWidth(734);
-		itemSearchInput.setFont(f);
+		//itemSearchInput.setFont(f);
 		itemSearchInput.setAlignment(Pos.CENTER);
 		itemSearchInput.setPromptText("What would you like to buy?");
 		if(DEBUG == true) {System.out.println("Caret Position: " + itemSearchInput.getCaretPosition());}
@@ -691,25 +691,25 @@ public class PaneInterface extends DisplayController implements Runnable {
 	public void syncChartSize() {
 	
 		
-	Platform.runLater(() -> {
-		 	w.primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
-		 		//new Thread(() -> {
-		 		delayW++;
-		 		if((delayW % 3) == 0) {
-		 			//System.out.println("Starting WidthProperty thread in synchCHartSize....");
-		 		cp.resizeChartW(cp.charts_chartViewerPrice(), (double)newVal - 8);
-		 		cp.resizeChartW(cp.charts_chartViewerVolume(), (double)newVal - 8);
-		 		//}).start();
-		 		}
-		 });
-//		 	w.primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
+//	Platform.runLater(() -> {
+//		 	w.primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
 //		 		//new Thread(() -> {
-//		 		cp.resizeChartH(cp.charts_chartViewerPrice(), (double)newVal);
-//		 		cp.resizeChartH(cp.charts_chartViewerVolume(), (double)newVal);
-//		 		//});
-//	 	 });
-
-	});
+//		 		delayW++;
+//		 		if((delayW % 3) == 0) {
+//		 			//System.out.println("Starting WidthProperty thread in synchCHartSize....");
+//		 		cp.resizeChartW(cp.charts_chartViewerPrice(), (double)newVal - 8);
+//		 		cp.resizeChartW(cp.charts_chartViewerVolume(), (double)newVal - 8);
+//		 		//}).start();
+//		 		}
+//		 });
+////		 	w.primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
+////		 		//new Thread(() -> {
+////		 		cp.resizeChartH(cp.charts_chartViewerPrice(), (double)newVal);
+////		 		cp.resizeChartH(cp.charts_chartViewerVolume(), (double)newVal);
+////		 		//});
+////	 	 });
+//
+//	});
 	
 	}
 
