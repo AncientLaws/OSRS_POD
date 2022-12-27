@@ -500,7 +500,7 @@ public class Charts implements ChartMouseListenerFX {
 
 	/**
 	 * @Purpose
-	 * Shortens the numbers in the axis of graphs to make it easily readable
+	 * Shortens the numbers in the axis of graphs to make it easily read-able
 	 * */
 	private void formatChartValues(){
 		final long MILLION = 1000000L;
