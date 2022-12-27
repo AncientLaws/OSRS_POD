@@ -122,12 +122,8 @@ TabController (String s){
 				if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
 					//Thread thread = new Thread(() -> {
 						pane_ItemSearchInputText = itemSearchInput.getText();
-						Get.get_osrs_api_parseItemJsonList(osrsItemSearch ,pane_ItemSearchInputText);
+						Get.set_osrs_api_parseItemJsonList(osrsItemSearch ,pane_ItemSearchInputText);
 						geSearchResults(); //clear search results and adds resulting item search images/labels
-					//});
-					//thread.start();
-
-
 			}
 			});
 		itemSearchInput.setOnMousePressed((mouseEvent) -> {
@@ -146,9 +142,8 @@ TabController (String s){
 		    @Override
 		    public void run() {
 		    	//new Thread(() -> {
-			Get.get_osrs_api_parseItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + itemID);
+			itemInfoArr = Get.get_osrs_api_parseItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + itemID);
 			tab_itemID = itemID;
-			itemInfoArr = Get.getItemInfo();		//Getting chosen Item Json Data
 			setIcon();
 			setInterfaceLabels();					//Drawing everything
 			pane_updateChart(itemID, "1h");

@@ -123,6 +123,9 @@ public class PaneInterface extends DisplayController implements Runnable {
 	
 	@Autowired
 	Charts cp;
+
+
+	//StockChart stockChart = new StockChart("Stock chart");
 	//ChartViewer chartViewer;
 
 	/*************** End variable declaration **************/
@@ -294,7 +297,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 		if(DEBUG == true) {System.out.println("pane_createChart()");}
 		tabInterface.getChildren().removeAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
 		tabInterface.getChildren().addAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
-		
+		//tabInterface.getChildren().addAll(stockChart.getChartViewerPrice(), stockChart.getChartViewerVolume());
 		//syncChartSize();
 		
 		//new Thread(() -> {

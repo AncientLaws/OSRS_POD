@@ -52,6 +52,7 @@ public class GET extends Connect implements Runnable {
 	private String[] itemInfoArr1 = new String[18];
 	private String[][] itemListArray = new String[100][6];
 	public static boolean DEBUG = false;
+	DataModeler dataModeler = new DataModeler();
 
 	GET() {
 	}
@@ -91,58 +92,10 @@ public class GET extends Connect implements Runnable {
 	 * Method parses the JSON response of the Runescape API (item price/info), and
 	 * adds it to an array
 	 **/
-	protected void get_osrs_api_parseItemJson(String url) {
-		obj = getItemJson(url);
-		name = obj.getJSONObject("item").getString("name");
-		id = String.valueOf(obj.getJSONObject("item").getInt("id"));
-		icon = obj.getJSONObject("item").getString("icon");
-		icon_large = obj.getJSONObject("item").getString("icon_large");
-		type = obj.getJSONObject("item").getString("type");
-		typeIcon = obj.getJSONObject("item").getString("typeIcon");
-		description = obj.getJSONObject("item").getString("description");
-		members = obj.getJSONObject("item").getString("members");
+	protected String [] get_osrs_api_parseItemJson(String url) {
+		//JSONObject obj = getItemJson(url);
+		return dataModeler.dataModeler_osrs_api_parseItemJson(getItemJson(url));
 
-		currentPrice = String.valueOf(obj.getJSONObject("item").getJSONObject("current").get("price"));
-		currentTrend = obj.getJSONObject("item").getJSONObject("current").getString("trend");
-
-		todayPrice = String.valueOf(obj.getJSONObject("item").getJSONObject("today").get("price"));
-		todayTrend = obj.getJSONObject("item").getJSONObject("today").getString("trend");
-
-		day30_trend = obj.getJSONObject("item").getJSONObject("day30").getString("trend");
-		day30_change = String.valueOf(obj.getJSONObject("item").getJSONObject("day30").get("change"));
-		day90_trend = obj.getJSONObject("item").getJSONObject("day90").getString("trend");
-		day90_change = String.valueOf(obj.getJSONObject("item").getJSONObject("day90").get("change"));
-		day180_trend = obj.getJSONObject("item").getJSONObject("day180").getString("trend");
-		day180_change = String.valueOf(obj.getJSONObject("item").getJSONObject("day180").get("change"));
-
-		String itemInfoArr2[] = { name // 0
-				, id // 1
-				, icon // 2
-				, icon_large // 3
-				, type // 4
-				, typeIcon // 5
-				, description // 6
-				, members // 7
-
-				, currentPrice // 8
-				, currentTrend // 9
-
-				, todayPrice // 10
-				, todayTrend // 11
-
-				, day30_trend // 12
-				, day30_change // 13
-				, day90_trend // 14
-				, day90_change // 15
-				, day180_trend // 16
-				, day180_change }; // 17
-
-		itemInfoArr1 = itemInfoArr2;
-
-	}
-
-	protected String[] getItemInfo() {
-		return itemInfoArr1;
 	}
 
 	protected String[][] returnItemListArray() {
@@ -157,7 +110,7 @@ public class GET extends Connect implements Runnable {
 	 * result), and adds it to an array
 	 **/
 
-	protected void get_osrs_api_parseItemJsonList(String url , String params) {
+	protected void set_osrs_api_parseItemJsonList(String url , String params) {
 
 		try {
 
@@ -214,8 +167,9 @@ public class GET extends Connect implements Runnable {
 	 * Method parses the JSON response of the runelite API, and adds it to an array
 	 */
 
-	protected String[][] get_api_parseRuneLitePrice(String url) {
-		obj = getItemJson(url);
+	protected String[][] get_api_parseRuneLitePrice(String timePeriod, int itemID) {
+		String runeLitePriceUrl = "https://prices.runescape.wiki/api/v1/osrs/timeseries?timestep=" + timePeriod + "&id=" + itemID;
+		obj = getItemJson(runeLitePriceUrl);
 		JSONArray jsonArray = obj.getJSONArray("data");
 		String[][] itemPriceArray = new String[jsonArray.length()][3];
 		try {
@@ -266,11 +220,11 @@ public class GET extends Connect implements Runnable {
 
 	}
 
-	protected String [][] get_osrs_api_parseItemGraph(String url) throws NullPointerException{
+	protected String [][] get_osrs_api_parseItemGraph(int itemID) throws NullPointerException{
 		String[][] itemPriceArray = null;
 		try {
-			
-			obj = getItemJson(url);
+			String itemGraphUrl = "https://services.runescape.com/m=itemdb_oldschool/api/graph/" + itemID + ".json";
+			obj = getItemJson(itemGraphUrl);
 			JSONObject dailyData = obj.getJSONObject("daily"); 
 			Set<?> key_dailyData =  dailyData.keySet();
 			itemPriceArray = new String[key_dailyData.size()][3];

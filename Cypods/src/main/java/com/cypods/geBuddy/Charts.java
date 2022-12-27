@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.stage.Screen;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.AxisSpace;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.fx.ChartViewer;
@@ -12,26 +11,19 @@ import org.jfree.chart.fx.interaction.ChartMouseEventFX;
 import org.jfree.chart.fx.interaction.ChartMouseListenerFX;
 import org.jfree.chart.fx.overlay.CrosshairOverlayFX;
 import org.jfree.chart.panel.CrosshairOverlay;
-import org.jfree.chart.plot.CombinedDomainXYPlot;
 import org.jfree.chart.plot.Crosshair;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.chart.ui.RectangleEdge;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DatasetUtils;
 import org.jfree.data.time.*;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.text.FieldPosition;
-import java.text.NumberFormat;
-import java.text.ParsePosition;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 
 //import org.jfree.chart.fx.ChartViewer;
@@ -52,6 +44,7 @@ public class Charts implements ChartMouseListenerFX {
 	JFreeChart volumeChart;
 	XYDataset dataset;
 	XYDataset XYDatasetTimeSeriesVolume;
+	DefaultCategoryDataset volumeCategoryDataset;
 	CrosshairOverlayFX crosshairOverlay;
 	TimeSeries series;
 	TimeSeries volumeSeries;
@@ -71,6 +64,9 @@ public class Charts implements ChartMouseListenerFX {
 
 	javafx.geometry.Rectangle2D screenBounds;
 
+
+	DataModeler dataModeler =  new DataModeler();
+
 	public Charts() {
 
 	}
@@ -81,9 +77,10 @@ public class Charts implements ChartMouseListenerFX {
 		this.chartWidth = chartWidth;
 		this.chartHeight = chartHeight;
 
-		dataset = createDataset();
+		dataset = dataModeler.createRandomDataset();
+		volumeCategoryDataset = dataModeler.createRandomCategoryDataset();
 		priceChart = createChart(dataset);
-		volumeChart = createChart(dataset);
+		volumeChart = createChart(volumeCategoryDataset);
 		screenBounds = Screen.getPrimary().getVisualBounds();
 
 		chartViewerPrice = new ChartViewer(priceChart);
@@ -101,23 +98,8 @@ public class Charts implements ChartMouseListenerFX {
 
 
 		priceChart = initChart(priceChart);
-		volumeChart = initChart(volumeChart);
-		//initCrosshairOverlay();
+		volumeChart = initVolumeChart(volumeChart);
 
-		//crosshairOverlay = new CrosshairOverlayFX();
-
-
-		//crosshairOverlay.addDomainCrosshair(xCrosshair);
-		//crosshairOverlay.addRangeCrosshair(yCrosshair);
-
-
-//		Platform.runLater(() -> {
-//			this.chartViewerPrice.getCanvas().addOverlay(crosshairOverlay);
-//		});
-//		chartViewerPrice.setPrefSize(chartWidth, 250);
-//		Platform.runLater(() -> {
-//			this.chartViewerVolume.getCanvas().addOverlay(crosshairOverlay);
-//		});
 
 	}
 
@@ -142,7 +124,29 @@ public class Charts implements ChartMouseListenerFX {
 
 		return chart;
 	}
+	private JFreeChart initVolumeChart(JFreeChart chart) {
 
+
+		Color chartBackgroundColor = new Color(126, 102, 64); //new Color(124, 101, 61);
+		Color chartSeriesColor = new Color(120, 173, 255);
+
+		chart.getPlot().setBackgroundPaint(chartBackgroundColor);//0x866b46
+
+		chart.getCategoryPlot().getRenderer().setSeriesPaint(0, chartSeriesColor);
+		chart.getCategoryPlot().getRenderer().setSeriesStroke(0, new BasicStroke(3.0f));
+		chart.getCategoryPlot().getRenderer().setDefaultOutlinePaint(chartSeriesColor);
+
+		chart.getCategoryPlot().getRenderer().setSeriesVisible(0, true);
+		chart.getCategoryPlot().getRangeAxis().setTickLabelPaint(Color.ORANGE);
+		chart.getCategoryPlot().getDomainAxis().setTickLabelPaint(Color.ORANGE);
+		((BarRenderer) chart.getCategoryPlot().getRenderer()).setBarPainter(new StandardBarPainter()); //Old look of bar chart
+
+		chart.removeLegend();
+
+
+
+		return chart;
+	}
 
 	/**
 	 * Method to create a price/volume/etc chart once the item is selected by the user.
@@ -250,22 +254,17 @@ public class Charts implements ChartMouseListenerFX {
 	 *
 	 * @return XYDataset
 	 */
-	private static XYDataset createDataset() {
-		XYSeries series = new XYSeries("S1");
-		for (int x = 0; x < 10; x++) {
-			series.add(x, x + Math.random() * 4.0);
-		}
-		XYSeriesCollection dataset = new XYSeriesCollection(series);
-		return dataset;
-	}
-
 
 	private static JFreeChart createChart(XYDataset dataset) {
 		JFreeChart chart = ChartFactory.createTimeSeriesChart(null, null, null, dataset);//createXYLineChart(null, null, null, dataset);
-
+		//JFreeChart volumeChart = ChartFactory.createBarChart(null, null, null, dataset);
 		return chart;
 	}
-
+	private static JFreeChart 	createChart(DefaultCategoryDataset dataset) {
+		JFreeChart volumeChart = ChartFactory.createBarChart(null, null, null, dataset);
+		//JFreeChart volumeChart = ChartFactory.createXYBarChart()
+		return volumeChart;
+	}
 	protected ChartViewer charts_chartViewerPrice() {
 		return chartViewerPrice;
 	}
@@ -300,7 +299,7 @@ public class Charts implements ChartMouseListenerFX {
 	 * @return XYDataset
 	 */
 
-	protected XYDataset createItemPriceDataset(int itemID, String timePeriod) {
+	public XYDataset createItemPriceDataset(int itemID, String timePeriod) {
 		String url = "";
 		series = new TimeSeries("Price");
 		volumeSeries = new TimeSeries("Volume");
@@ -312,8 +311,7 @@ public class Charts implements ChartMouseListenerFX {
 
 		if (timePeriod == "6Month") //If time period is 6 months, use OSRS official API
 		{
-			url = "https://services.runescape.com/m=itemdb_oldschool/api/graph/" + itemID + ".json";
-			itemPriceArrayStrings = getDataGet.get_osrs_api_parseItemGraph(url);
+			itemPriceArrayStrings = getDataGet.get_osrs_api_parseItemGraph(itemID);
 			for (int i = 0; i < itemPriceArrayStrings.length - 1; i++) {
 				//If item price value isn't available, don't add it to the dataset
 				if (Double.parseDouble(itemPriceArrayStrings[i][1]) == 0) {
@@ -323,20 +321,19 @@ public class Charts implements ChartMouseListenerFX {
 				x = itemPriceArrayStrings[i][0]; //timestamp
 				y = Double.parseDouble(itemPriceArrayStrings[i][1]); //item price
 
-				series.addOrUpdate(new Second(epochToDateTime(x)), y);
+				series.addOrUpdate(new Second(dataModeler.epochToDateTime(x)), y);
 
 				if (DEBUG == true) {
-					System.out.println("\nnew Day(epochToDateTime(x)) \t: " + new Day(epochToDateTime(x)) +
-							"\nnew Minute (epochToDateTime(x)): \t" + new Minute(epochToDateTime(x))
-							+ "\nnew Second (epochToDateTime(x)): \\t" + new Second(epochToDateTime(x)));
+					System.out.println("\nnew Day(epochToDateTime(x)) \t: " + new Day(dataModeler.epochToDateTime(x)) +
+							"\nnew Minute (epochToDateTime(x)): \t" + new Minute(dataModeler.epochToDateTime(x))
+							+ "\nnew Second (epochToDateTime(x)): \\t" + new Second(dataModeler.epochToDateTime(x)));
 				}
 
 			}
 
 		} else  //If time period is less than 6 months use RuneLite's API
 		{
-			url = "https://prices.runescape.wiki/api/v1/osrs/timeseries?timestep=" + timePeriod + "&id=" + itemID;
-			itemPriceArrayStrings = getDataGet.get_api_parseRuneLitePrice(url);
+			itemPriceArrayStrings = getDataGet.get_api_parseRuneLitePrice(timePeriod,itemID);
 			for (int i = 0; i < itemPriceArrayStrings.length - 1; i++) {
 				//If item price value isn't available, don't add it to the dataset
 				if (Double.parseDouble(itemPriceArrayStrings[i][1]) == 0) {
@@ -350,19 +347,19 @@ public class Charts implements ChartMouseListenerFX {
 				}
 
 				x = itemPriceArrayStrings[i][0]; 										//timestamp
-				y = avgValue(Double.parseDouble(itemPriceArrayStrings[i][1]), 			//item price high
+				y = dataModeler.avgValue(Double.parseDouble(itemPriceArrayStrings[i][1]), 			//item price high
 						Double.parseDouble(itemPriceArrayStrings[i][2])); 				//item price low
-				z = avgValue(Double.parseDouble(itemPriceArrayStrings[i][3]),			//item price high
+				z = dataModeler.avgValue(Double.parseDouble(itemPriceArrayStrings[i][3]),			//item price high
 						Double.parseDouble(itemPriceArrayStrings[i][4])); 				//item price low
 
 
-				series.addOrUpdate(new Second(epochToDateTime_x1000(x)), y);
-				volumeSeries.addOrUpdate(new Second(epochToDateTime_x1000(x)), z);
+				series.addOrUpdate(new Second(dataModeler.epochToDateTime_x1000(x)), y);
+				volumeSeries.addOrUpdate(new Second(dataModeler.epochToDateTime_x1000(x)), z);
 
 				if (DEBUG == true) {
-					System.out.println("\nnew Day(epochToDateTime_x1000(x)) \t: " + new Day(epochToDateTime_x1000(x)) +
-							"\nnew Minute (epochToDateTime_x1000(x)): \t" + new Minute(epochToDateTime_x1000(x))
-							+ "\nnew Second (epochToDateTime_x1000(x)): \\t" + new Second(epochToDateTime_x1000(x)));
+					System.out.println("\nnew Day(epochToDateTime_x1000(x)) \t: " + new Day(dataModeler.epochToDateTime_x1000(x)) +
+							"\nnew Minute (epochToDateTime_x1000(x)): \t" + new Minute(dataModeler.epochToDateTime_x1000(x))
+							+ "\nnew Second (epochToDateTime_x1000(x)): \\t" + new Second(dataModeler.epochToDateTime_x1000(x)));
 				}
 
 			}
@@ -414,36 +411,6 @@ public class Charts implements ChartMouseListenerFX {
 	}
 
 
-	/**
-	 * @Purpose
-	 * Method to convert epoch time to date with adding 1000 multiplier
-	 * Exists because runelite's price timeseries API returns epoch time divided by a 1000
-	 *
-	 * @return Date
-	 */
-	private Date epochToDateTime_x1000(String epoch) {
-
-		long longEpoch = Long.parseLong(epoch) * 1000;
-		LocalDateTime localDateTime = Instant.ofEpochMilli(longEpoch).atZone(ZoneId.systemDefault()).toLocalDateTime();
-		Instant i = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
-		java.util.Date date1 = Date.from(i);
-		return date1;
-	}
-
-	/**
-	 * Method to convert epoch time to date without adding 1000 multiplier
-	 * Exists because osrs graph API returns correct epoch time
-	 *
-	 * @return Date
-	 */
-	private Date epochToDateTime(String epoch) {
-
-		long longEpoch = Long.parseLong(epoch);
-		LocalDateTime localDateTime = Instant.ofEpochMilli(longEpoch).atZone(ZoneId.systemDefault()).toLocalDateTime();
-		Instant i = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
-		java.util.Date date1 = Date.from(i);
-		return date1;
-	}
 
 	/**
 	 * Method that resizes chart width
@@ -467,10 +434,6 @@ public class Charts implements ChartMouseListenerFX {
 
 	}
 
-	private double avgValue(double highValue, double lowValue) {
-		double average = (highValue + lowValue) / 2;
-		return average;
-	}
 	/**
 	 * @Purpose
 	 * Offset volume & price chart viewers based on the volume & price of the item. Needed to ensure
@@ -534,9 +497,6 @@ public class Charts implements ChartMouseListenerFX {
 
 	}
 
-	private int returnSomething(double d){
-		return 0;
-	}
 
 	/**
 	 * @Purpose
@@ -549,54 +509,14 @@ public class Charts implements ChartMouseListenerFX {
 		final long THOUSAND = 1000L;
 
 		NumberAxis priceChartRangeAxis = (NumberAxis) priceChart.getXYPlot().getRangeAxis();
+		NumberAxis volumeChartRangeAxis = (NumberAxis) volumeChart.getXYPlot().getRangeAxis();
 
-		NumberAxis priceChartVolumeAxis = (NumberAxis) volumeChart.getXYPlot().getRangeAxis();
-
-		setNumberFormatOverrideAxis(MILLION, BILLION, TRILLION, THOUSAND, priceChartRangeAxis);
-
-		setNumberFormatOverrideAxis(MILLION, BILLION, TRILLION, THOUSAND, priceChartVolumeAxis);
-
+		dataModeler.setNumberFormatOverrideAxis(MILLION, BILLION, TRILLION, THOUSAND, priceChartRangeAxis);
+		dataModeler.setNumberFormatOverrideAxis(MILLION, BILLION, TRILLION, THOUSAND, volumeChartRangeAxis);
 		chartViewerPrice.getChart().getXYPlot().setRangeAxis(priceChartRangeAxis);
-		chartViewerVolume.getChart().getXYPlot().setRangeAxis(priceChartVolumeAxis);
+		chartViewerVolume.getChart().getXYPlot().setRangeAxis(volumeChartRangeAxis);
 	}
 
-	/**
-	 * @Purpose
-	 * Shortens the numbers in the axis of graphs to make it easily readable
-	 * @Credit
-	 * https://stackoverflow.com/questions/43280204/y-axis-is-not-displaying-correct-figure-for-millions-and-billions-in-jfreechart?noredirect=1&lq=1#
-	 * */
-	private void setNumberFormatOverrideAxis(long MILLION, long BILLION, long TRILLION, long THOUSAND, NumberAxis priceChartAxis) {
-		priceChartAxis.setNumberFormatOverride(new NumberFormat() {
-
-			@Override
-			public Number parse(String source, ParsePosition parsePosition) {
-				return null;
-			}
-
-			@Override
-			public StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition pos) {
-
-				String temp =  number < THOUSAND ? String.valueOf((number * 100.0) / 100.0) :
-						number < MILLION ?  ((double)((number / THOUSAND)* 100.0) / 100.0) + " K" :
-								number < BILLION ?  ((double)((number / MILLION)* 100.0) / 100.0) + " M" :
-										number < TRILLION ? Math.round(((double)(number / BILLION)* 100.0) / 100.0) + " B" :
-												((double)((number / TRILLION)* 100.0) / 100.0) + " T";
-				return new StringBuffer(temp);
-			}
-
-			@Override
-			public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
-
-				String temp =  number < THOUSAND ? String.valueOf((number * 100.0) / 100.0) :
-						number < MILLION ?  (((number / THOUSAND) * 100.0) / 100.0) + " K" :
-								number < BILLION ?  (((number / MILLION)* 100.0) / 100.0) + " M" :
-										number < TRILLION ? (((number / BILLION)* 100.0) / 100.0) + " B" :
-												(((number / TRILLION)* 100.0) / 100.0) + " T";
-				return new StringBuffer(temp);
-			}
-		});
-	}
 
 }
 
