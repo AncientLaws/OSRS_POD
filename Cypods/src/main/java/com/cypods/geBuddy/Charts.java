@@ -29,7 +29,6 @@ import java.awt.geom.Rectangle2D;
 //import org.jfree.chart.fx.ChartViewer;
 
 @Component
-//@ComponentScan("com.cypods.geBuddy")
 public class Charts implements ChartMouseListenerFX {
 
 	public static boolean DEBUG = false;
@@ -79,25 +78,26 @@ public class Charts implements ChartMouseListenerFX {
 
 		dataset = dataModeler.createRandomDataset();
 		volumeCategoryDataset = dataModeler.createRandomCategoryDataset();
+
 		priceChart = createChart(dataset);
 		volumeChart = createChart(volumeCategoryDataset);
 		screenBounds = Screen.getPrimary().getVisualBounds();
 
 		chartViewerPrice = new ChartViewer(priceChart);
-		chartViewerPrice.setPrefSize(chartWidth - 29, 250); //.setPrefSize(1063, 351)
+		chartViewerPrice.setPrefSize(chartWidth, 250); //.setPrefSize(1063, 351)
 		chartViewerPrice.setLayoutX(4);  //setLayoutX(4);
 		chartViewerPrice.setLayoutY(52);  //setLayoutY(52);
 		chartViewerPrice.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
 
 
 		chartViewerVolume = new ChartViewer(volumeChart);
-		chartViewerVolume.setPrefSize(1063, 100);
+		chartViewerVolume.setPrefSize(chartWidth, 100);
 		chartViewerVolume.setLayoutX(4);
 		chartViewerVolume.setLayoutY(301);
 		chartViewerVolume.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
 
 
-		priceChart = initChart(priceChart);
+		priceChart = initPriceChart(priceChart);
 		volumeChart = initVolumeChart(volumeChart);
 
 
@@ -108,7 +108,7 @@ public class Charts implements ChartMouseListenerFX {
 	public void chartMouseClicked(ChartMouseEventFX event) { // ignore
 	}
 
-	private JFreeChart initChart(JFreeChart chart) {
+	private JFreeChart initPriceChart(JFreeChart chart) {
 
 		chart.getXYPlot().getRenderer().setSeriesVisibleInLegend(0, false, false); //Makes legend invisible
 		Color chartBackgroundColor = new Color(126, 102, 64); //new Color(124, 101, 61);
@@ -158,78 +158,27 @@ public class Charts implements ChartMouseListenerFX {
 		priceChart = null;
 		dataset = null;
 		XYDatasetTimeSeriesVolume = null;
+		volumeCategoryDataset = null;
 		series = null;
 		volumeSeries = null;
 
 		initCrosshairOverlay ();
 
-		dataset = createItemPriceDataset(itemID, timePeriod);
+		createItemPriceAndVolumeDataset(itemID, timePeriod);
 		priceChart = createChart(dataset);
+		volumeChart = createChart(XYDatasetTimeSeriesVolume); 						//Create Line Chart
+		//volumeChart = createChart(volumeCategoryDataset);
+		//volumeCategoryDataset = dataModeler.createRandomCategoryDataset();
 
 		chartViewerPrice = new ChartViewer(priceChart);
-		chartViewerPrice.setPrefSize(1060, 351);
-		chartViewerPrice.setLayoutX(4);
-		chartViewerPrice.setLayoutY(52);
-		chartViewerPrice.addChartMouseListener(this);
-		chartViewerPrice.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
-		chartViewerPrice.setTranslateX(5);
-		chartViewerPrice.setPrefSize(chartViewerPrice.getPrefWidth() - chartViewerPriceOffset, chartViewerPrice.getPrefHeight()); //new
-
-		volumeChart = createChart(XYDatasetTimeSeriesVolume);
 		chartViewerVolume = new ChartViewer(volumeChart);
-		chartViewerVolume.setPrefSize(1060, 100);
-		chartViewerVolume.setLayoutX(4);
-		chartViewerVolume.setLayoutY(301);
-		chartViewerVolume.addChartMouseListener(this);
-		chartViewerVolume.setTranslateX(chartViewerVolumeOffset);
-		chartViewerVolume.setPrefSize(chartViewerVolume.getPrefWidth() - chartViewerVolumeOffset, chartViewerVolume.getPrefHeight());
-		//chartViewerVolume.getCanvas().setTooltipEnabled(true);
-		chartViewerVolume.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
 
-		volumeChart.getXYPlot().getRangeAxis().setTickLabelPaint(Color.ORANGE);
-		volumeChart.getXYPlot().getDomainAxis().setTickLabelPaint(Color.ORANGE);
-		priceChart.getXYPlot().getRangeAxis().setTickLabelPaint(Color.ORANGE);
-		priceChart.getXYPlot().getDomainAxis().setTickLabelPaint(Color.ORANGE);
-		//priceChart.getXYPlot().getRangeAxis().setNegativeArrowVisible(true);
-
-
-		priceChart.getXYPlot().getRangeAxis().setFixedDimension(40);
-		volumeChart.getXYPlot().getRangeAxis().setFixedDimension(40);
-
-
-		//chartViewerVolume.getCanvas().getChart().
-
-		System.out.println("chartViewerVolume.getPrefWidth() - chartViewerVolumeOffset " + (chartViewerVolume.getPrefWidth() - chartViewerVolumeOffset));
-		System.out.println("chartViewerVolume.getPrefHeight() " + (chartViewerVolume.getPrefHeight()));
 
 		chartBackgroundColor = new Color(126, 102, 64); //new Color(124, 101, 61);
 		chartSeriesColor = new Color(120, 173, 255);
 
-		priceChart.getXYPlot().getRenderer().setSeriesVisibleInLegend(0, false, false); //Makes legend invisible
-		priceChart.getPlot().setBackgroundPaint(chartBackgroundColor);//0x866b46
-		priceChart.getXYPlot().getRenderer().setSeriesPaint(0, chartSeriesColor);
-		priceChart.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(3.0f));
-		priceChart.getXYPlot().getRenderer().setSeriesVisible(0, true);
-		priceChart.getXYPlot().setRangePannable(true);
-		priceChart.getXYPlot().setRangeCrosshairLockedOnData(true);
-		//priceChart.getXYPlot().setDomainAxisLocation(500, volumeChart.getXYPlot().getRangeAxisLocation());
-		//System.out.println("volumeChart.getXYPlot().getRangeAxisLocation()   "+ volumeChart.getXYPlot().getRangeAxis());
-
-		volumeChart.getXYPlot().getRenderer().setSeriesVisibleInLegend(0, false, false); //Makes legend invisible
-		volumeChart.getPlot().setBackgroundPaint(chartBackgroundColor);//0x866b46
-		volumeChart.getXYPlot().getRenderer().setSeriesPaint(0, chartSeriesColor);
-		volumeChart.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(3.0f));
-		volumeChart.getXYPlot().getRenderer().setSeriesVisible(0, true);
-		volumeChart.getXYPlot().setRangePannable(true);
-		volumeChart.getXYPlot().setRangeCrosshairLockedOnData(true);
-
-
-		priceChart.getXYPlot().setDomainPannable(true);
-		volumeChart.getXYPlot().setDomainPannable(true);
-
-
-
-
+		runPriceChartSettings();
+		runVolumeChartSettings();
 
 		Platform.runLater(() -> {
 			this.yCrosshair.setLabelVisible(true);
@@ -255,12 +204,57 @@ public class Charts implements ChartMouseListenerFX {
 	 * @return XYDataset
 	 */
 
+	private void runPriceChartSettings(){
+		priceChart.getXYPlot().getRangeAxis().setTickLabelPaint(Color.ORANGE);
+		priceChart.getXYPlot().getDomainAxis().setTickLabelPaint(Color.ORANGE);
+		priceChart.getXYPlot().getRangeAxis().setFixedDimension(40);
+		priceChart.getXYPlot().getRenderer().setSeriesVisibleInLegend(0, false, false); //Makes legend invisible
+		priceChart.getPlot().setBackgroundPaint(chartBackgroundColor);//0x866b46
+		priceChart.getXYPlot().getRenderer().setSeriesPaint(0, chartSeriesColor);
+		priceChart.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(3.0f));
+		priceChart.getXYPlot().getRenderer().setSeriesVisible(0, true);
+		priceChart.getXYPlot().setRangePannable(true);
+		priceChart.getXYPlot().setRangeCrosshairLockedOnData(true);
+		priceChart.getXYPlot().setDomainPannable(true);
+
+		chartViewerPrice.setPrefSize(1060, 351);
+		chartViewerPrice.setLayoutX(4);
+		chartViewerPrice.setLayoutY(52);
+		chartViewerPrice.addChartMouseListener(this);
+		chartViewerPrice.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
+		chartViewerPrice.setTranslateX(5);
+		chartViewerPrice.setPrefSize(chartViewerPrice.getPrefWidth() - chartViewerPriceOffset, chartViewerPrice.getPrefHeight()); //new
+
+	}
+
+	private void runVolumeChartSettings(){
+		volumeChart.getXYPlot().getRenderer().setSeriesVisibleInLegend(0, false, false); //Makes legend invisible
+		volumeChart.getPlot().setBackgroundPaint(chartBackgroundColor);//0x866b46
+		volumeChart.getXYPlot().getRenderer().setSeriesPaint(0, chartSeriesColor);
+		volumeChart.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(3.0f));
+		volumeChart.getXYPlot().getRenderer().setSeriesVisible(0, true);
+		volumeChart.getXYPlot().setRangePannable(true);
+		volumeChart.getXYPlot().setRangeCrosshairLockedOnData(true);
+		volumeChart.getXYPlot().setDomainPannable(true);
+		volumeChart.getXYPlot().getRangeAxis().setTickLabelPaint(Color.ORANGE);
+		volumeChart.getXYPlot().getDomainAxis().setTickLabelPaint(Color.ORANGE);
+		volumeChart.getXYPlot().getRangeAxis().setFixedDimension(40);
+
+		chartViewerVolume.setPrefSize(1060, 100);
+		chartViewerVolume.setLayoutX(4);
+		chartViewerVolume.setLayoutY(301);
+		chartViewerVolume.addChartMouseListener(this);
+		chartViewerVolume.setTranslateX(chartViewerVolumeOffset);
+		chartViewerVolume.setPrefSize(chartViewerVolume.getPrefWidth() - chartViewerVolumeOffset, chartViewerVolume.getPrefHeight());
+		chartViewerVolume.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
+	}
+
 	private static JFreeChart createChart(XYDataset dataset) {
 		JFreeChart chart = ChartFactory.createTimeSeriesChart(null, null, null, dataset);//createXYLineChart(null, null, null, dataset);
 		//JFreeChart volumeChart = ChartFactory.createBarChart(null, null, null, dataset);
 		return chart;
 	}
-	private static JFreeChart 	createChart(DefaultCategoryDataset dataset) {
+	private static JFreeChart createChart(DefaultCategoryDataset dataset) {
 		JFreeChart volumeChart = ChartFactory.createBarChart(null, null, null, dataset);
 		//JFreeChart volumeChart = ChartFactory.createXYBarChart()
 		return volumeChart;
@@ -299,7 +293,7 @@ public class Charts implements ChartMouseListenerFX {
 	 * @return XYDataset
 	 */
 
-	public XYDataset createItemPriceDataset(int itemID, String timePeriod) {
+	public void createItemPriceAndVolumeDataset(int itemID, String timePeriod) {
 		String url = "";
 		series = new TimeSeries("Price");
 		volumeSeries = new TimeSeries("Volume");
@@ -322,6 +316,7 @@ public class Charts implements ChartMouseListenerFX {
 				y = Double.parseDouble(itemPriceArrayStrings[i][1]); //item price
 
 				series.addOrUpdate(new Second(dataModeler.epochToDateTime(x)), y);
+
 
 				if (DEBUG == true) {
 					System.out.println("\nnew Day(epochToDateTime(x)) \t: " + new Day(dataModeler.epochToDateTime(x)) +
@@ -355,6 +350,8 @@ public class Charts implements ChartMouseListenerFX {
 
 				series.addOrUpdate(new Second(dataModeler.epochToDateTime_x1000(x)), y);
 				volumeSeries.addOrUpdate(new Second(dataModeler.epochToDateTime_x1000(x)), z);
+				Number n = Double.parseDouble(x);
+				//volumeCategoryDataset.addValue(n,y,z);
 
 				if (DEBUG == true) {
 					System.out.println("\nnew Day(epochToDateTime_x1000(x)) \t: " + new Day(dataModeler.epochToDateTime_x1000(x)) +
@@ -368,8 +365,10 @@ public class Charts implements ChartMouseListenerFX {
 
 
 		XYDatasetTimeSeriesVolume = new TimeSeriesCollection(volumeSeries);
+		volumeCategoryDataset = new DefaultCategoryDataset();
+		dataset = new TimeSeriesCollection(series);
 
-		return new TimeSeriesCollection(series);
+		//return new TimeSeriesCollection(series);
 	}
 	/**
 	 * @Purpose
@@ -392,20 +391,11 @@ public class Charts implements ChartMouseListenerFX {
 		ValueAxis xAxis = plot.getDomainAxis();
 		double x = xAxis.java2DToValue(event.getTrigger().getX(), dataArea,
 				RectangleEdge.BOTTOM);
-		// make the crosshairs disappear if the mouse is out of range
-//		if (!xAxis.getRange().contains(x)) {
-//			x = Double.NaN;
-//		}
 
 
 		double y = DatasetUtils.findYValue(plot.getDataset(), 0, x);
-		//this.crosshairOverlay.addDomainCrosshair(xCrosshair);
-		//Long l = Math.round(x);
-		//String s = Long.toString(l);
-		//chartViewerVolume.getCanvas().setTooltip("("+ Math.round(y)+"," +epochToDateTime_x1000(s) + ")", x,y);
 		this.xCrosshair.setValue(x);
 		this.yCrosshair.setValue(Math.round(y));
-		//this.yCrosshair.setLabelVisible(true);
 
 
 	}
@@ -431,69 +421,6 @@ public class Charts implements ChartMouseListenerFX {
 	 */
 	protected void resizeChartH(ChartViewer chart, double H) {
 		chart.setPrefHeight(H);
-
-	}
-
-	/**
-	 * @Purpose
-	 * Offset volume & price chart viewers based on the volume & price of the item. Needed to ensure
-	 * that price/volume chart data and cross-hair are lined up correctly
-	 * Replace with getTranslateX, otherwise it will be a headache to handle
-	 * */
-
-	private void updateChartOffset(int itemPrice, int itemVolume){
-
-		int offset = 0;
-		System.out.println("ChartViewerVolume: " + itemPrice);
-		if (itemPrice > 100000000) {
-			offset = 62; //pass
-		} else if (itemPrice > 10000000 && itemPrice < 100000000) {
-			offset =  5; //pass 53
-		} else if (itemPrice > 1000000 && itemPrice < 10000000) {
-			offset =  40;  //pass
-		} else if (itemPrice > 100000 && itemPrice < 1000000) {
-			offset =  36; //pass
-		} else if (itemPrice > 10000 && itemPrice < 100000) {
-			offset = 25;
-		} else if (itemPrice > 1000 && itemPrice < 10000) {
-			offset =  0;
-		} else if (itemPrice > 100 && itemPrice < 1000) {
-			offset =  0;
-		} else if (itemPrice > 10 && itemPrice < 100) {
-			offset =  0;
-		} else {
-			offset =  0;
-		}
-		UpdatePriceChartOffset(itemVolume);
-
-	}
-
-	/**
-	 * @Purpose
-	 * Offsets the price chart based on the volume of items sold. Helper method
- 	* */
-
-	private void UpdatePriceChartOffset(int itemVolume){
-		int offset = 0;
-		if(itemVolume > 1000000){
-			offset =  0;
-		}
-		else if(itemVolume > 100000 &&  itemVolume < 1000000){
-			offset =  0;
-		}
-		else if (itemVolume > 10000 &&  itemVolume < 100000){
-			offset =  5;  //pass
-		}
-		else if( itemVolume > 1000 &&  itemVolume < 10000){
-			offset =  5;
-		}
-		else if (itemVolume > 100 &&  itemVolume < 1000) {
-			offset =  0;
-		}
-		else {
-			offset =  25; //pass
-		}
-
 
 	}
 

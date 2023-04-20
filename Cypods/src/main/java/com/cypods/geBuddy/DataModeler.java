@@ -118,6 +118,12 @@ public class DataModeler {
         return defaultCategoryDataset;
     }
 
+    protected DefaultCategoryDataset createBarchartCategoryDataset(){
+        DefaultCategoryDataset defaultCategoryDataset = new DefaultCategoryDataset();
+
+        return defaultCategoryDataset;
+    }
+
     protected double avgValue(double highValue, double lowValue) {
         double average = (highValue + lowValue) / 2;
         return average;

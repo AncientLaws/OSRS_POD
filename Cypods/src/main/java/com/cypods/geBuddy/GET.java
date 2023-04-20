@@ -165,6 +165,7 @@ public class GET extends Connect implements Runnable {
 	
 	/**
 	 * Method parses the JSON response of the runelite API, and adds it to an array
+	 * @NotNull
 	 */
 
 	protected String[][] get_api_parseRuneLitePrice(String timePeriod, int itemID) {
