@@ -444,7 +444,8 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 				, changeToday, change30Days, change90Days, change180Days
 
-				, xyCoordinates);
+//				, xyCoordinates
+		);
 
 	}
 
@@ -456,7 +457,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 			String currentTrend1, String todayPrice1, String todayTrend1, String day30_trend1, String day30_change1,
 			String day90_trend1, String day90_change1, String day180_trend1, String day180_change1) {
 
-		createMonitoredLabel();
+//		createMonitoredLabel();
 		name.setText(name1);
 		name.setLayoutX(-((name.getText().length()*10)/2)); //Attempt at centering title
 		description.setText(description1);

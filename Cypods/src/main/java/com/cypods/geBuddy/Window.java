@@ -16,12 +16,21 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
+////import com.apple.eawt.Application;
+//import javafx.embed.swing.SwingFXUtils;
+//
+//import java.awt.image.BufferedImage;
+//import java.util.Objects;
+//
+//import javafx.scene.image.Image;
+//
+//import javax.swing.*;
+
 
 @Component
 @ComponentScan("com.cypods.geBuddy")
 
-public class Window extends Application {
+public class Window extends javafx.application.Application {
 	
 	public static Pane root = new Pane();
 	public static Group group = new Group(root);
@@ -40,11 +49,18 @@ public class Window extends Application {
 		try {
 			this.primaryStage =  primaryStage;
 			primaryStage.setTitle("Grand Exchange Central");
-			Image icon = new Image 	(getClass().getClassLoader().getResource("images/icon.png").toString(), true);
-			primaryStage.getIcons().add(icon);
+			primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/icon.png")));
 			//primaryStage.setWidth(1080);
 			//primaryStage.setHeight(720);
-			
+//			Image iconMac = new Image(getClass().getResourceAsStream("/images/icon_mac.icns"));
+
+			// Convert JavaFX Image to AWT Image
+//			java.awt.Image awtIcon = SwingFXUtils.fromFXImage(iconMac, null);
+
+//			ImageIcon icon = new ImageIcon(awtIcon);
+
+//			com.apple.eawt.Application.getApplication().setDockIconImage(icon.getImage());
+
 			root.setPrefSize(primaryStage.getWidth(),primaryStage.getHeight()-28);
 			
 			Platform.runLater(new Runnable() {
@@ -68,14 +84,14 @@ public class Window extends Application {
 			dc.getTab();
 			dc.setListeners();
 
+
 			
 			//scene.getStylesheets().add((getClass().getResource("application.css")).toExternalForm());
 			scene.getStylesheets().add((getClass().getResource("/application.css")).toExternalForm());
 			//scene.getStylesheets().add("application.css");
 			primaryStage.setScene(scene);
 			primaryStage.setAlwaysOnTop(false);
-			
-			primaryStage.setResizable(true);
+			primaryStage.setResizable(false);
 			primaryStage.show();
 	
 		} catch (Exception e) {

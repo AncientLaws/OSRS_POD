@@ -224,7 +224,7 @@ public class GET extends Connect implements Runnable {
 	protected String [][] get_osrs_api_parseItemGraph(int itemID) throws NullPointerException{
 		String[][] itemPriceArray = null;
 		try {
-			String itemGraphUrl = "https://services.runescape.com/m=itemdb_oldschool/api/graph/" + itemID + ".json";
+			String itemGraphUrl = "https://services.runescape.com/m=itemdb_oldschool/api/graph/".concat(String.valueOf(itemID)).concat(".json");
 			obj = getItemJson(itemGraphUrl);
 			JSONObject dailyData = obj.getJSONObject("daily"); 
 			Set<?> key_dailyData =  dailyData.keySet();

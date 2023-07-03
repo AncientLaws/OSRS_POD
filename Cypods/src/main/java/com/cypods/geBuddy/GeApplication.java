@@ -13,11 +13,6 @@ public class GeApplication {
 	
 	public static void main(String[] args) {
 		//SpringApplication.run(GeApplication.class, args);
-		
-		//test
-
-		//test2
-
 		Application.launch(Window.class, args);
 	}
 

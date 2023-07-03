@@ -294,7 +294,7 @@ TabController (String s){
 
 			for(int i = 0; i < GET.get_getSearchResultSize() ; i++)
 			{
-				geSearchResultLabels[i].setText(tc_itemListArray[i][2]);
+				geSearchResultLabels[i].setText(tc_itemListArray[i][2].concat("  (").concat(tc_itemListArray[i][3]).concat(")"));
 				input = new URL (tc_itemListArray[i][0]).openStream();
 				//image = ;
 				geSearchResultImages[i].setImage(new Image(input));

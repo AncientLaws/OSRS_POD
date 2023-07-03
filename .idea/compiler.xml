@@ -9,13 +9,10 @@
         <module name="ge" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="ge" target="17" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="ge" options="-parameters" />
+      <module name="ge" options="-parameters --add-exports java.desktop/com.apple.eawt=ALL-UNNAMED" />
     </option>
   </component>
 </project>
