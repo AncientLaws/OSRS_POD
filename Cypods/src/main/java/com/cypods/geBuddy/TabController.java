@@ -15,6 +15,10 @@ import org.springframework.stereotype.Component;
 import java.io.InputStream;
 import java.net.URL;
 
+import static com.cypods.geBuddy.ApplicationConstant.*;
+
+//import static com.cypods.geBuddy.ApplicationConstant.*;
+
 @Component
 //@Scope ("Prototype")
 public class TabController extends PaneInterface {
@@ -31,7 +35,7 @@ public class TabController extends PaneInterface {
 	protected int tab_itemID;
 	
 /***************Connect and get data********************/
-	GET Get =  new GET(); 
+	RequestController requestController =  new RequestController();
 	private String ItemSpriteUrl = "";
 	protected InputStream error;
 	public InputStream input;	
@@ -86,7 +90,7 @@ TabController (String s){
 	}
 
 	private void setIcon() {
-			ItemSpriteUrl = itemInfoArr[3];
+			ItemSpriteUrl = itemInfoArr[ITEM_SPRITE_URL];
 			getIcon();
 		}
 
@@ -122,7 +126,7 @@ TabController (String s){
 				if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
 					//Thread thread = new Thread(() -> {
 						pane_ItemSearchInputText = itemSearchInput.getText();
-						Get.set_osrs_api_parseItemJsonList(osrsItemSearch ,pane_ItemSearchInputText);
+						requestController.set_osrs_api_parseItemJsonList(osrsItemSearch ,pane_ItemSearchInputText);
 						geSearchResults(); //clear search results and adds resulting item search images/labels
 			}
 			});
@@ -142,7 +146,7 @@ TabController (String s){
 		    @Override
 		    public void run() {
 		    	//new Thread(() -> {
-			itemInfoArr = Get.get_osrs_api_parseItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + itemID);
+			itemInfoArr = requestController.get_osrs_api_parseItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + itemID);
 			tab_itemID = itemID;
 			setIcon();
 			setInterfaceLabels();					//Drawing everything
@@ -185,7 +189,7 @@ TabController (String s){
 		 imageView.setStyle("-fx-background-color: BLACK");
          imageView.setCache(true);
          imageView.setVisible(true);
-         tab_IconTooltip(itemInfoArr[0]);
+         tab_IconTooltip(itemInfoArr[ITEM_NAME]);
          imageView.setOnMouseEntered((mouseEvent) -> MakeItemPop());
          imageView.setOnMouseExited((mouseEvent) -> MakeItemPopBack());
 		 
@@ -219,22 +223,22 @@ TabController (String s){
 	        	 try {
 		        		 iconImageSettings();  //must have called getIcon() for it not to be null
 		        		 pane_setItemTopMenu(image);
-		        		 pane_iconTooltip(itemInfoArr[0]);
+		        		 pane_iconTooltip(itemInfoArr[ITEM_NAME]);
 		        		 setLabels(  
-		        				 	 		 itemInfoArr[0]							//name
-		        				 			,itemInfoArr[1] 						//Item ID
-		        				 			,itemInfoArr[6]							//Description 
-		        				 			,itemInfoArr[7]							//Member
-		        				 			,itemInfoArr[8]							//Current price
-		        				 			,itemInfoArr[9]							//Current trend
-		        				 			,itemInfoArr[10]						//Todays price
-		        				 			,itemInfoArr[11]						//Todays trend
-		        				 			,itemInfoArr[12]						//30 day trend
-		        				 			,itemInfoArr[13]						//30 day change
-		        				 			,itemInfoArr[14]						//90 day trend
-		        				 			,itemInfoArr[15]						//90 day change
-		        				 			,itemInfoArr[16]						//180 day trend
-		        				 			,itemInfoArr[17]						//180 day change
+		        				 	 		 itemInfoArr[ITEM_NAME]								//name
+		        				 			,itemInfoArr[ITEM_ID] 								//Item ID
+		        				 			,itemInfoArr[ITEM_DESC]								//Description
+		        				 			,itemInfoArr[ITEM_IS_MEMBER]						//Member
+		        				 			,itemInfoArr[ITEM_CURRENT_PRICE]					//Current price
+		        				 			,itemInfoArr[ITEM_CURRENT_TREND]					//Current trend
+		        				 			,itemInfoArr[ITEM_TODAY_PRICE]						//Todays price
+		        				 			,itemInfoArr[ITEM_TODAY_TREND]						//Todays trend
+		        				 			,itemInfoArr[ITEM_TREND_30]							//30 day trend
+		        				 			,itemInfoArr[ITEM_CHANGE_30]						//30 day change
+		        				 			,itemInfoArr[ITEM_TREND_90]							//90 day trend
+		        				 			,itemInfoArr[ITEM_CHANGE_90]						//90 day change
+		        				 			,itemInfoArr[ITEM_TREND_180]						//180 day trend
+		        				 			,itemInfoArr[ITEM_CHANGE_180]						//180 day change
   		        				 );
 		        		 itemSearchInput.positionCaret(itemSearchInput.getText().length());  //
 		        		 //pane_createChart();
@@ -288,14 +292,14 @@ TabController (String s){
 		addGeSearchResultDefaultItemImageViewsToArray();
 		addGeSearchResultLabelsToArray();
 		
-		tc_itemListArray = Get.returnItemListArray() ;
+		tc_itemListArray = requestController.returnItemListArray() ;
 
 		try { //Open stream to grab the image for each of the returned items
 
-			for(int i = 0; i < GET.get_getSearchResultSize() ; i++)
+			for(int i = 0; i < requestController.get_getSearchResultSize() ; i++)
 			{
-				geSearchResultLabels[i].setText(tc_itemListArray[i][2].concat("  (").concat(tc_itemListArray[i][3]).concat(")"));
-				input = new URL (tc_itemListArray[i][0]).openStream();
+				geSearchResultLabels[i].setText(tc_itemListArray[i][GE_SEARCH_NAME].concat("  (").concat(tc_itemListArray[i][GE_SEARCH_CURRENT_PRICE]).concat(")"));
+				input = new URL (tc_itemListArray[i][GE_SEARCH_ICON_URL]).openStream();
 				//image = ;
 				geSearchResultImages[i].setImage(new Image(input));
 
@@ -325,7 +329,7 @@ TabController (String s){
 
 
 	protected void addLabelActionListeners() {
-		int arrLength = GET.get_getSearchResultSize();
+		int arrLength = requestController.get_getSearchResultSize();
 		addGeSearchResultLabelsToArray();
 
 		for(int i = 0; i < arrLength ; i++)
@@ -343,7 +347,7 @@ TabController (String s){
 	
 	
 	private void removeLabelActionListeners() {
-		int arrLength = GET.get_getSearchResultSize();
+		int arrLength = requestController.get_getSearchResultSize();
 		addGeSearchResultLabelsToArray();
 
 

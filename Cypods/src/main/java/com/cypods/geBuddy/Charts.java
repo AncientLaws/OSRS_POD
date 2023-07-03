@@ -297,7 +297,7 @@ public class Charts implements ChartMouseListenerFX {
 		String url = "";
 		series = new TimeSeries("Price");
 		volumeSeries = new TimeSeries("Volume");
-		GET getDataGet = new GET();
+		RequestController getDataGet = new RequestController();
 		String[][] itemPriceArrayStrings;
 		String x = null;
 		Double y;
@@ -362,7 +362,6 @@ public class Charts implements ChartMouseListenerFX {
 			}
 
 		}
-
 
 		XYDatasetTimeSeriesVolume = new TimeSeriesCollection(volumeSeries);
 		volumeCategoryDataset = new DefaultCategoryDataset();
