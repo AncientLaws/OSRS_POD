@@ -287,6 +287,7 @@ public class Charts implements ChartMouseListenerFX {
 	}
 
 	/**
+	 * @Purpose
 	 * Method that creates the dataset used to populate the graph
 	 * Input: ItemID, timeperiod
 	 *

@@ -36,6 +36,7 @@ public class DataModeler {
     }
 
     /**
+     * @Purpose
      * Method to convert epoch time to date without adding 1000 multiplier
      * Exists because osrs graph API returns correct epoch time
      *
@@ -50,6 +51,11 @@ public class DataModeler {
         return date1;
     }
 
+    /**
+     * @Purpose
+     * Parses Osrs API specific item search JSON response and assigns key to String values.
+     * String values are used for labels
+     * */
     protected String [] dataModeler_osrs_api_parseItemJson(JSONObject obj) {
         String name = obj.getJSONObject("item").getString("name");
         String id = String.valueOf(obj.getJSONObject("item").getInt("id"));
@@ -98,6 +104,11 @@ public class DataModeler {
         return itemInfoArr2;
 
     }
+
+    /**
+     * @Purpose
+     * Create random XYDataset to be used when initalizing price chart
+     * */
     public static XYDataset createRandomDataset() {
         XYSeries series = new XYSeries("S1");
         for (int x = 0; x < 10; x++) {
@@ -107,6 +118,10 @@ public class DataModeler {
         return dataset;
     }
 
+    /**
+     * @Purpose
+     * Create random DefaultCategoryDataset to be used when initalizing volume chart
+     * */
     protected  DefaultCategoryDataset createRandomCategoryDataset(){
         DefaultCategoryDataset defaultCategoryDataset = new DefaultCategoryDataset();
         String dateString = "1622";
@@ -124,6 +139,10 @@ public class DataModeler {
         return defaultCategoryDataset;
     }
 
+    /**
+     * @Purpose
+     * Get the average value given two inputs
+     * */
     protected double avgValue(double highValue, double lowValue) {
         double average = (highValue + lowValue) / 2;
         return average;
@@ -135,8 +154,6 @@ public class DataModeler {
      * @Credit
      * https://stackoverflow.com/questions/43280204/y-axis-is-not-displaying-correct-figure-for-millions-and-billions-in-jfreechart?noredirect=1&lq=1#
      * */
-
-
     protected void setNumberFormatOverrideAxis(long MILLION, long BILLION, long TRILLION, long THOUSAND, NumberAxis priceChartAxis) {
         priceChartAxis.setNumberFormatOverride(new NumberFormat() {
 

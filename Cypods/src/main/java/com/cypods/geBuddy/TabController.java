@@ -298,7 +298,7 @@ TabController (String s){
 
 			for(int i = 0; i < requestController.get_getSearchResultSize() ; i++)
 			{
-				geSearchResultLabels[i].setText(tc_itemListArray[i][GE_SEARCH_NAME].concat("  (").concat(tc_itemListArray[i][GE_SEARCH_CURRENT_PRICE]).concat(")"));
+				geSearchResultLabels[i].setText(tc_itemListArray[i][GE_SEARCH_NAME].concat("  (").concat(tc_itemListArray[i][GE_SEARCH_CURRENT_PRICE]).concat(")").concat("\n").concat("Limit: "));
 				input = new URL (tc_itemListArray[i][GE_SEARCH_ICON_URL]).openStream();
 				//image = ;
 				geSearchResultImages[i].setImage(new Image(input));

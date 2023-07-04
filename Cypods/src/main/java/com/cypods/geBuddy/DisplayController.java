@@ -59,6 +59,11 @@ public class DisplayController implements ChangeListener{
 		
 	 }
 
+	 /**
+	  * @Purpose
+	  * Initialize all tabs when the program is executed
+	  * */
+
 	public void getTab() {
 		try {
 			
@@ -113,35 +118,46 @@ public class DisplayController implements ChangeListener{
 	 * protected void initListners() { tab1.lTab.setOnMousePressed((mouseEvent) ->
 	 * tab1.setActive()); }
 	 */
+
+	/**
+	 * @Purpose
+	 * Make Tab 1 the default tab
+	 * */
 	protected void setTabActiveOnStart() {
 		tab1.setActive();
 		setInterfaceInvisible(tabNo = "Tab1");
 		//setListners();
 	}
+
+	/**
+	 * @Purpose
+	 * Adds listeners to the labels and images in each tab to make the tab invisible when clicked.
+	 * This is so that when a new tab is clicked, we ensure that all tabs/interfaces are invisible (simulating tabs effect)
+	 * */
 	protected void setListeners()
 	{
 		try {
-		tab1.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab1"));
-		tab2.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab2"));
-		tab3.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab3"));
-		tab4.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab4"));
-		tab5.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab5"));
-		tab6.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab6"));
-		tab7.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab7"));
-		tab8.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab8"));
-		tab9.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab9"));
-	    tab10.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab10"));
+			tab1.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab1"));
+			tab2.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab2"));
+			tab3.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab3"));
+			tab4.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab4"));
+			tab5.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab5"));
+			tab6.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab6"));
+			tab7.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab7"));
+			tab8.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab8"));
+			tab9.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab9"));
+	    	tab10.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab10"));
 	    
-	    tab1.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab1"));
-	    tab2.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab2"));
-	    tab3.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab3"));
-	    tab4.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab4"));
-	    tab5.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab5"));
-	    tab6.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab6"));
-	    tab7.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab7"));
-	    tab8.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab8"));
-	    tab9.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab9"));
-	    tab10.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab10"));
+	    	tab1.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab1"));
+	    	tab2.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab2"));
+	    	tab3.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab3"));
+	    	tab4.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab4"));
+	    	tab5.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab5"));
+	    	tab6.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab6"));
+	    	tab7.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab7"));
+	    	tab8.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab8"));
+	    	tab9.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab9"));
+	    	tab10.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab10"));
 		/* w.primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
 		     this.stageWidth = (double) newVal;
 		     //System.out.println("Width: " + newVal);
@@ -158,6 +174,12 @@ public class DisplayController implements ChangeListener{
 		
 	}
 	//addChangelistener to the 1Tab label
+
+	/**
+	 * @Purpose
+	 * Set the tabs to be invisible and lower the opacity of the images for the none-active tabs
+	 * This is so that when a new tab is clicked, we ensure that all tabs/interfaces are invisible (simulating tabs effect)
+	 * */
 	private void setInterfaceInvisible(String s)
 	{
 		double opacity = .4;
@@ -186,7 +208,10 @@ public class DisplayController implements ChangeListener{
 		
 	}
 
-
+	/**
+	 * @Purpose
+	 * Sets the tab to be active based on the current value of the variable tabNo
+	 * */
 	private void dc_enableActiveInterface() {
 		if(DEBUG == true) {
 		System.out.println("dc_enableActiveInterface, tab no: " + tabNo);}
