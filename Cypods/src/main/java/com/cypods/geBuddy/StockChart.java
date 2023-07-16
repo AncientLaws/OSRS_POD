@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.awt.*;
 
-
+@Component
 public class StockChart extends ApplicationFrame {
 
     static IntervalXYDataset dataset = null;

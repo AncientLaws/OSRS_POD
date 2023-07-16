@@ -12,7 +12,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="ge" options="-parameters --add-exports java.desktop/com.apple.eawt=ALL-UNNAMED" />
+      <module name="ge" options="-parameters" />
     </option>
   </component>
 </project>

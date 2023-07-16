@@ -10,6 +10,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
@@ -17,12 +19,15 @@ import java.net.URL;
 
 import static com.cypods.geBuddy.ApplicationConstant.*;
 
+
 //import static com.cypods.geBuddy.ApplicationConstant.*;
 
 @Component
 //@Scope ("Prototype")
 public class TabController extends PaneInterface {
-	
+
+	@Autowired
+	ApplicationContext applicationContext;
 	
 /***************Interface variables********************/
 	protected Label lTab;
@@ -36,18 +41,22 @@ public class TabController extends PaneInterface {
 	
 /***************Connect and get data********************/
 	RequestController requestController =  new RequestController();
+//	DataModeler dataModeler = applicationContext.getBean(DataModeler.class);
+	DataModeler dataModeler = new DataModeler();
 	private String ItemSpriteUrl = "";
 	protected InputStream error;
 	public InputStream input;	
 	private String[] itemInfoArr = new String [18];
+	private String[][] itemMetaDataMapArr = new String[4000][10];
+	private String[] itemMetaDataMapSearchResult = new String[10];
 	private String[][] tc_itemListArray = new String[100][6];
-	private String osrsItemSearch = "https://services.runescape.com/m=itemdb_oldschool/api/catalogue/items.json?category=1&alpha=";
 
 /***************Tab icon settings********************/
 	int X;
 	int Y;
 
-/***************End variable declaration**************/			
+/***************End variable declaration**************/
+
 //@Autowired
 TabController() {
 	imageView = new ImageView();
@@ -62,7 +71,7 @@ TabController (String s){
 
 	}
 //@Autowired
-	public int tabSettings(String tab) {
+	public void tabSettings(String tab) {
 		if(DEBUG == true) {System.out.println("tabSettings");}
 		switch (tab){
 			case "Tab1":{ X = 100; Y = 12; tabActive = tab; break; }
@@ -78,11 +87,14 @@ TabController (String s){
 		}
 		initLabel();
 		initImage();
-		try { itemSearchListener();
+		try {
+			itemSearchListener(); //add listeners
+//			itemMetaDataMapArr = requestController.get_wiki_api_parseItemMeta(osrsItemMetaDataUrl); //get items meta data
 		}
-		catch(Exception e) {catchError();
+		catch(Exception e) {
+//			catchError();
+			System.out.println("An error was thrown, here is why: " + e.getMessage() + e.getStackTrace());
 		}
-		return 1;
 	}
 	
 	protected void setInterfaceVisible(boolean b){
@@ -126,8 +138,9 @@ TabController (String s){
 				if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
 					//Thread thread = new Thread(() -> {
 						pane_ItemSearchInputText = itemSearchInput.getText();
-						requestController.set_osrs_api_parseItemJsonList(osrsItemSearch ,pane_ItemSearchInputText);
+						requestController.set_osrs_api_parseItemJsonList(ApplicationConstant.RUNESCAPE_API_ITEM_SEARCH_URL ,pane_ItemSearchInputText);
 						geSearchResults(); //clear search results and adds resulting item search images/labels
+
 			}
 			});
 		itemSearchInput.setOnMousePressed((mouseEvent) -> {
@@ -139,14 +152,24 @@ TabController (String s){
 
 
 	}
-	
+
+	/*
+	* @Purpose
+	* When a user selects an item from search result, perform the following actions
+	* 	- Get the ge price from osrs api
+	* 	- Set icons
+	* 	- Update interface labels
+	* 	- Make a call to populate price and volume chart with the passed item id and time period
+	* 	- Add button listeners
+	* 	- Show selected default timeframe
+	* */
 	private void itemSearchSelectionListener(int itemID) {
 		//new Thread(() -> {
 		Platform.runLater(new Runnable() {
 		    @Override
 		    public void run() {
 		    	//new Thread(() -> {
-			itemInfoArr = requestController.get_osrs_api_parseItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + itemID);
+			itemInfoArr = requestController.get_osrs_api_parseItemJson(ApplicationConstant.RUNESCAPE_API_ITEM_LOOKUP_URL + itemID);
 			tab_itemID = itemID;
 			setIcon();
 			setInterfaceLabels();					//Drawing everything
@@ -157,6 +180,7 @@ TabController (String s){
 			//System.out.println("=========================================Epoch Key values===================================");
 			//Get.get_osrs_api_parseItemGraph("https://services.runescape.com/m=itemdb_oldschool/api/graph/26374.json");
 		    	//}).start();
+//				System.out.println("getGeLimit: " + getGeLimit.getText().toString() + " getHighAlchValue: " + getHighAlchValue);
 		    }
 		    
 		});
@@ -224,6 +248,7 @@ TabController (String s){
 		        		 iconImageSettings();  //must have called getIcon() for it not to be null
 		        		 pane_setItemTopMenu(image);
 		        		 pane_iconTooltip(itemInfoArr[ITEM_NAME]);
+					 	 itemMetaDataMapSearchResult = tabC_searchForItemMetaData(Integer.parseInt(String.valueOf(itemInfoArr[ITEM_ID])));
 		        		 setLabels(  
 		        				 	 		 itemInfoArr[ITEM_NAME]								//name
 		        				 			,itemInfoArr[ITEM_ID] 								//Item ID
@@ -239,14 +264,16 @@ TabController (String s){
 		        				 			,itemInfoArr[ITEM_CHANGE_90]						//90 day change
 		        				 			,itemInfoArr[ITEM_TREND_180]						//180 day trend
 		        				 			,itemInfoArr[ITEM_CHANGE_180]						//180 day change
+								 			,itemMetaDataMapSearchResult[ITEM_META_GE_LIMIT]   //Item's ge limit
+								 			,itemMetaDataMapSearchResult[ITEM_META_ALCH_VALUE] //Item's Alch value
   		        				 );
 		        		 itemSearchInput.positionCaret(itemSearchInput.getText().length());  //
 		        		 //pane_createChart();
 	        	 	 }
 	        	 catch(Exception e) {
-		        		 System.out.println("Error in setInterfaceLabels()");
+		        		 System.out.println("Error in setInterfaceLabels() " + e.getMessage());
 		        		 pane_setItemTopMenuError();
-		        		 catchError();
+//		        		 catchError();
 	        	 	 }
 			} catch (Exception e) {
 					System.out.println("Error in setInterfaceLabels: " + e);
@@ -298,7 +325,7 @@ TabController (String s){
 
 			for(int i = 0; i < requestController.get_getSearchResultSize() ; i++)
 			{
-				geSearchResultLabels[i].setText(tc_itemListArray[i][GE_SEARCH_NAME].concat("  (").concat(tc_itemListArray[i][GE_SEARCH_CURRENT_PRICE]).concat(")").concat("\n").concat("Limit: "));
+				geSearchResultLabels[i].setText(tc_itemListArray[i][GE_SEARCH_NAME].concat("  (").concat(tc_itemListArray[i][GE_SEARCH_CURRENT_PRICE]).concat(")"));
 				input = new URL (tc_itemListArray[i][GE_SEARCH_ICON_URL]).openStream();
 				//image = ;
 				geSearchResultImages[i].setImage(new Image(input));
@@ -320,14 +347,22 @@ TabController (String s){
 		
 	}
 
+	/*
+	* @Purpose
+	* Helper method used to search for a specific item's meta data once its retrieved
+	* */
+	private String [] tabC_searchForItemMetaData(int itemId){
+		System.out.println("searchForItemMetaData length " + itemMetaDataMapSearchResult.length);
+
+		return dataModeler.searchForItemMetaData(itemId);
+	}
+
 	/**
 	 * @Purpose
 	 * - Dynamically add action listeners to labels based on search result size
 	 * - Enable mouse Enter/Exit animation
 	 * - Allow items to be selected and displayed
 	 * */
-
-
 	protected void addLabelActionListeners() {
 		int arrLength = requestController.get_getSearchResultSize();
 		addGeSearchResultLabelsToArray();
@@ -338,7 +373,7 @@ TabController (String s){
 			int j = i;
 			geSearchResultLabels[i].setOnMouseEntered((mouseEvent)-> {label.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
 			geSearchResultLabels[i].setOnMouseExited ((mouseEvent)-> {label.setBackground(new Background(new BackgroundFill(null, null, null)));});
-			geSearchResultLabels[i].setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[j][1]));});
+			geSearchResultLabels[i].setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[j][ITEM_ID]));});
 
 		}
 

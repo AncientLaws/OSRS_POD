@@ -7,7 +7,9 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.FieldPosition;
@@ -17,8 +19,17 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+
+import static com.cypods.geBuddy.ApplicationConstant.*;
+
 @Component
 public class DataModeler {
+
+    @Autowired
+    ApplicationConstant applicationConstant;
+
+    @Autowired
+    ItemsDao itemsDao;
     /**
      * @Purpose
      * Method to convert epoch time to date with adding 1000 multiplier
@@ -57,52 +68,89 @@ public class DataModeler {
      * String values are used for labels
      * */
     protected String [] dataModeler_osrs_api_parseItemJson(JSONObject obj) {
-        String name = obj.getJSONObject("item").getString("name");
-        String id = String.valueOf(obj.getJSONObject("item").getInt("id"));
-        String icon = obj.getJSONObject("item").getString("icon");
-        String icon_large = obj.getJSONObject("item").getString("icon_large");
-        String type = obj.getJSONObject("item").getString("type");
-        String typeIcon = obj.getJSONObject("item").getString("typeIcon");
-        String description = obj.getJSONObject("item").getString("description");
-        String members = obj.getJSONObject("item").getString("members");
 
-        String currentPrice = String.valueOf(obj.getJSONObject("item").getJSONObject("current").get("price"));
-        String currentTrend = obj.getJSONObject("item").getJSONObject("current").getString("trend");
+        String itemInfoArr2[] = { obj.getJSONObject("item").getString("name") // 0
+                , String.valueOf(obj.getJSONObject("item").getInt("id")) // 1
+                , obj.getJSONObject("item").getString("icon") // 2
+                , obj.getJSONObject("item").getString("icon_large") // 3
+                , obj.getJSONObject("item").getString("type") // 4
+                , obj.getJSONObject("item").getString("typeIcon") // 5
+                , obj.getJSONObject("item").getString("description") // 6
+                , obj.getJSONObject("item").getString("members") // 7
 
-        String todayPrice = String.valueOf(obj.getJSONObject("item").getJSONObject("today").get("price"));
-        String todayTrend = obj.getJSONObject("item").getJSONObject("today").getString("trend");
+                , String.valueOf(obj.getJSONObject("item").getJSONObject("current").get("price")) // 8
+                , obj.getJSONObject("item").getJSONObject("current").getString("trend") // 9
 
-        String day30_trend = obj.getJSONObject("item").getJSONObject("day30").getString("trend");
-        String day30_change = String.valueOf(obj.getJSONObject("item").getJSONObject("day30").get("change"));
-        String day90_trend = obj.getJSONObject("item").getJSONObject("day90").getString("trend");
-        String day90_change = String.valueOf(obj.getJSONObject("item").getJSONObject("day90").get("change"));
-        String day180_trend = obj.getJSONObject("item").getJSONObject("day180").getString("trend");
-        String day180_change = String.valueOf(obj.getJSONObject("item").getJSONObject("day180").get("change"));
+                , String.valueOf(obj.getJSONObject("item").getJSONObject("today").get("price")) // 10
+                , obj.getJSONObject("item").getJSONObject("today").getString("trend") // 11
 
-        String itemInfoArr2[] = { name // 0
-                , id // 1
-                , icon // 2
-                , icon_large // 3
-                , type // 4
-                , typeIcon // 5
-                , description // 6
-                , members // 7
-
-                , currentPrice // 8
-                , currentTrend // 9
-
-                , todayPrice // 10
-                , todayTrend // 11
-
-                , day30_trend // 12
-                , day30_change // 13
-                , day90_trend // 14
-                , day90_change // 15
-                , day180_trend // 16
-                , day180_change }; // 17
+                , obj.getJSONObject("item").getJSONObject("day30").getString("trend") // 12
+                , String.valueOf(obj.getJSONObject("item").getJSONObject("day30").get("change")) // 13
+                , obj.getJSONObject("item").getJSONObject("day90").getString("trend") // 14
+                , String.valueOf(obj.getJSONObject("item").getJSONObject("day90").get("change")) // 15
+                , obj.getJSONObject("item").getJSONObject("day180").getString("trend") // 16
+                , String.valueOf(obj.getJSONObject("item").getJSONObject("day180").get("change")) }; // 17
 
         return itemInfoArr2;
 
+    }
+
+    /*
+    * @Purpose
+    * Given the Json object result from the metadata api response, parse the json result and save it into an array
+    * */
+    public String[][] dataModeler_wiki_item_metaData(JSONObject jsonObject){
+        String[][] metaDataParsingResult = new String[4000][10];
+        JSONObject obj = jsonObject;
+        try{
+            for(int i = 0; i < obj.length() - 1; i++) {
+                if(obj.has("examine")){
+                    metaDataParsingResult[i][0] = obj.getString("examine");
+                }
+                if(obj.has("id")){
+                    metaDataParsingResult[i][1] = String.valueOf(obj.get("id"));
+                }
+                if(obj.has("lowalch")){
+                    metaDataParsingResult[i][2] = String.valueOf(obj.get("lowalch"));
+                }
+                if(obj.has("limit")){
+                    metaDataParsingResult[i][3] = String.valueOf(obj.get("limit"));
+                }
+                if(obj.has("value")){
+                    metaDataParsingResult[i][4] = String.valueOf(obj.get("value"));
+                }
+                if(obj.has("highalch")){
+                    metaDataParsingResult[i][5] = String.valueOf(obj.get("highalch"));
+                }
+                if(obj.has("name")){
+                    metaDataParsingResult[i][6] = obj.getString("name");
+                }
+
+            }
+        }
+        catch (JSONException JE){
+            System.out.println("JSON error was thrown in DataModeler.dataModeler_wiki_item_metaData due to: "+ JE.getMessage() + JE.getStackTrace());
+
+        }
+        return metaDataParsingResult;
+    }
+
+    /*
+    * @Purpose
+    * Search for a specific item's metadata given the passed 2d array
+    * */
+    protected String[] searchForItemMetaData( int itemId){
+        String[] metaDataSearchResult = new String[10];
+        ItemsDb itemsDb= itemsDao.findById(itemId);
+        System.out.println("Found Item " + itemsDb.getItem_name() + "from the database via the DataModeler.searchForItemMetaData method");
+                metaDataSearchResult[ITEM_META_EXAMINE]     = itemsDb.getItem_examine();
+                metaDataSearchResult[ITEM_META_ID]          = itemsDb.getItemId().toString();
+                metaDataSearchResult[ITEM_META_LOW_ALCH]    = itemsDb.getItem_low_alch().toString();
+                metaDataSearchResult[ITEM_META_GE_LIMIT]    = itemsDb.getItem_limit().toString();
+                metaDataSearchResult[ITEM_META_VALUE]       = itemsDb.getItem_value().toString();
+                metaDataSearchResult[ITEM_META_ALCH_VALUE]  = itemsDb.getItem_high_alch().toString();
+                metaDataSearchResult[ITEM_META_NAME]        = itemsDb.getItem_name();
+        return metaDataSearchResult;
     }
 
     /**

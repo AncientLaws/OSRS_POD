@@ -56,11 +56,15 @@ public class PaneInterface extends DisplayController implements Runnable {
 	Label day30_change;
 	Label day90_change;
 	Label day180_change;
+	Label getGeLimit;
+	Label getHighAlchValue;
 
 	Label changeToday;
 	Label change30Days;
 	Label change90Days;
 	Label change180Days;
+	Label geLimitLabel;
+	Label highAlchValueLabel;
 
 	Label xyCoordinates;
 
@@ -402,7 +406,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 		changeToday = new Label("Change today:");
 		changeToday.setTranslateX(755);
-		changeToday.setTranslateY(472);
+		changeToday.setTranslateY(474);
 		changeToday.setStyle("-fx-text-fill: orange;");
 		changeToday.getStyleClass().add("labelAll");
 
@@ -424,7 +428,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 		change90Days = new Label("90 days: ");
 		change90Days.setTranslateX(755);
-		change90Days.setTranslateY(528);
+		change90Days.setTranslateY(525);//528
 		change90Days.setStyle("-fx-text-fill: orange;");
 		change90Days.getStyleClass().add("labelAll");
 
@@ -435,27 +439,55 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 		change180Days = new Label("180 days: ");
 		change180Days.setTranslateX(755);
-		change180Days.setTranslateY(556);
+		change180Days.setTranslateY(550);
 		change180Days.setStyle("-fx-text-fill: orange;");
 		change180Days.getStyleClass().add("labelAll");
+
+		geLimitLabel = new Label("Limit: ");
+		geLimitLabel.setTranslateX(755);
+		geLimitLabel.setTranslateY(578);
+		geLimitLabel.setStyle("-fx-text-fill: orange;");
+		geLimitLabel.getStyleClass().add("labelAll");
+
+		getGeLimit = new Label(null);
+		getGeLimit.setTranslateX(812);
+		getGeLimit.setTranslateY(578);
+		getGeLimit.setStyle("-fx-text-fill: orange;");
+		getGeLimit.getStyleClass().add("labelAll");
+
+
+		highAlchValueLabel = new Label("High alch value: ");
+		highAlchValueLabel.setTranslateX(755);
+		highAlchValueLabel.setTranslateY(605);
+		highAlchValueLabel.setStyle("-fx-text-fill: orange;");
+		highAlchValueLabel.getStyleClass().add("labelAll");
+
+		getHighAlchValue = new Label(null);
+		getHighAlchValue.setTranslateX(812);
+		getHighAlchValue.setTranslateY(605);
+		getHighAlchValue.setStyle("-fx-text-fill: orange;");
+		getHighAlchValue.getStyleClass().add("labelAll");
 
 		tabInterface.getChildren().addAll(name, id, description, members, currentPrice_bigLabel,currentPrice_descLabel,currentPrice_priceLabel ,todayPrice, day30_change,
 				day90_change, day180_change
 
-				, changeToday, change30Days, change90Days, change180Days
+				, changeToday, change30Days, change90Days, change180Days, geLimitLabel,highAlchValueLabel, getGeLimit,getHighAlchValue
 
 //				, xyCoordinates
 		);
 
+
 	}
 
 	/**
-	 * A method that sets the labels in the main pane interface.
+	 * A method that sets the labels in the main pane interface
 	 **/
 
 	protected void setLabels(String name1, String id1, String description1, String members1, String currentPrice1,
 			String currentTrend1, String todayPrice1, String todayTrend1, String day30_trend1, String day30_change1,
-			String day90_trend1, String day90_change1, String day180_trend1, String day180_change1) {
+			String day90_trend1, String day90_change1, String day180_trend1, String day180_change1
+			, String geLimit, String alchValue
+	) {
 
 //		createMonitoredLabel();
 		name.setText(name1);
@@ -463,6 +495,10 @@ public class PaneInterface extends DisplayController implements Runnable {
 		description.setText(description1);
 		currentPrice_bigLabel.setText(currentPrice1);
 		currentPrice_priceLabel.setText(currentPrice1);
+		getGeLimit.setText(geLimit);
+		getHighAlchValue.setText(alchValue);
+
+
 
 		if (members1.equals("true")) {
 			members.setText("Members");

@@ -53,6 +53,7 @@ public class RequestController extends Connect implements Runnable {
 
 	private String[] itemInfoArr1 = new String[18];
 	private String[][] itemListArray = new String[100][6];
+	private JSONObject itemMetaDataJson;
 	public static boolean DEBUG = false;
 	DataModeler dataModeler = new DataModeler();
 
@@ -79,14 +80,39 @@ public class RequestController extends Connect implements Runnable {
 				obj = new JSONObject(jsonString);
 				// get_osrs_api_parseItemJson();
 			}
-
 		}
-
 		catch (Exception e) {
 			System.out.println("Error in Method: getItemJson() " + " " + e.getMessage());
 		}
-
 		return obj;
+	}
+
+	/**
+	 * Method takes an API endpoint as an input, and returns a JSONObject
+	 **/
+
+	private JSONObject genericGetJsonObject(String url) throws NullPointerException {
+		String s = "";
+		JSONObject jsonObject = new JSONObject();
+		try {
+			HttpURLConnection http = httpStringURL(url);
+			if (HttpURLConnection.HTTP_OK == responseCode) { // Success: Status = 200
+				BufferedReader in = new BufferedReader(new InputStreamReader(http.getInputStream()));
+				StringBuffer response = new StringBuffer();
+				String READ_INPUT_LINE_FROM_SITE;
+				while ((READ_INPUT_LINE_FROM_SITE = in.readLine()) != null) {
+					response.append(READ_INPUT_LINE_FROM_SITE);
+				}
+				in.close();
+				String jsonString = response.toString().replace("[","").replace("]","").trim();
+				jsonObject = new JSONObject(jsonString);
+//				 get_osrs_api_parseItemJson();
+			}
+		}
+		catch (Exception e) {
+			System.out.println("Error in Method: genericGetJsonObject() " + " " + e.getMessage());
+		}
+		return jsonObject;
 	}
 	
 
@@ -98,6 +124,11 @@ public class RequestController extends Connect implements Runnable {
 		//JSONObject obj = getItemJson(url);
 		return dataModeler.dataModeler_osrs_api_parseItemJson(getItemJson(url));
 
+	}
+
+	protected String[][] get_wiki_api_parseItemMeta(String url){
+		itemMetaDataJson = genericGetJsonObject(url);
+		return dataModeler.dataModeler_wiki_item_metaData(itemMetaDataJson);
 	}
 
 	protected String[][] returnItemListArray() {
@@ -171,8 +202,8 @@ public class RequestController extends Connect implements Runnable {
 	 */
 
 	protected String[][] get_api_parseRuneLitePrice(String timePeriod, int itemID) {
-		String runeLitePriceUrl = "https://prices.runescape.wiki/api/v1/osrs/timeseries?timestep=" + timePeriod + "&id=" + itemID;
-		obj = getItemJson(runeLitePriceUrl);
+		StringBuilder runeLitePriceUrl = new StringBuilder(ApplicationConstant.RSWIKI_API_ITEM_LOOKUP_URL + timePeriod + "&id=" + itemID);
+		obj = getItemJson(runeLitePriceUrl.toString());
 		JSONArray jsonArray = obj.getJSONArray("data");
 		String[][] itemPriceArray = new String[jsonArray.length()][3];
 		try {
@@ -226,8 +257,8 @@ public class RequestController extends Connect implements Runnable {
 	protected String [][] get_osrs_api_parseItemGraph(int itemID) throws NullPointerException{
 		String[][] itemPriceArray = null;
 		try {
-			String itemGraphUrl = "https://services.runescape.com/m=itemdb_oldschool/api/graph/".concat(String.valueOf(itemID)).concat(".json");
-			obj = getItemJson(itemGraphUrl);
+			StringBuilder itemGraphUrl = new StringBuilder(RUNESCAPE_API_ITEM_GRAPH_URL.concat(String.valueOf(itemID)).concat(".json"));
+			obj = getItemJson(itemGraphUrl.toString());
 			JSONObject dailyData = obj.getJSONObject("daily"); 
 			Set<?> key_dailyData =  dailyData.keySet();
 			itemPriceArray = new String[key_dailyData.size()][3];
