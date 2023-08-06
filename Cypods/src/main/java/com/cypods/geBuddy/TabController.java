@@ -15,49 +15,53 @@ import org.springframework.stereotype.Component;
 import java.io.InputStream;
 import java.net.URL;
 
+import static com.cypods.geBuddy.ApplicationConstant.*;
+
+//import static com.cypods.geBuddy.ApplicationConstant.*;
+
 @Component
 //@Scope ("Prototype")
 public class TabController extends PaneInterface {
-	
-	
-/***************Interface variables********************/
+
+
+	/***************Interface variables********************/
 	protected Label lTab;
-	static String instanceActiveTab; 
+	static String instanceActiveTab;
 	private String tabActive;
 	private Image image;
 	protected ImageView imageView;
 	Tooltip tooltip;
 	private String itemToolTip = "Item Tool Tip";
 	protected int tab_itemID;
-	
-/***************Connect and get data********************/
-	GET Get =  new GET(); 
+
+	/***************Connect and get data********************/
+	RequestController requestController =  new RequestController();
 	private String ItemSpriteUrl = "";
 	protected InputStream error;
-	public InputStream input;	
+	public InputStream input;
 	private String[] itemInfoArr = new String [18];
 	private String[][] tc_itemListArray = new String[100][6];
 	private String osrsItemSearch = "https://services.runescape.com/m=itemdb_oldschool/api/catalogue/items.json?category=1&alpha=";
 
-/***************Tab icon settings********************/
+	/***************Tab icon settings********************/
 	int X;
 	int Y;
 
-/***************End variable declaration**************/			
+	/***************End variable declaration**************/
 //@Autowired
-TabController() {
-	imageView = new ImageView();
-	initLabel();
-	initImage();
-}
+	TabController() {
+		imageView = new ImageView();
+		initLabel();
+		initImage();
+	}
 
-//@Autowired
-TabController (String s){
-	imageView = new ImageView();
+	//@Autowired
+	TabController (String s){
+		imageView = new ImageView();
 		tabSettings(s);
 
 	}
-//@Autowired
+	//@Autowired
 	public int tabSettings(String tab) {
 		if(DEBUG == true) {System.out.println("tabSettings");}
 		switch (tab){
@@ -70,7 +74,7 @@ TabController (String s){
 			case "Tab7":{ X = 636; Y = 12; tabActive = tab; break;}
 			case "Tab8":{ X = 728; Y = 12; tabActive = tab; break;}
 			case "Tab9":{ X = 818; Y = 12; tabActive = tab; break;}
-			case "Tab10":{X = 909; Y = 12; tabActive = tab; break;}			
+			case "Tab10":{X = 909; Y = 12; tabActive = tab; break;}
 		}
 		initLabel();
 		initImage();
@@ -80,175 +84,175 @@ TabController (String s){
 		}
 		return 1;
 	}
-	
+
 	protected void setInterfaceVisible(boolean b){
 		pane_setVisibleInterface(b);
 	}
 
 	private void setIcon() {
-			ItemSpriteUrl = itemInfoArr[3];
-			getIcon();
-		}
+		ItemSpriteUrl = itemInfoArr[ITEM_SPRITE_URL];
+		getIcon();
+	}
 
 	private void getIcon() {
 		try {
 
 			input = new URL (ItemSpriteUrl).openStream();
-         	image = new Image(input); 
-         	imageView.setImage(image);
+			image = new Image(input);
+			imageView.setImage(image);
 		}
 		catch(Exception e) {
 			catchError();
 			System.out.println("Error in getting Icon for:" + tabActive);
-			
+
 		}
 		//return input;
 	}
-	
+
 	public void setActive() {
 		tabNo = tabActive;
 		setInterfaceVisible(true); 				//Setting current Objects paneInterface to be visible
 		root.setId(tabActive);					//changing background to simulate tab change
 		imageView.setOpacity(1);            	//returns item to full opacity
 		if(DEBUG == true) {System.out.println("setActive: " + tabActive);}
-		}
+	}
 	/**
 	 * Handles user search input
 	 * Thread is created whenever a user attempts to search for an Item. This is to enhance the application performance.
 	 * */
 	private void itemSearchListener() {
 		itemSearchInput.setOnKeyPressed(KeyEvent ->
-			{
-				if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
-					//Thread thread = new Thread(() -> {
-						pane_ItemSearchInputText = itemSearchInput.getText();
-						Get.set_osrs_api_parseItemJsonList(osrsItemSearch ,pane_ItemSearchInputText);
-						geSearchResults(); //clear search results and adds resulting item search images/labels
+		{
+			if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
+				//Thread thread = new Thread(() -> {
+				pane_ItemSearchInputText = itemSearchInput.getText();
+				requestController.set_osrs_api_parseItemJsonList(osrsItemSearch ,pane_ItemSearchInputText);
+				geSearchResults(); //clear search results and adds resulting item search images/labels
 			}
-			});
+		});
 		itemSearchInput.setOnMousePressed((mouseEvent) -> {
 			itemSearchInput.setText("");
 			clearGeSearchResults();
 		});
-				
-				
+
+
 
 
 	}
-	
+
 	private void itemSearchSelectionListener(int itemID) {
 		//new Thread(() -> {
 		Platform.runLater(new Runnable() {
-		    @Override
-		    public void run() {
-		    	//new Thread(() -> {
-			itemInfoArr = Get.get_osrs_api_parseItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + itemID);
-			tab_itemID = itemID;
-			setIcon();
-			setInterfaceLabels();					//Drawing everything
-			pane_updateChart(itemID, "1h");
-			addButtonListeners();
-			resetButtonClickedStyle();
-			setButtonClickedStyleWeek();
-			//System.out.println("=========================================Epoch Key values===================================");
-			//Get.get_osrs_api_parseItemGraph("https://services.runescape.com/m=itemdb_oldschool/api/graph/26374.json");
-		    	//}).start();
-		    }
-		    
+			@Override
+			public void run() {
+				//new Thread(() -> {
+				itemInfoArr = requestController.get_osrs_api_parseItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + itemID);
+				tab_itemID = itemID;
+				setIcon();
+				setInterfaceLabels();					//Drawing everything
+				pane_updateChart(itemID, "1h");
+				addButtonListeners();
+				resetButtonClickedStyle();
+				setButtonClickedStyleWeek();
+				//System.out.println("=========================================Epoch Key values===================================");
+				//Get.get_osrs_api_parseItemGraph("https://services.runescape.com/m=itemdb_oldschool/api/graph/26374.json");
+				//}).start();
+			}
+
 		});
 	}
-	
-	private void catchError(){
-		 //root.getChildren().remove(lTab);
-		 image = new Image(getClass().getClassLoader().getResource("/images/Item_UnAvailable.png").toString(),true); 
-		 imageView.setImage(image);
-		 imageView.setPreserveRatio(true);
-		 imageView.setFitHeight(75);
-		 imageView.setFitWidth(75);
-		 imageView.setLayoutX(X);
-		 imageView.setLayoutY(Y);
-		 imageView.setStyle("-fx-background-color: BLACK");
-		 imageView.setCache(true);
-		 tab_IconTooltip("Item unavailable or unable to retrieve item");
-		 //root.getChildren().add(imageView);
 
-		
+	private void catchError(){
+		//root.getChildren().remove(lTab);
+		image = new Image(getClass().getClassLoader().getResource("/images/Item_UnAvailable.png").toString(),true);
+		imageView.setImage(image);
+		imageView.setPreserveRatio(true);
+		imageView.setFitHeight(75);
+		imageView.setFitWidth(75);
+		imageView.setLayoutX(X);
+		imageView.setLayoutY(Y);
+		imageView.setStyle("-fx-background-color: BLACK");
+		imageView.setCache(true);
+		tab_IconTooltip("Item unavailable or unable to retrieve item");
+		//root.getChildren().add(imageView);
+
+
 	}
-	
+
 	private void iconImageSettings() {
 		if(DEBUG == true) {System.out.println("iconImageSettings InputStream: ");}
-		 imageView.setLayoutX(X);
-		 imageView.setLayoutY(Y);
-		 imageView.setPreserveRatio(true);
-		 imageView.setFitHeight(75);
-		 imageView.setFitWidth(75);
-		 imageView.setStyle("-fx-background-color: BLACK");
-         imageView.setCache(true);
-         imageView.setVisible(true);
-         tab_IconTooltip(itemInfoArr[0]);
-         imageView.setOnMouseEntered((mouseEvent) -> MakeItemPop());
-         imageView.setOnMouseExited((mouseEvent) -> MakeItemPopBack());
-		 
+		imageView.setLayoutX(X);
+		imageView.setLayoutY(Y);
+		imageView.setPreserveRatio(true);
+		imageView.setFitHeight(75);
+		imageView.setFitWidth(75);
+		imageView.setStyle("-fx-background-color: BLACK");
+		imageView.setCache(true);
+		imageView.setVisible(true);
+		tab_IconTooltip(itemInfoArr[ITEM_NAME]);
+		imageView.setOnMouseEntered((mouseEvent) -> MakeItemPop());
+		imageView.setOnMouseExited((mouseEvent) -> MakeItemPopBack());
+
 
 	}
-	 private void MakeItemPop() {
-		  imageView.setScaleX(1.2);  
-		  imageView.setScaleY(1.2);
-	 }
-	 private void MakeItemPopBack() {
-		  imageView.setScaleX(1);  
-		  imageView.setScaleY(1); 
-	 }
-	  
+	private void MakeItemPop() {
+		imageView.setScaleX(1.2);
+		imageView.setScaleY(1.2);
+	}
+	private void MakeItemPopBack() {
+		imageView.setScaleX(1);
+		imageView.setScaleY(1);
+	}
+
 	private void initImage(){
 		root.getChildren().add(imageView); //adds all imageViews to the top left corner
 		imageView.setVisible(false);       //hides all the added images, only sets visible once clicked
 	}
-	
+
 	private void initLabel(){
-		  lTab = new Label("");
-		  lTab.setTranslateX(X);
-		  lTab.setTranslateY(Y);
-		  lTab.setPrefSize(75, 75);
-		  root.getChildren().add(lTab);
+		lTab = new Label("");
+		lTab.setTranslateX(X);
+		lTab.setTranslateY(Y);
+		lTab.setPrefSize(75, 75);
+		root.getChildren().add(lTab);
 	}
-	
+
 	private void setInterfaceLabels() {
 
-	         try {
-	        	 try {
-		        		 iconImageSettings();  //must have called getIcon() for it not to be null
-		        		 pane_setItemTopMenu(image);
-		        		 pane_iconTooltip(itemInfoArr[0]);
-		        		 setLabels(  
-		        				 	 		 itemInfoArr[0]							//name
-		        				 			,itemInfoArr[1] 						//Item ID
-		        				 			,itemInfoArr[6]							//Description 
-		        				 			,itemInfoArr[7]							//Member
-		        				 			,itemInfoArr[8]							//Current price
-		        				 			,itemInfoArr[9]							//Current trend
-		        				 			,itemInfoArr[10]						//Todays price
-		        				 			,itemInfoArr[11]						//Todays trend
-		        				 			,itemInfoArr[12]						//30 day trend
-		        				 			,itemInfoArr[13]						//30 day change
-		        				 			,itemInfoArr[14]						//90 day trend
-		        				 			,itemInfoArr[15]						//90 day change
-		        				 			,itemInfoArr[16]						//180 day trend
-		        				 			,itemInfoArr[17]						//180 day change
-  		        				 );
-		        		 itemSearchInput.positionCaret(itemSearchInput.getText().length());  //
-		        		 //pane_createChart();
-	        	 	 }
-	        	 catch(Exception e) {
-		        		 System.out.println("Error in setInterfaceLabels()");
-		        		 pane_setItemTopMenuError();
-		        		 catchError();
-	        	 	 }
-			} catch (Exception e) {
-					System.out.println("Error in setInterfaceLabels: " + e);
+		try {
+			try {
+				iconImageSettings();  //must have called getIcon() for it not to be null
+				pane_setItemTopMenu(image);
+				pane_iconTooltip(itemInfoArr[ITEM_NAME]);
+				setLabels(
+						itemInfoArr[ITEM_NAME]								//name
+						,itemInfoArr[ITEM_ID] 								//Item ID
+						,itemInfoArr[ITEM_DESC]								//Description
+						,itemInfoArr[ITEM_IS_MEMBER]						//Member
+						,itemInfoArr[ITEM_CURRENT_PRICE]					//Current price
+						,itemInfoArr[ITEM_CURRENT_TREND]					//Current trend
+						,itemInfoArr[ITEM_TODAY_PRICE]						//Todays price
+						,itemInfoArr[ITEM_TODAY_TREND]						//Todays trend
+						,itemInfoArr[ITEM_TREND_30]							//30 day trend
+						,itemInfoArr[ITEM_CHANGE_30]						//30 day change
+						,itemInfoArr[ITEM_TREND_90]							//90 day trend
+						,itemInfoArr[ITEM_CHANGE_90]						//90 day change
+						,itemInfoArr[ITEM_TREND_180]						//180 day trend
+						,itemInfoArr[ITEM_CHANGE_180]						//180 day change
+				);
+				itemSearchInput.positionCaret(itemSearchInput.getText().length());  //
+				//pane_createChart();
 			}
+			catch(Exception e) {
+				System.out.println("Error in setInterfaceLabels()");
+				pane_setItemTopMenuError();
+				catchError();
+			}
+		} catch (Exception e) {
+			System.out.println("Error in setInterfaceLabels: " + e);
+		}
 	}
-	
+
 	private void tab_IconTooltip (String s) {
 		tooltip = new Tooltip(s);
 		//tooltip.setShowDelay(Duration.millis(100));
@@ -283,19 +287,19 @@ TabController (String s){
 	 * - Add result to all labels
 	 * */
 	private void geSearchResults() {
-		clearGeSearchResults();		
+		clearGeSearchResults();
 		addLabelActionListeners();
 		addGeSearchResultDefaultItemImageViewsToArray();
 		addGeSearchResultLabelsToArray();
-		
-		tc_itemListArray = Get.returnItemListArray() ;
+
+		tc_itemListArray = requestController.returnItemListArray() ;
 
 		try { //Open stream to grab the image for each of the returned items
 
-			for(int i = 0; i < GET.get_getSearchResultSize() ; i++)
+			for(int i = 0; i < requestController.get_getSearchResultSize() ; i++)
 			{
-				geSearchResultLabels[i].setText(tc_itemListArray[i][2]);
-				input = new URL (tc_itemListArray[i][0]).openStream();
+				geSearchResultLabels[i].setText(tc_itemListArray[i][GE_SEARCH_NAME].concat("  (").concat(tc_itemListArray[i][GE_SEARCH_CURRENT_PRICE]).concat(")"));
+				input = new URL (tc_itemListArray[i][GE_SEARCH_ICON_URL]).openStream();
 				//image = ;
 				geSearchResultImages[i].setImage(new Image(input));
 
@@ -310,10 +314,10 @@ TabController (String s){
 			 */
 			System.out.println("Error grabbing Icon Images in TabController>geSearchResults");
 			//System.out.println(e);
-			
+
 		}
-		
-		
+
+
 	}
 
 	/**
@@ -325,7 +329,7 @@ TabController (String s){
 
 
 	protected void addLabelActionListeners() {
-		int arrLength = GET.get_getSearchResultSize();
+		int arrLength = requestController.get_getSearchResultSize();
 		addGeSearchResultLabelsToArray();
 
 		for(int i = 0; i < arrLength ; i++)
@@ -340,10 +344,10 @@ TabController (String s){
 
 
 	}
-	
-	
+
+
 	private void removeLabelActionListeners() {
-		int arrLength = GET.get_getSearchResultSize();
+		int arrLength = requestController.get_getSearchResultSize();
 		addGeSearchResultLabelsToArray();
 
 
@@ -388,31 +392,31 @@ TabController (String s){
 
 	private void addButtonListeners() {
 
-			day.setOnMouseClicked((mouseEvent) -> {
-				resetButtonClickedStyle();
-				pane_updateChart(tab_itemID, "5m");
-				day.setStyle("-fx-background-color: grey");			
-			});
-			week.setOnMouseClicked((mouseEvent) -> {
-				resetButtonClickedStyle();
-				pane_updateChart(tab_itemID, "1h");
-				week.setStyle("-fx-background-color: grey");	
-			});
-			month.setOnMouseClicked((mouseEvent) -> {
-				resetButtonClickedStyle();
-				pane_updateChart(tab_itemID, "6h");
-				month.setStyle("-fx-background-color: grey");
-			});
-			months3.setOnMouseClicked((mouseEvent) -> {
-				resetButtonClickedStyle();
-				pane_updateChart(tab_itemID, "6Month");
-				months3.setStyle("-fx-background-color: grey");
-			});
-			months6.setOnMouseClicked((mouseEvent) -> {
-				resetButtonClickedStyle();
-				pane_updateChart(tab_itemID, "24h");
-				months6.setStyle("-fx-background-color: grey");
-			});
+		day.setOnMouseClicked((mouseEvent) -> {
+			resetButtonClickedStyle();
+			pane_updateChart(tab_itemID, "5m");
+			day.setStyle("-fx-background-color: grey");
+		});
+		week.setOnMouseClicked((mouseEvent) -> {
+			resetButtonClickedStyle();
+			pane_updateChart(tab_itemID, "1h");
+			week.setStyle("-fx-background-color: grey");
+		});
+		month.setOnMouseClicked((mouseEvent) -> {
+			resetButtonClickedStyle();
+			pane_updateChart(tab_itemID, "6h");
+			month.setStyle("-fx-background-color: grey");
+		});
+		months3.setOnMouseClicked((mouseEvent) -> {
+			resetButtonClickedStyle();
+			pane_updateChart(tab_itemID, "6Month");
+			months3.setStyle("-fx-background-color: grey");
+		});
+		months6.setOnMouseClicked((mouseEvent) -> {
+			resetButtonClickedStyle();
+			pane_updateChart(tab_itemID, "24h");
+			months6.setStyle("-fx-background-color: grey");
+		});
 	}
 	private void resetButtonClickedStyle() {
 		day.setStyle("-fx-background-color: black");
@@ -420,9 +424,9 @@ TabController (String s){
 		month.setStyle("-fx-background-color: black");
 		months3.setStyle("-fx-background-color: black");
 		months6.setStyle("-fx-background-color: black");
-		
+
 	}
-	
+
 	private void setButtonClickedStyleWeek() {
 		week.setStyle("-fx-background-color: grey");
 	}
