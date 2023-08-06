@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="d3a89c02-1720-4240-804f-bab0dc9ca57c" name="gebuddy.db Mapping">
+      <data-sources db="d6c199e1-0699-4348-95d2-fec95c490dec" ddl="af85f06b-bb5f-499b-be54-decf8f576bb8" />
+    </mapping>
+    <mapping uuid="4d92d248-b52d-420e-9e30-8f63b085ddf0" name="gebuddy.db Mapping [2]">
+      <data-sources db="2dced7d9-1ff7-4708-a54d-a58a2e38a788" ddl="63db4d4c-11e6-4312-a0df-20a9084c2320" />
+      <scope>
+        <node kind="database" negative="1" />
+      </scope>
+    </mapping>
+    <mapping uuid="c4d1e85b-fb57-4af3-9c47-04e8ff3bdf18" name="identifier.sqlite Mapping">
+      <data-sources db="8ac1f9aa-20ea-42d7-be39-4a417f86d14a" />
+    </mapping>
+  </component>
+</project>
