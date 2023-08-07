@@ -10,9 +10,6 @@
         <module name="ge" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="ge" target="17" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
