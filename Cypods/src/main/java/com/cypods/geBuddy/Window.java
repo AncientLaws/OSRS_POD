@@ -1,5 +1,6 @@
 package com.cypods.geBuddy;
 
+import com.sun.tools.javac.Main;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Group;
@@ -15,7 +16,10 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
+import java.awt.image.*;
 
+import javax.swing.*;
+import java.net.URL;
 import java.util.Objects;
 
 @Component
@@ -39,7 +43,7 @@ public class Window extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			this.primaryStage =  primaryStage;
-			primaryStage.setTitle("Grand Exchange Central");
+			primaryStage.setTitle("Grand Exchange Central - By Ancient laws");
 			Image icon = new Image 	(getClass().getClassLoader().getResource("images/icon.png").toString(), true);
 			primaryStage.getIcons().add(icon);
 			//primaryStage.setWidth(1080);

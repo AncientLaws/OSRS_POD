@@ -444,7 +444,8 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 				, changeToday, change30Days, change90Days, change180Days
 
-				, xyCoordinates);
+				//, xyCoordinates
+		);
 
 	}
 
