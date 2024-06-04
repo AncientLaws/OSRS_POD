@@ -24,6 +24,8 @@ import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.util.Calendar;
+import java.util.Date;
 
 
 //import org.jfree.chart.fx.ChartViewer;
@@ -63,8 +65,8 @@ public class Charts implements ChartMouseListenerFX {
 
 	javafx.geometry.Rectangle2D screenBounds;
 
-
 	DataModeler dataModeler =  new DataModeler();
+
 
 	public Charts() {
 
@@ -208,14 +210,7 @@ public class Charts implements ChartMouseListenerFX {
 		priceChart.getXYPlot().getRangeAxis().setTickLabelPaint(Color.ORANGE);
 		priceChart.getXYPlot().getDomainAxis().setTickLabelPaint(Color.ORANGE);
 		priceChart.getXYPlot().getRangeAxis().setFixedDimension(40);
-		priceChart.getXYPlot().getRenderer().setSeriesVisibleInLegend(0, false, false); //Makes legend invisible
-		priceChart.getPlot().setBackgroundPaint(chartBackgroundColor);//0x866b46
-		priceChart.getXYPlot().getRenderer().setSeriesPaint(0, chartSeriesColor);
-		priceChart.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(3.0f));
-		priceChart.getXYPlot().getRenderer().setSeriesVisible(0, true);
-		priceChart.getXYPlot().setRangePannable(true);
-		priceChart.getXYPlot().setRangeCrosshairLockedOnData(true);
-		priceChart.getXYPlot().setDomainPannable(true);
+		defaultChartSettings(priceChart);
 
 		chartViewerPrice.setPrefSize(1060, 351);
 		chartViewerPrice.setLayoutX(4);
@@ -228,14 +223,7 @@ public class Charts implements ChartMouseListenerFX {
 	}
 
 	private void runVolumeChartSettings(){
-		volumeChart.getXYPlot().getRenderer().setSeriesVisibleInLegend(0, false, false); //Makes legend invisible
-		volumeChart.getPlot().setBackgroundPaint(chartBackgroundColor);//0x866b46
-		volumeChart.getXYPlot().getRenderer().setSeriesPaint(0, chartSeriesColor);
-		volumeChart.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(3.0f));
-		volumeChart.getXYPlot().getRenderer().setSeriesVisible(0, true);
-		volumeChart.getXYPlot().setRangePannable(true);
-		volumeChart.getXYPlot().setRangeCrosshairLockedOnData(true);
-		volumeChart.getXYPlot().setDomainPannable(true);
+		defaultChartSettings(volumeChart);
 		volumeChart.getXYPlot().getRangeAxis().setTickLabelPaint(Color.ORANGE);
 		volumeChart.getXYPlot().getDomainAxis().setTickLabelPaint(Color.ORANGE);
 		volumeChart.getXYPlot().getRangeAxis().setFixedDimension(40);
@@ -247,6 +235,17 @@ public class Charts implements ChartMouseListenerFX {
 		chartViewerVolume.setTranslateX(chartViewerVolumeOffset);
 		chartViewerVolume.setPrefSize(chartViewerVolume.getPrefWidth() - chartViewerVolumeOffset, chartViewerVolume.getPrefHeight());
 		chartViewerVolume.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
+	}
+
+	private void defaultChartSettings(JFreeChart volumeChart) {
+		volumeChart.getXYPlot().getRenderer().setSeriesVisibleInLegend(0, false, false); //Makes legend invisible
+		volumeChart.getPlot().setBackgroundPaint(chartBackgroundColor);//0x866b46
+		volumeChart.getXYPlot().getRenderer().setSeriesPaint(0, chartSeriesColor);
+		volumeChart.getXYPlot().getRenderer().setSeriesStroke(0, new BasicStroke(3.0f));
+		volumeChart.getXYPlot().getRenderer().setSeriesVisible(0, true);
+		volumeChart.getXYPlot().setRangePannable(true);
+		volumeChart.getXYPlot().setRangeCrosshairLockedOnData(true);
+		volumeChart.getXYPlot().setDomainPannable(true);
 	}
 
 	private static JFreeChart createChart(XYDataset dataset) {
@@ -302,33 +301,42 @@ public class Charts implements ChartMouseListenerFX {
 		String x = null;
 		Double y;
 		double z;
-
-		if (timePeriod == "6Month") //If time period is 6 months, use OSRS official API
-		{
-			itemPriceArrayStrings = getDataGet.get_osrs_api_parseItemGraph(itemID);
-			for (int i = 0; i < itemPriceArrayStrings.length - 1; i++) {
-				//If item price value isn't available, don't add it to the dataset
-				if (Double.parseDouble(itemPriceArrayStrings[i][1]) == 0) {
-					continue;
-				}
-
-				x = itemPriceArrayStrings[i][0]; //timestamp
-				y = Double.parseDouble(itemPriceArrayStrings[i][1]); //item price
-
-				series.addOrUpdate(new Second(dataModeler.epochToDateTime(x)), y);
+		Calendar cal = Calendar.getInstance();
 
 
-				if (DEBUG == true) {
-					System.out.println("\nnew Day(epochToDateTime(x)) \t: " + new Day(dataModeler.epochToDateTime(x)) +
-							"\nnew Minute (epochToDateTime(x)): \t" + new Minute(dataModeler.epochToDateTime(x))
-							+ "\nnew Second (epochToDateTime(x)): \\t" + new Second(dataModeler.epochToDateTime(x)));
-				}
-
+//		if (timePeriod == "6Month") //If time period is 6 months, use OSRS official API
+//		{
+//			itemPriceArrayStrings = getDataGet.get_osrs_api_parseItemGraph(itemID);
+//			for (int i = 0; i < itemPriceArrayStrings.length - 1; i++) {
+//				//If item price value isn't available, don't add it to the dataset
+//				if (Double.parseDouble(itemPriceArrayStrings[i][1]) == 0) {
+//					continue;
+//				}
+//
+//				x = itemPriceArrayStrings[i][0]; //timestamp
+//				y = Double.parseDouble(itemPriceArrayStrings[i][1]); //item price
+//
+//				series.addOrUpdate(new Second(dataModeler.epochToDateTime(x)), y);
+//
+//
+//				if (DEBUG == true) {
+//					System.out.println("\nnew Day(epochToDateTime(x)) \t: " + new Day(dataModeler.epochToDateTime(x)) +
+//							"\nnew Minute (epochToDateTime(x)): \t" + new Minute(dataModeler.epochToDateTime(x))
+//							+ "\nnew Second (epochToDateTime(x)): \\t" + new Second(dataModeler.epochToDateTime(x)));
+//				}
+//
+//			}
+//
+//		} else  //If time period is less than 6 months use RuneLite's API
+//		{
+			if(timePeriod == "6Month"){
+				itemPriceArrayStrings = getDataGet.get_api_parseRuneLitePrice("24h",itemID); //Retrieve a years worth of data
+			}
+			else{
+				itemPriceArrayStrings = getDataGet.get_api_parseRuneLitePrice(timePeriod,itemID);
 			}
 
-		} else  //If time period is less than 6 months use RuneLite's API
-		{
-			itemPriceArrayStrings = getDataGet.get_api_parseRuneLitePrice(timePeriod,itemID);
+			cal.add(Calendar.MONTH, -6);
 			for (int i = 0; i < itemPriceArrayStrings.length - 1; i++) {
 				//If item price value isn't available, don't add it to the dataset
 				if (Double.parseDouble(itemPriceArrayStrings[i][1]) == 0) {
@@ -347,9 +355,20 @@ public class Charts implements ChartMouseListenerFX {
 				z = dataModeler.avgValue(Double.parseDouble(itemPriceArrayStrings[i][3]),			//item price high
 						Double.parseDouble(itemPriceArrayStrings[i][4])); 				//item price low
 
+				Second second = new Second(dataModeler.epochToDateTime_x1000(x));
 
-				series.addOrUpdate(new Second(dataModeler.epochToDateTime_x1000(x)), y);
-				volumeSeries.addOrUpdate(new Second(dataModeler.epochToDateTime_x1000(x)), z);
+				//Custom timeseries for 6 months
+				if(timePeriod == "6Month"){
+					if(second.getFirstMillisecond() > cal.getTimeInMillis()){
+						series.addOrUpdate(second, y);
+						volumeSeries.addOrUpdate(second, z);
+					}
+				}
+				else{
+					series.addOrUpdate(second, y);
+					volumeSeries.addOrUpdate(second, z);
+				}
+
 				Number n = Double.parseDouble(x);
 				//volumeCategoryDataset.addValue(n,y,z);
 
@@ -361,7 +380,7 @@ public class Charts implements ChartMouseListenerFX {
 
 			}
 
-		}
+
 
 
 		XYDatasetTimeSeriesVolume = new TimeSeriesCollection(volumeSeries);

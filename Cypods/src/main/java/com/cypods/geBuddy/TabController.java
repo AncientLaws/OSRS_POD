@@ -65,7 +65,7 @@ public class TabController extends PaneInterface {
 	public int tabSettings(String tab) {
 		if(DEBUG == true) {System.out.println("tabSettings");}
 		switch (tab){
-			case "Tab1":{ X = 100; Y = 12; tabActive = tab; break; }
+			case "Tab1":{ X = 100; Y = 12; tabActive = tab; break;}
 			case "Tab2":{ X = 189; Y = 12; tabActive = tab; break;}
 			case "Tab3":{ X = 278; Y = 12; tabActive = tab; break;}
 			case "Tab4":{ X = 367; Y = 12; tabActive = tab; break;}
