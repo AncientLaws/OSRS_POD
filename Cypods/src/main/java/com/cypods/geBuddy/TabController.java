@@ -41,7 +41,7 @@ public class TabController extends PaneInterface {
 	public InputStream input;
 	private String[] itemInfoArr = new String [18];
 	private String[][] tc_itemListArray = new String[100][6];
-	private String osrsItemSearch = "https://services.runescape.com/m=itemdb_oldschool/api/catalogue/items.json?category=1&alpha=";
+
 
 	/***************Tab icon settings********************/
 	int X;
@@ -127,7 +127,7 @@ public class TabController extends PaneInterface {
 			if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
 				//Thread thread = new Thread(() -> {
 				pane_ItemSearchInputText = itemSearchInput.getText();
-				requestController.set_osrs_api_parseItemJsonList(osrsItemSearch ,pane_ItemSearchInputText);
+				requestController.set_osrs_api_parseItemJsonList(ApplicationConstant.osrsItemSearch ,pane_ItemSearchInputText);
 				geSearchResults(); //clear search results and adds resulting item search images/labels
 			}
 		});
@@ -135,10 +135,6 @@ public class TabController extends PaneInterface {
 			itemSearchInput.setText("");
 			clearGeSearchResults();
 		});
-
-
-
-
 	}
 
 	private void itemSearchSelectionListener(int itemID) {
@@ -147,7 +143,7 @@ public class TabController extends PaneInterface {
 			@Override
 			public void run() {
 				//new Thread(() -> {
-				itemInfoArr = requestController.get_osrs_api_parseItemJson("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" + itemID);
+				itemInfoArr = requestController.get_osrs_api_parseItemJson(ApplicationConstant.osrsGetItemDetails + itemID);
 				tab_itemID = itemID;
 				setIcon();
 				setInterfaceLabels();					//Drawing everything

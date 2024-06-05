@@ -31,6 +31,10 @@ public class ApplicationConstant {
 
         public static String itemGraphUrl = "https://services.runescape.com/m=itemdb_oldschool/api/graph/";
 
+        public static String osrsItemSearch = "https://services.runescape.com/m=itemdb_oldschool/api/catalogue/items.json?category=1&alpha=";
+
+        public static String osrsGetItemDetails = "https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=";
+
         public static boolean DEBUG = true;
 
         public static String generateRuneLitePriceDataUrl(String timePeriod, Integer itemId){
