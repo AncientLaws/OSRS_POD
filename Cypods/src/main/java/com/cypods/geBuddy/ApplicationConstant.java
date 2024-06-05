@@ -29,11 +29,20 @@ public class ApplicationConstant {
 
         public static String runeLitePriceData = "https://prices.runescape.wiki/api/v1/osrs/timeseries?timestep=";
 
-        public static boolean DEBUG = false;
+        public static String itemGraphUrl = "https://services.runescape.com/m=itemdb_oldschool/api/graph/";
+
+        public static boolean DEBUG = true;
 
         public static String generateRuneLitePriceDataUrl(String timePeriod, Integer itemId){
                 if(timePeriod != null && itemId!= null){
-                     return runeLitePriceData.concat(timePeriod).concat("&id=").concat(itemId.toString());
+                        return runeLitePriceData.concat(timePeriod).concat("&id=").concat(itemId.toString());
+                }
+                return "";
+        }
+
+        public static String generateOsrsPriceDataUrl(Integer itemId){
+                if(itemId != null){
+                        return itemGraphUrl.concat(itemId.toString()).concat(".json");
                 }
                 return "";
         }

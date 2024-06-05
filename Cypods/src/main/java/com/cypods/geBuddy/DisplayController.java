@@ -8,6 +8,9 @@ import javafx.scene.layout.Pane;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
 
 @Component
@@ -15,93 +18,33 @@ import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
 public class DisplayController implements ChangeListener{
 	
 	//@Autowired
-	Window w;
+	Window window;
 	protected Pane root = new Pane();
 	protected  Group group = new Group(root);
-	protected static double stageWidth = 0;
-	protected static double stageHeight = 0;
-	
-
-	//@Autowired 
-	TabController tab1;// = applicationContext.getBean(TabController.class);
-	//@Autowired 
-	TabController tab2;
-	//@Autowired 
-	TabController tab3 ;
-	//@Autowired 
-	TabController tab4 ;
-	//@Autowired 
-	TabController tab5 ;
-	//@Autowired 
-	TabController tab6;
-	//@Autowired 
-	TabController tab7;
-	//@Autowired 
-	TabController tab8 ;
-	//@Autowired 
-	TabController tab9 ;
-	//@Autowired 
-	TabController tab10 ;
+	List<TabController> tabControllerList = new ArrayList<>();
 	String tabNo;
 
 
-	//Window w;
-	//Pane root = new Pane();
-	//Group group = new Group(root);
-	
-
-	
 	 DisplayController (){
-		 w = new Window();
-		 this.root = w.root;
-		 this.group = w.group;
-		 //w.ac.getBean(null);
-
-		
+		 window = new Window();
+		 this.root = window.root;
+		 this.group = window.group;
 	 }
 
 	public void getTab() {
 		try {
-			
-			if(DEBUG == true) {System.out.println("Called tab1");}
-			//tab1 = applicationContext.getBean(TabController.class, TabController.class);
-			  
-			   tab1 = new TabController("Tab1");
-				//tab1 = w.ac.getBean(TabController.class);
-			   if(DEBUG == true) {System.out.println("Called tab2");}
-			   tab2 = new TabController("Tab2");
-			   //tab2.tabSettings("tab2");
-
-			   if(DEBUG == true) { System.out.println("Called tab2");}
-		
-			   if(DEBUG == true) { System.out.println("Called tab3");}
-			   tab3 = new TabController("Tab3"); 
-			   //tab3.tabSettings("tab3");
-			  
-			   if(DEBUG == true) {System.out.println("Called tab4");}		   
-			   tab4 = new TabController("Tab4"); 
-			   
-			   if(DEBUG == true) {System.out.println("Called tab5");}
-			   tab5 = new TabController("Tab5"); 
-			   
-			   if(DEBUG == true) {System.out.println("Called tab6");}		   
-			   tab6 = new TabController("Tab6"); 
-			   
-			   if(DEBUG == true) {System.out.println("Called tab7");}		   
-			   tab7 = new TabController("Tab7"); 
-			  
-			   if(DEBUG == true) {System.out.println("Called tab8");}		   
-			   tab8 = new TabController("Tab8"); 
-			  
-			   if(DEBUG == true) {System.out.println("Called tab9");}		   
-			   tab9 = new TabController("Tab9"); 
-			   
-			   if(DEBUG == true) {System.out.println("Called tab10");}		   
-			   tab10 = new TabController("Tab10"); 
+					tabControllerList.add(new TabController("Tab1"));
+					tabControllerList.add(new TabController("Tab2"));
+					tabControllerList.add(new TabController("Tab3"));
+					tabControllerList.add(new TabController("Tab4"));
+					tabControllerList.add(new TabController("Tab5"));
+					tabControllerList.add(new TabController("Tab6"));
+					tabControllerList.add(new TabController("Tab7"));
+					tabControllerList.add(new TabController("Tab8"));
+					tabControllerList.add(new TabController("Tab9"));
+					tabControllerList.add(new TabController("Tab10"));
 			   setTabActiveOnStart();
 			   setListeners();
-
-   
 		}
 		catch(Exception e) {
 			System.out.println("Display Controller: Error in calling one of the tabs");
@@ -110,47 +53,30 @@ public class DisplayController implements ChangeListener{
 		
 	}
 
-	/*
-	 * protected void initListners() { tab1.lTab.setOnMousePressed((mouseEvent) ->
-	 * tab1.setActive()); }
-	 */
 	protected void setTabActiveOnStart() {
-		tab1.setActive();
-		setInterfaceInvisible(tabNo = "Tab1");
-		//setListners();
+		 for(TabController tab : tabControllerList){
+			 if(tab.getInstanceTabName().equals("Tab1")){
+				 tab.setActive();
+				 tabNo = tab.getInstanceTabName();
+			 }
+		 }
+		setInterfaceInvisible();
 	}
 	protected void setListeners()
 	{
 		try {
-		tab1.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab1"));
-		tab2.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab2"));
-		tab3.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab3"));
-		tab4.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab4"));
-		tab5.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab5"));
-		tab6.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab6"));
-		tab7.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab7"));
-		tab8.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab8"));
-		tab9.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab9"));
-	    tab10.lTab.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab10"));
-	    
-	    tab1.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab1"));
-	    tab2.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab2"));
-	    tab3.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab3"));
-	    tab4.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab4"));
-	    tab5.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab5"));
-	    tab6.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab6"));
-	    tab7.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab7"));
-	    tab8.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab8"));
-	    tab9.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab9"));
-	    tab10.imageView.setOnMousePressed((mouseEvent) ->  setInterfaceInvisible(tabNo = "Tab10"));
-		/* w.primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
-		     this.stageWidth = (double) newVal;
-		     //System.out.println("Width: " + newVal);
-		});
-		 w.primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
-			 this.stageHeight = (double) newVal;
-			 //System.out.println("Height: " + newVal);
-		});*/
+			for(TabController tab : tabControllerList){
+
+				tab.getTabSelectionLabel().setOnMousePressed((mouseEvent) ->  {
+					tabNo = tab.getInstanceTabName();
+					setInterfaceInvisible();
+				});
+
+				tab.imageView.setOnMousePressed((mouseEvent) ->  {
+					tabNo = tab.getInstanceTabName();
+					setInterfaceInvisible();
+				});
+			}
 		}
 		catch(Exception e) {
 			System.out.println("Unable to add listners on the method DisplayController.setListners -> " );
@@ -158,53 +84,33 @@ public class DisplayController implements ChangeListener{
 		}
 		
 	}
-	//addChangelistener to the 1Tab label
-	private void setInterfaceInvisible(String s)
+	/**
+	 * Making all interfaces invisible and reducing opacity
+	 * */
+	private void setInterfaceInvisible()
 	{
 		double opacity = .4;
-		
-		tab1.setInterfaceVisible(false);
-		tab2.setInterfaceVisible(false);
-		tab3.setInterfaceVisible(false);
-		tab4.setInterfaceVisible(false);
-		tab5.setInterfaceVisible(false);
-		tab6.setInterfaceVisible(false);
-		tab7.setInterfaceVisible(false);
-		tab8.setInterfaceVisible(false);
-		tab9.setInterfaceVisible(false);
-		tab10.setInterfaceVisible(false);
-		tab1.imageView.setOpacity(opacity);
-		tab2.imageView.setOpacity(opacity);
-		tab3.imageView.setOpacity(opacity);
-		tab4.imageView.setOpacity(opacity);
-		tab5.imageView.setOpacity(opacity);
-		tab6.imageView.setOpacity(opacity);
-		tab7.imageView.setOpacity(opacity);
-		tab8.imageView.setOpacity(opacity);
-		tab9.imageView.setOpacity(opacity);
-		tab10.imageView.setOpacity(opacity);
+
+		for(TabController tab : tabControllerList){
+			tab.setInterfaceVisible(false);
+			tab.imageView.setOpacity(opacity);
+		}
 		dc_enableActiveInterface();
-		
 	}
 
-
+/**
+ * Selecting which tab is active based on user selection (tabNo)
+ * */
 	private void dc_enableActiveInterface() {
 		if(DEBUG == true) {
 		System.out.println("dc_enableActiveInterface, tab no: " + tabNo);}
-	    switch(tabNo)
-		{
-			case "Tab1": tab1.setActive(); break;
-			case "Tab2": tab2.setActive(); break;
-			case "Tab3": tab3.setActive(); break;
-			case "Tab4": tab4.setActive(); break;
-			case "Tab5": tab5.setActive(); break;
-			case "Tab6": tab6.setActive(); break;
-			case "Tab7": tab7.setActive(); break;
-			case "Tab8": tab8.setActive(); break;
-			case "Tab9": tab9.setActive(); break;
-			case "Tab10": tab10.setActive(); break;
+
+		for(TabController tab : tabControllerList){
+			if(tabNo.equals(tab.getInstanceTabName())){
+				tab.setActive();
+				break;
+			}
 		}
-		
 	}
 	
 	

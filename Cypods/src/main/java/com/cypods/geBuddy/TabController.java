@@ -25,8 +25,8 @@ public class TabController extends PaneInterface {
 
 
 	/***************Interface variables********************/
-	protected Label lTab;
-	static String instanceActiveTab;
+	private Label tabSelectionLabel;
+	private String instanceTabName;
 	private String tabActive;
 	private Image image;
 	protected ImageView imageView;
@@ -57,24 +57,25 @@ public class TabController extends PaneInterface {
 
 	//@Autowired
 	TabController (String s){
+		instanceTabName = s;
 		imageView = new ImageView();
-		tabSettings(s);
+		tabSettings(instanceTabName);
 
 	}
 	//@Autowired
 	public int tabSettings(String tab) {
 		if(DEBUG == true) {System.out.println("tabSettings");}
 		switch (tab){
-			case "Tab1":{ X = 100; Y = 12; tabActive = tab; break;}
-			case "Tab2":{ X = 189; Y = 12; tabActive = tab; break;}
-			case "Tab3":{ X = 278; Y = 12; tabActive = tab; break;}
-			case "Tab4":{ X = 367; Y = 12; tabActive = tab; break;}
-			case "Tab5":{ X = 456; Y = 12; tabActive = tab; break;}
-			case "Tab6":{ X = 545; Y = 12; tabActive = tab; break;}
-			case "Tab7":{ X = 636; Y = 12; tabActive = tab; break;}
-			case "Tab8":{ X = 728; Y = 12; tabActive = tab; break;}
-			case "Tab9":{ X = 818; Y = 12; tabActive = tab; break;}
-			case "Tab10":{X = 909; Y = 12; tabActive = tab; break;}
+			case "Tab1":{ X = 100; Y = 12; setTabActive(tab); break;}
+			case "Tab2":{ X = 189; Y = 12; setTabActive(tab); break;}
+			case "Tab3":{ X = 278; Y = 12; setTabActive(tab); break;}
+			case "Tab4":{ X = 367; Y = 12; setTabActive(tab); break;}
+			case "Tab5":{ X = 456; Y = 12; setTabActive(tab); break;}
+			case "Tab6":{ X = 545; Y = 12; setTabActive(tab); break;}
+			case "Tab7":{ X = 636; Y = 12; setTabActive(tab); break;}
+			case "Tab8":{ X = 728; Y = 12; setTabActive(tab); break;}
+			case "Tab9":{ X = 818; Y = 12; setTabActive(tab); break;}
+			case "Tab10":{X = 909; Y = 12; setTabActive(tab); break;}
 		}
 		initLabel();
 		initImage();
@@ -103,18 +104,18 @@ public class TabController extends PaneInterface {
 		}
 		catch(Exception e) {
 			catchError();
-			System.out.println("Error in getting Icon for:" + tabActive);
+			System.out.println("Error in getting Icon for:" + getTabActive());
 
 		}
 		//return input;
 	}
 
 	public void setActive() {
-		tabNo = tabActive;
+		tabNo = getTabActive();
 		setInterfaceVisible(true); 				//Setting current Objects paneInterface to be visible
-		root.setId(tabActive);					//changing background to simulate tab change
+		root.setId(getTabActive());					//changing background to simulate tab change
 		imageView.setOpacity(1);            	//returns item to full opacity
-		if(DEBUG == true) {System.out.println("setActive: " + tabActive);}
+		if(DEBUG == true) {System.out.println("setActive: " + getTabActive());}
 	}
 	/**
 	 * Handles user search input
@@ -210,11 +211,11 @@ public class TabController extends PaneInterface {
 	}
 
 	private void initLabel(){
-		lTab = new Label("");
-		lTab.setTranslateX(X);
-		lTab.setTranslateY(Y);
-		lTab.setPrefSize(75, 75);
-		root.getChildren().add(lTab);
+		tabSelectionLabel = new Label("");
+		tabSelectionLabel.setTranslateX(X);
+		tabSelectionLabel.setTranslateY(Y);
+		tabSelectionLabel.setPrefSize(75, 75);
+		root.getChildren().add(tabSelectionLabel);
 	}
 
 	private void setInterfaceLabels() {
@@ -269,10 +270,12 @@ public class TabController extends PaneInterface {
 		addGeSearchResultDefaultItemImageViewsToArray();
 		addGeSearchResultLabelsToArray();
 
-		for(int i = 0; i<12 ; i++)
+		for(Label label : geSearchResultLabels)
 		{
-			geSearchResultLabels[i].setText(null);
-			geSearchResultImages[i].setImage(null);
+			label.setText(null);
+		}
+		for(ImageView view : geSearchResultImages){
+			view.setImage(null);
 		}
 	}
 
@@ -361,33 +364,35 @@ public class TabController extends PaneInterface {
 	}
 
 	private void addGeSearchResultLabelsToArray() {
-		geSearchResultLabels[0] = geSearchResult1;
-		geSearchResultLabels[1] = geSearchResult2;
-		geSearchResultLabels[2] = geSearchResult3;
-		geSearchResultLabels[3] = geSearchResult4;
-		geSearchResultLabels[4] = geSearchResult5;
-		geSearchResultLabels[5] = geSearchResult6;
-		geSearchResultLabels[6] = geSearchResult7;
-		geSearchResultLabels[7] = geSearchResult8;
-		geSearchResultLabels[8] = geSearchResult9;
-		geSearchResultLabels[9] = geSearchResult10;
-		geSearchResultLabels[10] = geSearchResult11;
-		geSearchResultLabels[11] = geSearchResult12;
+
+		geSearchResultLabels[0] = searchGeResultLabelInstances("geSearchResult1").getLabel();
+		geSearchResultLabels[1] = searchGeResultLabelInstances("geSearchResult2").getLabel();
+		geSearchResultLabels[2] = searchGeResultLabelInstances("geSearchResult3").getLabel();
+		geSearchResultLabels[3] = searchGeResultLabelInstances("geSearchResult4").getLabel();
+		geSearchResultLabels[4] = searchGeResultLabelInstances("geSearchResult5").getLabel();
+		geSearchResultLabels[5] = searchGeResultLabelInstances("geSearchResult6").getLabel();
+		geSearchResultLabels[6] = searchGeResultLabelInstances("geSearchResult7").getLabel();
+		geSearchResultLabels[7] = searchGeResultLabelInstances("geSearchResult8").getLabel();
+		geSearchResultLabels[8] = searchGeResultLabelInstances("geSearchResult9").getLabel();
+		geSearchResultLabels[9] = searchGeResultLabelInstances("geSearchResult10").getLabel();
+		geSearchResultLabels[10] = searchGeResultLabelInstances("geSearchResult11").getLabel();
+		geSearchResultLabels[11] = searchGeResultLabelInstances("geSearchResult12").getLabel();
 	}
 
 	private void addGeSearchResultDefaultItemImageViewsToArray() {
-		geSearchResultImages[0] = img1;
-		geSearchResultImages[1] = img2;
-		geSearchResultImages[2] = img3;
-		geSearchResultImages[3] = img4;
-		geSearchResultImages[4] = img5;
-		geSearchResultImages[5] = img6;
-		geSearchResultImages[6] = img7;
-		geSearchResultImages[7] = img8;
-		geSearchResultImages[8] = img9;
-		geSearchResultImages[9] = img10;
-		geSearchResultImages[10] = img11;
-		geSearchResultImages[11] = img12;
+
+		geSearchResultImages[0]  = searchGeResultLabelInstances("geSearchResult1").getLabelImage();
+		geSearchResultImages[1] = searchGeResultLabelInstances("geSearchResult2").getLabelImage();
+		geSearchResultImages[2] = searchGeResultLabelInstances("geSearchResult3").getLabelImage();
+		geSearchResultImages[3] = searchGeResultLabelInstances("geSearchResult4").getLabelImage();
+		geSearchResultImages[4] = searchGeResultLabelInstances("geSearchResult5").getLabelImage();
+		geSearchResultImages[5] = searchGeResultLabelInstances("geSearchResult6").getLabelImage();
+		geSearchResultImages[6] = searchGeResultLabelInstances("geSearchResult7").getLabelImage();
+		geSearchResultImages[7] = searchGeResultLabelInstances("geSearchResult8").getLabelImage();
+		geSearchResultImages[8] = searchGeResultLabelInstances("geSearchResult9").getLabelImage();
+		geSearchResultImages[9] = searchGeResultLabelInstances("geSearchResult10").getLabelImage();
+		geSearchResultImages[10] = searchGeResultLabelInstances("geSearchResult11").getLabelImage();
+		geSearchResultImages[11] = searchGeResultLabelInstances("geSearchResult12").getLabelImage();
 	}
 
 	private void addButtonListeners() {
@@ -402,10 +407,10 @@ public class TabController extends PaneInterface {
 			pane_updateChart(tab_itemID, "1h");
 			week.setStyle("-fx-background-color: grey");
 		});
-		month.setOnMouseClicked((mouseEvent) -> {
+		quarter.setOnMouseClicked((mouseEvent) -> {
 			resetButtonClickedStyle();
 			pane_updateChart(tab_itemID, "6h");
-			month.setStyle("-fx-background-color: grey");
+			quarter.setStyle("-fx-background-color: grey");
 		});
 		months3.setOnMouseClicked((mouseEvent) -> {
 			resetButtonClickedStyle();
@@ -421,7 +426,7 @@ public class TabController extends PaneInterface {
 	private void resetButtonClickedStyle() {
 		day.setStyle("-fx-background-color: black");
 		week.setStyle("-fx-background-color: black");
-		month.setStyle("-fx-background-color: black");
+		quarter.setStyle("-fx-background-color: black");
 		months3.setStyle("-fx-background-color: black");
 		months6.setStyle("-fx-background-color: black");
 
@@ -431,4 +436,27 @@ public class TabController extends PaneInterface {
 		week.setStyle("-fx-background-color: grey");
 	}
 
+	public String getInstanceTabName() {
+		return instanceTabName;
+	}
+
+	public void setInstanceTabName(String instanceTabName) {
+		this.instanceTabName = instanceTabName;
+	}
+
+	public Label getTabSelectionLabel() {
+		return tabSelectionLabel;
+	}
+
+	public void setTabSelectionLabel(Label tabSelectionLabel) {
+		this.tabSelectionLabel = tabSelectionLabel;
+	}
+
+	public String getTabActive() {
+		return tabActive;
+	}
+
+	public void setTabActive(String tabActive) {
+		this.tabActive = tabActive;
+	}
 }

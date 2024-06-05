@@ -18,40 +18,10 @@ import static com.cypods.geBuddy.ApplicationConstant.*;
 @Component
 public class RequestController extends Connect implements Runnable {
 
-
-
-	private URL GET_1;
-	private Object grab;
-	private int[] grabno;
 	JSONObject obj;
-	JSONObject searchJSONObj;
-	JSONObject itemPriceJSON;
 	protected static int searchResultSize = 0;
 	/*********** Item key values *************/
-	private String name;
-	private String id;
-	private String icon;
-	private String icon_large;
-	private String type;
-	private String typeIcon;
-	private String description;
-	private String members;
-	private String currentTrend;
-	private String currentPrice;
-	private String todayTrend;
-	private String todayPrice;
-	private String day30;
-	private String day30_trend;
-	private String day30_change;
-	private String day90;
-	private String day90_trend;
-	private String day90_change;
-	private String day180;
-	private String day180_trend;
-	private String day180_change;
-	/*********** Item key values *************/
 
-	private String[] itemInfoArr1 = new String[18];
 	private String[][] itemListArray = new String[100][6];
 	DataModeler dataModeler = new DataModeler();
 
@@ -62,7 +32,7 @@ public class RequestController extends Connect implements Runnable {
 	 * Method takes an API endpoint as an input, and returns a JSONObject
 	 **/
 
-	private JSONObject getItemJson(String url) throws NullPointerException {
+	private JSONObject requestItemData(String url) throws NullPointerException {
 		String s = "";
 		try {
 			HttpURLConnection http = httpStringURL(url);
@@ -82,7 +52,7 @@ public class RequestController extends Connect implements Runnable {
 		}
 
 		catch (Exception e) {
-			System.out.println("Error in Method: getItemJson() " + " " + e.getMessage());
+			System.out.println("Error in Method: requestItemData() " + " " + e.getMessage());
 		}
 
 		return obj;
@@ -94,8 +64,8 @@ public class RequestController extends Connect implements Runnable {
 	 * adds it to an array
 	 **/
 	protected String [] get_osrs_api_parseItemJson(String url) {
-		//JSONObject obj = getItemJson(url);
-		return dataModeler.dataModeler_osrs_api_parseItemJson(getItemJson(url));
+		//JSONObject obj = requestItemData(url);
+		return dataModeler.dataModeler_osrs_api_parseItemJson(requestItemData(url));
 
 	}
 
@@ -120,13 +90,10 @@ public class RequestController extends Connect implements Runnable {
 			 * @After:- Url must be encoded correctly by removing spaces =dragon+claws
 			 * */
 			url = url +  URLEncoder.encode(params, "UTF-8");
-			obj = getItemJson(url);
+			obj = requestItemData(url);
 			JSONArray jsonArray = obj.getJSONArray("items");
 
 			setSearchResultSize(jsonArray.length());
-
-			// System.out.println("itemListArray.length = "+ itemListArray.length + "
-			// itemListArray[0].length = "+ itemListArray[0].length );
 
 			clearItemSearchResultArray();
 
@@ -139,19 +106,9 @@ public class RequestController extends Connect implements Runnable {
 				itemListNode[GE_SEARCH_NAME] = arrayParserJSONObject.getString("name");
 				itemListNode[GE_SEARCH_CURRENT_PRICE] = String.valueOf(arrayParserJSONObject.getJSONObject("current").get("price"));
 				itemListNode[GE_SEARCH_TREND_TODAY] = arrayParserJSONObject.getJSONObject("today").getString("trend");
-				itemListNode[GE_SEARCH_PRICE_TODAY] = String.valueOf(arrayParserJSONObject.getJSONObject("today").get("price")); // if 0
-				// will
-				// become
-				// an
-				// integer
+				itemListNode[GE_SEARCH_PRICE_TODAY] = String.valueOf(arrayParserJSONObject.getJSONObject("today").get("price"));
 
 				itemListArray[i] = itemListNode;
-
-//				 System.out.println("\nIcon: "+itemListNode [0] +"\nID: "+ itemListNode
-//				 [1]+"\nName: "+itemListNode [2]+"\n Price Today: "+itemListNode [3]+"\n Trend Today "+ itemListNode [4]
-//				 +"\nPrice Change Today: "+itemListNode [5]);
-//
-//				 System.out.println(itemListArray[i][1]);
 
 			}
 			if (DEBUG == true) {
@@ -170,7 +127,7 @@ public class RequestController extends Connect implements Runnable {
 	 */
 
 	protected String[][] get_api_parseRuneLitePrice(String timePeriod, int itemID) {
-		obj = getItemJson(generateRuneLitePriceDataUrl(timePeriod,itemID));
+		obj = requestItemData(generateRuneLitePriceDataUrl(timePeriod,itemID));
 		JSONArray jsonArray = obj.getJSONArray("data");
 		String[][] itemPriceArray = new String[jsonArray.length()][3];
 		try {
@@ -221,11 +178,10 @@ public class RequestController extends Connect implements Runnable {
 
 	}
 
-	protected String [][] get_osrs_api_parseItemGraph(int itemID) throws NullPointerException{
+	protected String [][] get_osrs_api_parseItemGraph(int itemId) throws NullPointerException{
 		String[][] itemPriceArray = null;
 		try {
-			String itemGraphUrl = "https://services.runescape.com/m=itemdb_oldschool/api/graph/".concat(String.valueOf(itemID)).concat(".json");
-			obj = getItemJson(itemGraphUrl);
+			obj = requestItemData(generateOsrsPriceDataUrl(itemId));
 			JSONObject dailyData = obj.getJSONObject("daily");
 			Set<?> key_dailyData =  dailyData.keySet();
 			itemPriceArray = new String[key_dailyData.size()][3];
@@ -276,8 +232,6 @@ public class RequestController extends Connect implements Runnable {
 	private void setSearchResultSize(int i){
 		searchResultSize = i;
 	}
-
-
 
 
 }

@@ -1,6 +1,5 @@
 package com.cypods.geBuddy;
 
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -11,12 +10,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
 
@@ -31,18 +32,6 @@ public class PaneInterface extends DisplayController implements Runnable {
 	ImageView graphBackground;
 	ImageView itemTopMenu;
 	ImageView itemIconPaneImage;
-	ImageView img1 = new ImageView(image);
-	ImageView img2 = new ImageView(image);
-	ImageView img3 = new ImageView(image);
-	ImageView img4 = new ImageView(image);
-	ImageView img5 = new ImageView(image);
-	ImageView img6 = new ImageView(image);
-	ImageView img7 = new ImageView(image);
-	ImageView img8 = new ImageView(image);
-	ImageView img9 = new ImageView(image);
-	ImageView img10 = new ImageView(image);
-	ImageView img11 = new ImageView(image);
-	ImageView img12 = new ImageView(image);
 
 	/************************** Labels **************************/
 	Label name;
@@ -66,18 +55,6 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 	Label xyCoordinates;
 
-	Label geSearchResult1;
-	Label geSearchResult2;
-	Label geSearchResult3;
-	Label geSearchResult4;
-	Label geSearchResult5;
-	Label geSearchResult6;
-	Label geSearchResult7;
-	Label geSearchResult8;
-	Label geSearchResult9;
-	Label geSearchResult10;
-	Label geSearchResult11;
-	Label geSearchResult12;
 
 	String pane_ItemSearchInputText;
 
@@ -86,7 +63,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 	/*************** Buttons ********************/
 	ToggleButton day;
 	ToggleButton week;
-	ToggleButton month;
+	ToggleButton quarter;
 	ToggleButton months3;
 	ToggleButton months6;
 	ToggleGroup toggleGroup;
@@ -95,6 +72,8 @@ public class PaneInterface extends DisplayController implements Runnable {
 	ButtonBar buttonBarRight;
 	
 	/*************** Ge search area locations ********************/
+	List<GeSearchResultLabel> geSearchResultLabelList = new ArrayList<>();
+
 	int row1X;
 	int row2X;
 	int row3X;
@@ -133,11 +112,6 @@ public class PaneInterface extends DisplayController implements Runnable {
 	/*************** End variable declaration **************/
 
 	public PaneInterface() {
-		System.out.println("Attempting to add application context........");
-		 //cp = applicationContext.getBean(Charts.class);
-		 System.out.println("added application context........");
-			
-
 		pane_activateInterface();
 	}
 
@@ -156,9 +130,6 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 		 tabInterfaceWidth  = group.getBoundsInLocal().getWidth();
      	 tabInterfaceHeight = group.getBoundsInLocal().getHeight();
-     	 
-     	{System.out.println("InterfaceWidth: " + tabInterfaceWidth + " tabInterfaceHeight" + tabInterfaceHeight);}
-     	{System.out.println("group.getBoundsInLocal().getWidth(): " + group.getBoundsInLocal().getWidth() + " group.getBoundsInLocal().getHeight()" + group.getBoundsInLocal().getHeight());}
      	 
      	cp = new Charts(tabInterfaceWidth-12, tabInterfaceHeight);
      	
@@ -534,139 +505,116 @@ public class PaneInterface extends DisplayController implements Runnable {
 		row2Y = 495;
 		row3Y = 555;
 
-		img1.setFitWidth(iconWidth);
-		img1.setFitHeight(iconHeight);
-		img2.setFitWidth(iconWidth);
-		img2.setFitHeight(iconHeight);
-		img3.setFitWidth(iconWidth);
-		img3.setFitHeight(iconHeight);
-		img4.setFitWidth(iconWidth);
-		img4.setFitHeight(iconHeight);
-		img5.setFitWidth(iconWidth);
-		img5.setFitHeight(iconHeight);
-		img6.setFitWidth(iconWidth);
-		img6.setFitHeight(iconHeight);
-		img7.setFitWidth(iconWidth);
-		img7.setFitHeight(iconHeight);
-		img8.setFitWidth(iconWidth);
-		img8.setFitHeight(iconHeight);
-		img9.setFitWidth(iconWidth);
-		img9.setFitHeight(iconHeight);
-		img10.setFitWidth(iconWidth);
-		img10.setFitHeight(iconHeight);
-		img11.setFitWidth(iconWidth);
-		img11.setFitHeight(iconHeight);
-		img12.setFitWidth(iconWidth);
-		img12.setFitHeight(iconHeight);
+		for(int i = 0; i < 12 ; i++){
+			geSearchResultLabelList.add(new GeSearchResultLabel("geSearchResult"+(i+1)));
+			System.out.println("GeSearchResultLabel initialized with name: " + geSearchResultLabelList.get(i).getLabelInstanceName());
+		}
 
-		geSearchResult1 = new Label("");
-		geSearchResult2 = new Label("");
-		geSearchResult3 = new Label("");
-		geSearchResult4 = new Label("");
-		geSearchResult1.setTranslateX(row1X);
-		geSearchResult2.setTranslateX(row2X);
-		geSearchResult3.setTranslateX(row3X);
-		geSearchResult4.setTranslateX(row4X);
-		geSearchResult1.setTranslateY(row1Y);
-		geSearchResult2.setTranslateY(row1Y);
-		geSearchResult3.setTranslateY(row1Y);
-		geSearchResult4.setTranslateY(row1Y);
-		geSearchResult1.setPrefSize(sizeX, sizeY);
-		geSearchResult2.setPrefSize(sizeX, sizeY);
-		geSearchResult3.setPrefSize(sizeX, sizeY);
-		geSearchResult4.setPrefSize(sizeX, sizeY);
-		geSearchResult1.setWrapText(true);
-		geSearchResult2.setWrapText(true);
-		geSearchResult3.setWrapText(true);
-		geSearchResult4.setWrapText(true);
-		geSearchResult1.setGraphic(img1);
-		geSearchResult2.setGraphic(img2);
-		geSearchResult3.setGraphic(img3);
-		geSearchResult4.setGraphic(img4);
+		for(GeSearchResultLabel resultLabel : geSearchResultLabelList){
+			System.out.println("pane_initGeSearchLabels labelInstanceName: " + resultLabel.getLabelInstanceName());
+//			resultLabel.setLabelImage();
+			resultLabel.getLabelImage().setFitWidth(iconWidth);
+			resultLabel.getLabelImage().setFitHeight(iconHeight);
 
-		geSearchResult5 = new Label("");
-		geSearchResult6 = new Label("");
-		geSearchResult7 = new Label("");
-		geSearchResult8 = new Label("");
-		geSearchResult5.setTranslateX(row1X);
-		geSearchResult6.setTranslateX(row2X);
-		geSearchResult7.setTranslateX(row3X);
-		geSearchResult8.setTranslateX(row4X);
-		geSearchResult5.setTranslateY(row2Y);
-		geSearchResult6.setTranslateY(row2Y);
-		geSearchResult7.setTranslateY(row2Y);
-		geSearchResult8.setTranslateY(row2Y);
-		geSearchResult5.setPrefSize(sizeX, sizeY);
-		geSearchResult6.setPrefSize(sizeX, sizeY);
-		geSearchResult7.setPrefSize(sizeX, sizeY);
-		geSearchResult8.setPrefSize(sizeX, sizeY);
-		geSearchResult5.setWrapText(true);
-		geSearchResult6.setWrapText(true);
-		geSearchResult7.setWrapText(true);
-		geSearchResult8.setWrapText(true);
-		geSearchResult5.setGraphic(img5);
-		geSearchResult6.setGraphic(img6);
-		geSearchResult7.setGraphic(img7);
-		geSearchResult8.setGraphic(img8);
+			resultLabel.getLabel().setPrefSize(sizeX, sizeY);
+			resultLabel.getLabel().setGraphic(resultLabel.getLabelImage());
+			resultLabel.getLabel().setWrapText(true);
 
-		geSearchResult9 = new Label("");
-		geSearchResult10 = new Label("");
-		geSearchResult11 = new Label("");
-		geSearchResult12 = new Label("");
-		geSearchResult9.setTranslateX(row1X);
-		geSearchResult10.setTranslateX(row2X);
-		geSearchResult11.setTranslateX(row3X);
-		geSearchResult12.setTranslateX(row4X);
-		geSearchResult9.setTranslateY(row3Y);
-		geSearchResult10.setTranslateY(row3Y);
-		geSearchResult11.setTranslateY(row3Y);
-		geSearchResult12.setTranslateY(row3Y);
-		geSearchResult9.setPrefSize(sizeX, sizeY);
-		geSearchResult10.setPrefSize(sizeX, sizeY);
-		geSearchResult11.setPrefSize(sizeX, sizeY);
-		geSearchResult12.setPrefSize(155, sizeY);
-		geSearchResult9.setWrapText(true);
-		geSearchResult10.setWrapText(true);
-		geSearchResult11.setWrapText(true);
-		geSearchResult12.setWrapText(true);
-		geSearchResult9.setGraphic(img9);
-		geSearchResult10.setGraphic(img10);
-		geSearchResult11.setGraphic(img11);
-		geSearchResult12.setGraphic(img12);
+			switch(resultLabel.getLabelInstanceName()){
+				case "geSearchResult1":
+					resultLabel.getLabel().setTranslateX(row1X);
+					resultLabel.getLabel().setTranslateY(row1Y);
+					break;
+				case "geSearchResult2":
+					resultLabel.getLabel().setTranslateX(row2X);
+					resultLabel.getLabel().setTranslateY(row1Y);
+					break;
+				case "geSearchResult3":
+					resultLabel.getLabel().setTranslateX(row3X);
+					resultLabel.getLabel().setTranslateY(row1Y);
+					break;
+				case "geSearchResult4":
+					resultLabel.getLabel().setTranslateX(row4X);
+					resultLabel.getLabel().setTranslateY(row1Y);
+					break;
+				case "geSearchResult5":
+					resultLabel.getLabel().setTranslateX(row1X);
+					resultLabel.getLabel().setTranslateY(row2Y);
+					break;
+				case "geSearchResult6":
+					resultLabel.getLabel().setTranslateX(row2X);
+					resultLabel.getLabel().setTranslateY(row2Y);
+					break;
+				case "geSearchResult7":
+					resultLabel.getLabel().setTranslateX(row3X);
+					resultLabel.getLabel().setTranslateY(row2Y);
+					break;
+				case "geSearchResult8":
+					resultLabel.getLabel().setTranslateX(row4X);
+					resultLabel.getLabel().setTranslateY(row2Y);
+					break;
+				case "geSearchResult9":
+					resultLabel.getLabel().setTranslateX(row1X);
+					resultLabel.getLabel().setTranslateY(row3Y);
+					break;
+				case "geSearchResult10":
+					resultLabel.getLabel().setTranslateX(row2X);
+					resultLabel.getLabel().setTranslateY(row3Y);
+					break;
+				case "geSearchResult11":
+					resultLabel.getLabel().setTranslateX(row3X);
+					resultLabel.getLabel().setTranslateY(row3Y);
+					break;
+				case "geSearchResult12":
+					resultLabel.getLabel().setTranslateX(row4X);
+					resultLabel.getLabel().setTranslateY(row3Y);
+					break;
+			}
+			tabInterface.getChildren().add(resultLabel.getLabel());
+		}
 
-		tabInterface.getChildren().addAll(geSearchResult1, geSearchResult2, geSearchResult3, geSearchResult4,
-				geSearchResult5, geSearchResult6, geSearchResult7, geSearchResult8, geSearchResult9, geSearchResult10,
-				geSearchResult11, geSearchResult12);
+//		tabInterface.getChildren().addAll(geSearchResult1, geSearchResult2, geSearchResult3, geSearchResult4,
+//				geSearchResult5, geSearchResult6, geSearchResult7, geSearchResult8, geSearchResult9, geSearchResult10,
+//				geSearchResult11, geSearchResult12);
 
+	}
+
+	public GeSearchResultLabel searchGeResultLabelInstances(String labelInstanceName){
+		for(GeSearchResultLabel current : geSearchResultLabelList){
+			if(current.getLabelInstanceName().equals(labelInstanceName)){
+				return current;
+			}
+		}
+		return null;
 	}
 	
 	private void pane_createButtons() {
 		day 		= new ToggleButton("1 Day");
 		week		= new ToggleButton("2 Week");
-		month		= new ToggleButton("Quarter");
+		quarter 	= new ToggleButton("Quarter");
 		months3		= new ToggleButton("6 Months");
 		months6		= new ToggleButton("1 Year");
 			
 		day.setPrefSize(70, 10);
 		week.setPrefSize(70, 10);
-		month.setPrefSize(70, 10);
+		quarter.setPrefSize(70, 10);
 		months3.setPrefSize(80, 10);
 		months6.setPrefSize(70, 10);
 		
 		day.getStyleClass().add("button");
 		week.getStyleClass().add("button");
-		month.getStyleClass().add("button");
+		quarter.getStyleClass().add("button");
 		months3.getStyleClass().add("button");
 		months6.getStyleClass().add("button");
 		
 		day.setToggleGroup(toggleGroup);
 		week.setToggleGroup(toggleGroup);
-		month.setToggleGroup(toggleGroup);
+		quarter.setToggleGroup(toggleGroup);
 		months3.setToggleGroup(toggleGroup);
 		months6.setToggleGroup(toggleGroup);
 		
 		buttonBarLeft = new ButtonBar();
-		buttonBarLeft.setButtonData(month, ButtonData.APPLY);
+		buttonBarLeft.setButtonData(quarter, ButtonData.APPLY);
 		buttonBarLeft.setButtonData(months3, ButtonData.APPLY);
 		buttonBarLeft.setButtonData(months6, ButtonData.APPLY);
 		
@@ -674,7 +622,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 		buttonBarRight.setButtonData(day, ButtonData.APPLY);
 		buttonBarRight.setButtonData(week, ButtonData.APPLY);
 
-		buttonBarLeft.getButtons().addAll(day,week,month);
+		buttonBarLeft.getButtons().addAll(day,week, quarter);
 		buttonBarRight.getButtons().addAll(months3,months6);
 		
 
