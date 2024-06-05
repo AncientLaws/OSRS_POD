@@ -18,6 +18,8 @@ import javafx.scene.text.Font;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
+
 @Component
 public class PaneInterface extends DisplayController implements Runnable {
 

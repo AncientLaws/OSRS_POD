@@ -8,6 +8,8 @@ import javafx.scene.layout.Pane;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
+import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
+
 @Component
 @Primary
 public class DisplayController implements ChangeListener{
@@ -47,7 +49,6 @@ public class DisplayController implements ChangeListener{
 	//Pane root = new Pane();
 	//Group group = new Group(root);
 	
-	public static boolean DEBUG = false;
 
 	
 	 DisplayController (){

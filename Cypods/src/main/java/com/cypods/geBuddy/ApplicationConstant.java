@@ -27,4 +27,15 @@ public class ApplicationConstant {
         public static int GE_SEARCH_TREND_TODAY = 4;
         public static int GE_SEARCH_PRICE_TODAY = 5;
 
+        public static String runeLitePriceData = "https://prices.runescape.wiki/api/v1/osrs/timeseries?timestep=";
+
+        public static boolean DEBUG = false;
+
+        public static String generateRuneLitePriceDataUrl(String timePeriod, Integer itemId){
+                if(timePeriod != null && itemId!= null){
+                     return runeLitePriceData.concat(timePeriod).concat("&id=").concat(itemId.toString());
+                }
+                return "";
+        }
+
     }

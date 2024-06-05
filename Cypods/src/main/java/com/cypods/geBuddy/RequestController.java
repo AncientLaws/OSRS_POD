@@ -53,7 +53,6 @@ public class RequestController extends Connect implements Runnable {
 
 	private String[] itemInfoArr1 = new String[18];
 	private String[][] itemListArray = new String[100][6];
-	public static boolean DEBUG = false;
 	DataModeler dataModeler = new DataModeler();
 
 	RequestController() {
@@ -171,8 +170,7 @@ public class RequestController extends Connect implements Runnable {
 	 */
 
 	protected String[][] get_api_parseRuneLitePrice(String timePeriod, int itemID) {
-		String runeLitePriceUrl = "https://prices.runescape.wiki/api/v1/osrs/timeseries?timestep=" + timePeriod + "&id=" + itemID;
-		obj = getItemJson(runeLitePriceUrl);
+		obj = getItemJson(generateRuneLitePriceDataUrl(timePeriod,itemID));
 		JSONArray jsonArray = obj.getJSONArray("data");
 		String[][] itemPriceArray = new String[jsonArray.length()][3];
 		try {
