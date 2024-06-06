@@ -293,7 +293,6 @@ public class Charts implements ChartMouseListenerFX {
 	 */
 
 	public void createItemPriceAndVolumeDataset(int itemID, String timePeriod) {
-		String url = "";
 		series = new TimeSeries("Price");
 		volumeSeries = new TimeSeries("Volume");
 		RequestController getDataGet = new RequestController();

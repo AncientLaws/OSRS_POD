@@ -45,4 +45,9 @@ public class GeSearchResultLabel {
     public void setLabelImage(ImageView labelImage) {
         this.labelImage = labelImage;
     }
+
+    public void setLabelLocation(int x , int y){
+        getLabel().setTranslateX(x);
+        getLabel().setTranslateY(y);
+    }
 }

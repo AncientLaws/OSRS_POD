@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
@@ -58,8 +59,12 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 	String pane_ItemSearchInputText;
 
+
+	HashMap<String, GeSearchResultLabel> geSearchResultLabelMap = new HashMap<>();
+
 	protected Label [] geSearchResultLabels = new Label[12];
 	protected ImageView [] geSearchResultImages = new ImageView[12];
+
 	/*************** Buttons ********************/
 	ToggleButton day;
 	ToggleButton week;
@@ -72,8 +77,6 @@ public class PaneInterface extends DisplayController implements Runnable {
 	ButtonBar buttonBarRight;
 	
 	/*************** Ge search area locations ********************/
-	List<GeSearchResultLabel> geSearchResultLabelList = new ArrayList<>();
-
 	int row1X;
 	int row2X;
 	int row3X;
@@ -506,88 +509,65 @@ public class PaneInterface extends DisplayController implements Runnable {
 		row3Y = 555;
 
 		for(int i = 0; i < 12 ; i++){
-			geSearchResultLabelList.add(new GeSearchResultLabel("geSearchResult"+(i+1)));
-			System.out.println("GeSearchResultLabel initialized with name: " + geSearchResultLabelList.get(i).getLabelInstanceName());
+			String instanceKeyGen = "geSearchResult"+(i+1);
+//			geSearchResultLabelList.add(new GeSearchResultLabel(instanceKeyGen));
+			geSearchResultLabelMap.put(instanceKeyGen, new GeSearchResultLabel(instanceKeyGen));
 		}
 
-		for(GeSearchResultLabel resultLabel : geSearchResultLabelList){
-			System.out.println("pane_initGeSearchLabels labelInstanceName: " + resultLabel.getLabelInstanceName());
-//			resultLabel.setLabelImage();
-			resultLabel.getLabelImage().setFitWidth(iconWidth);
-			resultLabel.getLabelImage().setFitHeight(iconHeight);
+		for(String resultLabel : geSearchResultLabelMap.keySet()){
+			System.out.println("pane_initGeSearchLabels labelInstanceName: " + geSearchResultLabelMap.get(resultLabel).getLabelInstanceName());
 
-			resultLabel.getLabel().setPrefSize(sizeX, sizeY);
-			resultLabel.getLabel().setGraphic(resultLabel.getLabelImage());
-			resultLabel.getLabel().setWrapText(true);
+			geSearchResultLabelMap.get(resultLabel).getLabelImage().setFitWidth(iconWidth);
+			geSearchResultLabelMap.get(resultLabel).getLabelImage().setFitHeight(iconHeight);
 
-			switch(resultLabel.getLabelInstanceName()){
+			geSearchResultLabelMap.get(resultLabel).getLabel().setPrefSize(sizeX, sizeY);
+			geSearchResultLabelMap.get(resultLabel).getLabel().setGraphic(geSearchResultLabelMap.get(resultLabel).getLabelImage());
+			geSearchResultLabelMap.get(resultLabel).getLabel().setWrapText(true);
+
+			switch(resultLabel){
 				case "geSearchResult1":
-					resultLabel.getLabel().setTranslateX(row1X);
-					resultLabel.getLabel().setTranslateY(row1Y);
+					geSearchResultLabelMap.get("geSearchResult1").setLabelLocation(row1X,row1Y);
 					break;
 				case "geSearchResult2":
-					resultLabel.getLabel().setTranslateX(row2X);
-					resultLabel.getLabel().setTranslateY(row1Y);
+					geSearchResultLabelMap.get("geSearchResult2").setLabelLocation(row2X,row1Y);
 					break;
 				case "geSearchResult3":
-					resultLabel.getLabel().setTranslateX(row3X);
-					resultLabel.getLabel().setTranslateY(row1Y);
+					geSearchResultLabelMap.get("geSearchResult3").setLabelLocation(row3X,row1Y);
 					break;
 				case "geSearchResult4":
-					resultLabel.getLabel().setTranslateX(row4X);
-					resultLabel.getLabel().setTranslateY(row1Y);
+					geSearchResultLabelMap.get("geSearchResult4").setLabelLocation(row4X,row1Y);
 					break;
 				case "geSearchResult5":
-					resultLabel.getLabel().setTranslateX(row1X);
-					resultLabel.getLabel().setTranslateY(row2Y);
+					geSearchResultLabelMap.get("geSearchResult5").setLabelLocation(row1X,row2Y);
 					break;
 				case "geSearchResult6":
-					resultLabel.getLabel().setTranslateX(row2X);
-					resultLabel.getLabel().setTranslateY(row2Y);
+					geSearchResultLabelMap.get("geSearchResult6").setLabelLocation(row2X,row2Y);
 					break;
 				case "geSearchResult7":
-					resultLabel.getLabel().setTranslateX(row3X);
-					resultLabel.getLabel().setTranslateY(row2Y);
+					geSearchResultLabelMap.get("geSearchResult7").setLabelLocation(row3X,row2Y);
 					break;
 				case "geSearchResult8":
-					resultLabel.getLabel().setTranslateX(row4X);
-					resultLabel.getLabel().setTranslateY(row2Y);
+					geSearchResultLabelMap.get("geSearchResult8").setLabelLocation(row4X,row2Y);
 					break;
 				case "geSearchResult9":
-					resultLabel.getLabel().setTranslateX(row1X);
-					resultLabel.getLabel().setTranslateY(row3Y);
+					geSearchResultLabelMap.get("geSearchResult9").setLabelLocation(row1X,row3Y);
 					break;
 				case "geSearchResult10":
-					resultLabel.getLabel().setTranslateX(row2X);
-					resultLabel.getLabel().setTranslateY(row3Y);
+					geSearchResultLabelMap.get("geSearchResult10").setLabelLocation(row2X,row3Y);
 					break;
 				case "geSearchResult11":
-					resultLabel.getLabel().setTranslateX(row3X);
-					resultLabel.getLabel().setTranslateY(row3Y);
+					geSearchResultLabelMap.get("geSearchResult11").setLabelLocation(row3X,row3Y);
 					break;
 				case "geSearchResult12":
-					resultLabel.getLabel().setTranslateX(row4X);
-					resultLabel.getLabel().setTranslateY(row3Y);
+					geSearchResultLabelMap.get("geSearchResult12").setLabelLocation(row4X,row3Y);
 					break;
 			}
-			tabInterface.getChildren().add(resultLabel.getLabel());
+
+			tabInterface.getChildren().add(geSearchResultLabelMap.get(resultLabel).getLabel());
 		}
-
-//		tabInterface.getChildren().addAll(geSearchResult1, geSearchResult2, geSearchResult3, geSearchResult4,
-//				geSearchResult5, geSearchResult6, geSearchResult7, geSearchResult8, geSearchResult9, geSearchResult10,
-//				geSearchResult11, geSearchResult12);
-
 	}
 
-	public GeSearchResultLabel searchGeResultLabelInstances(String labelInstanceName){
-		for(GeSearchResultLabel current : geSearchResultLabelList){
-			if(current.getLabelInstanceName().equals(labelInstanceName)){
-				return current;
-			}
-		}
-		return null;
-	}
-	
+
 	private void pane_createButtons() {
 		day 		= new ToggleButton("1 Day");
 		week		= new ToggleButton("2 Week");

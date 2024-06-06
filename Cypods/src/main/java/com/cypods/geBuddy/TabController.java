@@ -361,34 +361,34 @@ public class TabController extends PaneInterface {
 
 	private void addGeSearchResultLabelsToArray() {
 
-		geSearchResultLabels[0] = searchGeResultLabelInstances("geSearchResult1").getLabel();
-		geSearchResultLabels[1] = searchGeResultLabelInstances("geSearchResult2").getLabel();
-		geSearchResultLabels[2] = searchGeResultLabelInstances("geSearchResult3").getLabel();
-		geSearchResultLabels[3] = searchGeResultLabelInstances("geSearchResult4").getLabel();
-		geSearchResultLabels[4] = searchGeResultLabelInstances("geSearchResult5").getLabel();
-		geSearchResultLabels[5] = searchGeResultLabelInstances("geSearchResult6").getLabel();
-		geSearchResultLabels[6] = searchGeResultLabelInstances("geSearchResult7").getLabel();
-		geSearchResultLabels[7] = searchGeResultLabelInstances("geSearchResult8").getLabel();
-		geSearchResultLabels[8] = searchGeResultLabelInstances("geSearchResult9").getLabel();
-		geSearchResultLabels[9] = searchGeResultLabelInstances("geSearchResult10").getLabel();
-		geSearchResultLabels[10] = searchGeResultLabelInstances("geSearchResult11").getLabel();
-		geSearchResultLabels[11] = searchGeResultLabelInstances("geSearchResult12").getLabel();
+		geSearchResultLabels[0] = geSearchResultLabelMap.get("geSearchResult1").getLabel();
+		geSearchResultLabels[1] = geSearchResultLabelMap.get("geSearchResult2").getLabel();
+		geSearchResultLabels[2] = geSearchResultLabelMap.get("geSearchResult3").getLabel();
+		geSearchResultLabels[3] = geSearchResultLabelMap.get("geSearchResult4").getLabel();
+		geSearchResultLabels[4] = geSearchResultLabelMap.get("geSearchResult5").getLabel();
+		geSearchResultLabels[5] = geSearchResultLabelMap.get("geSearchResult6").getLabel();
+		geSearchResultLabels[6] = geSearchResultLabelMap.get("geSearchResult7").getLabel();
+		geSearchResultLabels[7] = geSearchResultLabelMap.get("geSearchResult8").getLabel();
+		geSearchResultLabels[8] = geSearchResultLabelMap.get("geSearchResult9").getLabel();
+		geSearchResultLabels[9] = geSearchResultLabelMap.get("geSearchResult10").getLabel();
+		geSearchResultLabels[10] = geSearchResultLabelMap.get("geSearchResult11").getLabel();
+		geSearchResultLabels[11] = geSearchResultLabelMap.get("geSearchResult12").getLabel();
 	}
 
 	private void addGeSearchResultDefaultItemImageViewsToArray() {
 
-		geSearchResultImages[0]  = searchGeResultLabelInstances("geSearchResult1").getLabelImage();
-		geSearchResultImages[1] = searchGeResultLabelInstances("geSearchResult2").getLabelImage();
-		geSearchResultImages[2] = searchGeResultLabelInstances("geSearchResult3").getLabelImage();
-		geSearchResultImages[3] = searchGeResultLabelInstances("geSearchResult4").getLabelImage();
-		geSearchResultImages[4] = searchGeResultLabelInstances("geSearchResult5").getLabelImage();
-		geSearchResultImages[5] = searchGeResultLabelInstances("geSearchResult6").getLabelImage();
-		geSearchResultImages[6] = searchGeResultLabelInstances("geSearchResult7").getLabelImage();
-		geSearchResultImages[7] = searchGeResultLabelInstances("geSearchResult8").getLabelImage();
-		geSearchResultImages[8] = searchGeResultLabelInstances("geSearchResult9").getLabelImage();
-		geSearchResultImages[9] = searchGeResultLabelInstances("geSearchResult10").getLabelImage();
-		geSearchResultImages[10] = searchGeResultLabelInstances("geSearchResult11").getLabelImage();
-		geSearchResultImages[11] = searchGeResultLabelInstances("geSearchResult12").getLabelImage();
+		geSearchResultImages[0]  = geSearchResultLabelMap.get("geSearchResult1").getLabelImage();
+		geSearchResultImages[1] = geSearchResultLabelMap.get("geSearchResult2").getLabelImage();
+		geSearchResultImages[2] = geSearchResultLabelMap.get("geSearchResult3").getLabelImage();
+		geSearchResultImages[3] = geSearchResultLabelMap.get("geSearchResult4").getLabelImage();
+		geSearchResultImages[4] = geSearchResultLabelMap.get("geSearchResult5").getLabelImage();
+		geSearchResultImages[5] = geSearchResultLabelMap.get("geSearchResult6").getLabelImage();
+		geSearchResultImages[6] = geSearchResultLabelMap.get("geSearchResult7").getLabelImage();
+		geSearchResultImages[7] = geSearchResultLabelMap.get("geSearchResult8").getLabelImage();
+		geSearchResultImages[8] = geSearchResultLabelMap.get("geSearchResult9").getLabelImage();
+		geSearchResultImages[9] = geSearchResultLabelMap.get("geSearchResult10").getLabelImage();
+		geSearchResultImages[10] = geSearchResultLabelMap.get("geSearchResult11").getLabelImage();
+		geSearchResultImages[11] = geSearchResultLabelMap.get("geSearchResult12").getLabelImage();
 	}
 
 	private void addButtonListeners() {
