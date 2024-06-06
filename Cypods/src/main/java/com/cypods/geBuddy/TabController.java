@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Date;
 
 import static com.cypods.geBuddy.ApplicationConstant.*;
 
@@ -346,6 +347,7 @@ public class TabController extends PaneInterface {
 					label.getGraphic().setScaleY(1.1);
 				});
 				label.setOnMouseExited((mouseEvent) -> {
+					//Only clear background highlight when the item is not selected
 					if (!selectedSearchItem.equals(geSearchResultLabel.getLabelInstanceName())) {
 						label.setBackground(new Background(new BackgroundFill(null, null, null)));
 					}

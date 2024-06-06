@@ -80,8 +80,7 @@ public class RequestController extends Connect implements Runnable {
 	 * Method parses the JSON response of the Runescape API (item query search
 	 * result), and adds it to an array
 	 **/
-
-	protected void set_osrs_api_parseItemJsonList(String url , String params) {
+	protected boolean set_osrs_api_parseItemJsonList(String url , String params) {
 
 		try {
 
@@ -112,12 +111,13 @@ public class RequestController extends Connect implements Runnable {
 
 			}
 			if (DEBUG == true) {
-				System.out.println(itemListArray[10][2] + "" + itemListArray[10][2]);
+				System.out.println("Debug item [10][2]: " +itemListArray[10][2] + "" + itemListArray[10][2]);
 			}
+
 		} catch (Exception e) {
 			System.out.println("Error parsing get_osrs_api_parseItemJsonList: " + e.getMessage());
 		}
-
+		return true;
 	}
 
 

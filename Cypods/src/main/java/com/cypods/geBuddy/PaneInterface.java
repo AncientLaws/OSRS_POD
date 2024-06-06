@@ -105,7 +105,6 @@ public class PaneInterface extends DisplayController implements Runnable {
 	
 	int delayW = 25;
 	
-	@Autowired
 	Charts cp;
 
 
@@ -120,6 +119,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 	protected void pane_setVisibleInterface(boolean bool) {
 		tabInterface.setVisible(bool);
+
 	}
 
 	protected void pane_activateInterface() {
