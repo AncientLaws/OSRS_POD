@@ -77,14 +77,19 @@ public class PaneInterface extends DisplayController implements Runnable {
 	ButtonBar buttonBarRight;
 	
 	/*************** Ge search area locations ********************/
-	int row1X;
-	int row2X;
-	int row3X;
-	int row4X;
+	int row1X = 14;
+	int row2X = 190;
+	int row3X = 366;
+	int row4X = 542;
 
-	int row1Y;
-	int row2Y;
-	int row3Y;
+	int row1Y = 435;
+	int row2Y = 495;
+	int row3Y = 555;
+
+	int iconWidth = 65;
+	int iconHeight = 65;
+	int sizeX = 175;
+	int sizeY = 50;
 
 	/*************** Event handlers ********************/
 	private EventHandler<MouseEvent> mouseMovedHandler;
@@ -493,30 +498,18 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 	}
 
+	/**
+	 * Generating the Object that will show the result of the item search
+	 * */
 	protected void pane_initGeSearchLabels() {
 		if(DEBUG == true) {System.out.println("pane_initGeSearchLabels()");}
-		int iconWidth = 65;
-		int iconHeight = 65;
-		int sizeX = 175;
-		int sizeY = 50;
-
-		row1X = 14;
-		row2X = 190;
-		row3X = 366;
-		row4X = 542;
-		row1Y = 435;
-		row2Y = 495;
-		row3Y = 555;
 
 		for(int i = 0; i < 12 ; i++){
 			String instanceKeyGen = "geSearchResult"+(i+1);
-//			geSearchResultLabelList.add(new GeSearchResultLabel(instanceKeyGen));
 			geSearchResultLabelMap.put(instanceKeyGen, new GeSearchResultLabel(instanceKeyGen));
 		}
 
 		for(String resultLabel : geSearchResultLabelMap.keySet()){
-			System.out.println("pane_initGeSearchLabels labelInstanceName: " + geSearchResultLabelMap.get(resultLabel).getLabelInstanceName());
-
 			geSearchResultLabelMap.get(resultLabel).getLabelImage().setFitWidth(iconWidth);
 			geSearchResultLabelMap.get(resultLabel).getLabelImage().setFitHeight(iconHeight);
 

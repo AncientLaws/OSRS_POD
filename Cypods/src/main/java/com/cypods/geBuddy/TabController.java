@@ -56,26 +56,26 @@ public class TabController extends PaneInterface {
 	}
 
 	//@Autowired
-	TabController (String s){
-		instanceTabName = s;
+	TabController (String instanceTabName){
+		this.instanceTabName = instanceTabName;
 		imageView = new ImageView();
-		tabSettings(instanceTabName);
+		tabSettings(this.instanceTabName);
 
 	}
 	//@Autowired
-	public int tabSettings(String tab) {
+	public int tabSettings(String instanceTabName) {
 		if(DEBUG == true) {System.out.println("tabSettings");}
-		switch (tab){
-			case "Tab1":{ X = 100; Y = 12; setTabActive(tab); break;}
-			case "Tab2":{ X = 189; Y = 12; setTabActive(tab); break;}
-			case "Tab3":{ X = 278; Y = 12; setTabActive(tab); break;}
-			case "Tab4":{ X = 367; Y = 12; setTabActive(tab); break;}
-			case "Tab5":{ X = 456; Y = 12; setTabActive(tab); break;}
-			case "Tab6":{ X = 545; Y = 12; setTabActive(tab); break;}
-			case "Tab7":{ X = 636; Y = 12; setTabActive(tab); break;}
-			case "Tab8":{ X = 728; Y = 12; setTabActive(tab); break;}
-			case "Tab9":{ X = 818; Y = 12; setTabActive(tab); break;}
-			case "Tab10":{X = 909; Y = 12; setTabActive(tab); break;}
+		switch (instanceTabName){
+			case "Tab1":{ X = 100; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab2":{ X = 189; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab3":{ X = 278; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab4":{ X = 367; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab5":{ X = 456; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab6":{ X = 545; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab7":{ X = 636; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab8":{ X = 728; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab9":{ X = 818; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab10":{X = 909; Y = 12; setTabActive(instanceTabName); break;}
 		}
 		initLabel();
 		initImage();
@@ -113,22 +113,27 @@ public class TabController extends PaneInterface {
 	public void setActive() {
 		tabNo = getTabActive();
 		setInterfaceVisible(true); 				//Setting current Objects paneInterface to be visible
-		root.setId(getTabActive());					//changing background to simulate tab change
+		root.setId(getTabActive());				//changing background to simulate tab change
 		imageView.setOpacity(1);            	//returns item to full opacity
 		if(DEBUG == true) {System.out.println("setActive: " + getTabActive());}
 	}
 	/**
 	 * Handles user search input
-	 * Thread is created whenever a user attempts to search for an Item. This is to enhance the application performance.
+	 * @Note Thread is created whenever a user attempts to search for an Item. This is to enhance the application performance.
+	 * Platform.runLater must be used when updating javafx components
 	 * */
 	private void itemSearchListener() {
 		itemSearchInput.setOnKeyPressed(KeyEvent ->
 		{
 			if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
-				//Thread thread = new Thread(() -> {
-				pane_ItemSearchInputText = itemSearchInput.getText();
-				requestController.set_osrs_api_parseItemJsonList(ApplicationConstant.osrsItemSearch ,pane_ItemSearchInputText);
-				geSearchResults(); //clear search results and adds resulting item search images/labels
+				Thread thread = new Thread(() -> {
+					pane_ItemSearchInputText = itemSearchInput.getText();
+					requestController.set_osrs_api_parseItemJsonList(ApplicationConstant.osrsItemSearch, pane_ItemSearchInputText);
+					Platform.runLater(() ->{
+						geSearchResults();
+					});
+				});
+				thread.start();
 			}
 		});
 		itemSearchInput.setOnMousePressed((mouseEvent) -> {
@@ -137,26 +142,25 @@ public class TabController extends PaneInterface {
 		});
 	}
 
+	/**
+	 * Retrieve the details of the selected item from search result, and update the chart
+	 * @Note A normal thread can be used for plain java, but Platform.runlater() must be used as javafx
+	 * components can only be updated by the javafx application thread
+	 * */
 	private void itemSearchSelectionListener(int itemID) {
-		//new Thread(() -> {
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				//new Thread(() -> {
-				itemInfoArr = requestController.get_osrs_api_parseItemJson(ApplicationConstant.osrsGetItemDetails + itemID);
-				tab_itemID = itemID;
+		Thread thread = new Thread(() -> {
+			itemInfoArr = requestController.get_osrs_api_parseItemJson(ApplicationConstant.osrsGetItemDetails + itemID);
+			tab_itemID = itemID;
+			Platform.runLater(() -> {
 				setIcon();
 				setInterfaceLabels();					//Drawing everything
 				pane_updateChart(itemID, "1h");
 				addButtonListeners();
 				resetButtonClickedStyle();
 				setButtonClickedStyleWeek();
-				//System.out.println("=========================================Epoch Key values===================================");
-				//Get.get_osrs_api_parseItemGraph("https://services.runescape.com/m=itemdb_oldschool/api/graph/26374.json");
-				//}).start();
-			}
-
+			});
 		});
+		thread.start();
 	}
 
 	private void catchError(){
@@ -287,9 +291,9 @@ public class TabController extends PaneInterface {
 	 * */
 	private void geSearchResults() {
 		clearGeSearchResults();
-		addLabelActionListeners();
 		addGeSearchResultDefaultItemImageViewsToArray();
 		addGeSearchResultLabelsToArray();
+		addLabelActionListeners();
 
 		tc_itemListArray = requestController.returnItemListArray() ;
 
@@ -299,12 +303,8 @@ public class TabController extends PaneInterface {
 			{
 				geSearchResultLabels[i].setText(tc_itemListArray[i][GE_SEARCH_NAME].concat("  (").concat(tc_itemListArray[i][GE_SEARCH_CURRENT_PRICE]).concat(")"));
 				input = new URL (tc_itemListArray[i][GE_SEARCH_ICON_URL]).openStream();
-				//image = ;
 				geSearchResultImages[i].setImage(new Image(input));
-
 			}
-
-
 		}
 		catch(Exception e) {
 			/**
@@ -334,14 +334,23 @@ public class TabController extends PaneInterface {
 		for(int i = 0; i < arrLength ; i++)
 		{
 			Label label = geSearchResultLabels[i];
+			ImageView image = geSearchResultImages[i];
 			int j = i;
-			geSearchResultLabels[i].setOnMouseEntered((mouseEvent)-> {label.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));});
-			geSearchResultLabels[i].setOnMouseExited ((mouseEvent)-> {label.setBackground(new Background(new BackgroundFill(null, null, null)));});
-			geSearchResultLabels[i].setOnMouseClicked((mouseEvent)->{itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[j][1]));});
-
+			geSearchResultLabels[i].setOnMouseEntered((mouseEvent)-> {
+				label.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));
+				label.getGraphic().setScaleX(.8);
+				label.getGraphic().setScaleY(.8);
+			});
+			geSearchResultLabels[i].setOnMouseExited ((mouseEvent)-> {
+				label.setBackground(new Background(new BackgroundFill(null, null, null)));
+				label.getGraphic().setScaleX(1);
+				label.getGraphic().setScaleY(1);
+			});
+			geSearchResultLabels[i].setOnMouseClicked((mouseEvent)->{
+				label.setBackground(new Background(new BackgroundFill(null, null, null)));
+				itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[j][1]));
+			});
 		}
-
-
 	}
 
 
