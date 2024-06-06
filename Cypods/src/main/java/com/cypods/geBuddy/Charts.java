@@ -293,7 +293,6 @@ public class Charts implements ChartMouseListenerFX {
 	 */
 
 	public void createItemPriceAndVolumeDataset(int itemID, String timePeriod) {
-		String url = "";
 		series = new TimeSeries("Price");
 		volumeSeries = new TimeSeries("Volume");
 		RequestController getDataGet = new RequestController();
@@ -304,31 +303,6 @@ public class Charts implements ChartMouseListenerFX {
 		Calendar cal = Calendar.getInstance();
 
 
-//		if (timePeriod == "6Month") //If time period is 6 months, use OSRS official API
-//		{
-//			itemPriceArrayStrings = getDataGet.get_osrs_api_parseItemGraph(itemID);
-//			for (int i = 0; i < itemPriceArrayStrings.length - 1; i++) {
-//				//If item price value isn't available, don't add it to the dataset
-//				if (Double.parseDouble(itemPriceArrayStrings[i][1]) == 0) {
-//					continue;
-//				}
-//
-//				x = itemPriceArrayStrings[i][0]; //timestamp
-//				y = Double.parseDouble(itemPriceArrayStrings[i][1]); //item price
-//
-//				series.addOrUpdate(new Second(dataModeler.epochToDateTime(x)), y);
-//
-//
-//				if (DEBUG == true) {
-//					System.out.println("\nnew Day(epochToDateTime(x)) \t: " + new Day(dataModeler.epochToDateTime(x)) +
-//							"\nnew Minute (epochToDateTime(x)): \t" + new Minute(dataModeler.epochToDateTime(x))
-//							+ "\nnew Second (epochToDateTime(x)): \\t" + new Second(dataModeler.epochToDateTime(x)));
-//				}
-//
-//			}
-//
-//		} else  //If time period is less than 6 months use RuneLite's API
-//		{
 			if(timePeriod == "6Month"){
 				itemPriceArrayStrings = getDataGet.get_api_parseRuneLitePrice("24h",itemID); //Retrieve a years worth of data
 			}
