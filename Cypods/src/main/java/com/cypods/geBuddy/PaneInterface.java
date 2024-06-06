@@ -1,5 +1,6 @@
 package com.cypods.geBuddy;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -60,10 +61,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 	String pane_ItemSearchInputText;
 
 
-	HashMap<String, GeSearchResultLabel> geSearchResultLabelMap = new HashMap<>();
-
-	protected Label [] geSearchResultLabels = new Label[12];
-	protected ImageView [] geSearchResultImages = new ImageView[12];
+	HashMap<String, GeSearchResultLabel> geSearchResultLabelMap = new HashMap<>(12);
 
 	/*************** Buttons ********************/
 	ToggleButton day;
@@ -93,7 +91,6 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 	/*************** Event handlers ********************/
 	private EventHandler<MouseEvent> mouseMovedHandler;
-	private EventHandler<KeyEvent> textInputListener;
 
 	/*************** Classes /other declarations **********/
 	protected Tooltip pane_Tooltip;
@@ -107,8 +104,6 @@ public class PaneInterface extends DisplayController implements Runnable {
 	protected double tabInterfaceHeight;
 	
 	int delayW = 25;
-	
-	Thread thread_WSize = new Thread(this);
 	
 	@Autowired
 	Charts cp;
@@ -131,13 +126,10 @@ public class PaneInterface extends DisplayController implements Runnable {
 		if(DEBUG == true) {System.out.println("activateInterface");}
 		tabInterface.setTranslateX(0);
 		tabInterface.setTranslateY(91);		
-
 		tabInterface.setMinWidth(1000);
-		
-		
 
-		 tabInterfaceWidth  = group.getBoundsInLocal().getWidth();
-     	 tabInterfaceHeight = group.getBoundsInLocal().getHeight();
+		tabInterfaceWidth  = group.getBoundsInLocal().getWidth();
+		tabInterfaceHeight = group.getBoundsInLocal().getHeight();
      	 
      	cp = new Charts(tabInterfaceWidth-12, tabInterfaceHeight);
      	
@@ -145,7 +137,6 @@ public class PaneInterface extends DisplayController implements Runnable {
 		pane_drawInventoryMenu();
 
 		pane_drawChartArea();
-		// pane_drawItemTopMenuArea();
 		pane_initLabels();
 		initTextField();
 		pane_initGeSearchLabels();
@@ -159,13 +150,10 @@ public class PaneInterface extends DisplayController implements Runnable {
 	}
 
 	private void createMonitoredLabel() {
-
 		mouseMovedHandler = event -> {
 			String msg = "(x: " + event.getX() + ", y: " + event.getY() + ")";
-
 			xyCoordinates.setText(msg);
 		};
-
 		tabInterface.addEventHandler(MouseEvent.MOUSE_MOVED, mouseMovedHandler);
 	}
 
@@ -273,25 +261,20 @@ public class PaneInterface extends DisplayController implements Runnable {
 	 * Method created to handle dynamic chart size in cases where the user is resizing the window. This method is handled
 	 * by a new thread to increase performance
 	 * */
-
 	protected void pane_createChart() {
 		if(DEBUG == true) {System.out.println("pane_createChart()");}
-		tabInterface.getChildren().removeAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
-		tabInterface.getChildren().addAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
-		//tabInterface.getChildren().addAll(stockChart.getChartViewerPrice(), stockChart.getChartViewerVolume());
-		//syncChartSize();
-		
-		//new Thread(() -> {
-			thread_WSize.start();
-		//}).start();
-			
-		
+		Platform.runLater(()->{
+				tabInterface.getChildren().removeAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
+				tabInterface.getChildren().addAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
+		});
 	}
 	
 	public void pane_updateChart(int itemID, String timePeriod) {
-		tabInterface.getChildren().removeAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
-		cp.runChart(itemID, timePeriod);
-		tabInterface.getChildren().addAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
+		Platform.runLater(()->{
+			tabInterface.getChildren().removeAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
+			cp.runChart(itemID, timePeriod);
+			tabInterface.getChildren().addAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
+		});
 	}
 
 	/**
@@ -308,19 +291,13 @@ public class PaneInterface extends DisplayController implements Runnable {
 		itemSearchInput.setLayoutX(8);
 		itemSearchInput.setLayoutY(411);
 		itemSearchInput.setPrefWidth(734);
-		//itemSearchInput.setFont(f);
 		itemSearchInput.setAlignment(Pos.CENTER);
 		itemSearchInput.setPromptText("What would you like to buy?");
 		if(DEBUG == true) {System.out.println("Caret Position: " + itemSearchInput.getCaretPosition());}
 		itemSearchInput.setStyle(
 				"-fx-text-fill: black; -fx-font-size: 13px; -fx-font-weight: bold;-fx-font-family: 'runescape_uf.ttf'");
-		// itemSearchInput.setOnMousePressed((mouseEvent) -> {
-		// itemSearchInput.setText("");
-
-		// });
 		itemSearchInput.setFocusTraversable(false);
 		tabInterface.getChildren().add(itemSearchInput);
-
 	}
 
 	/**
@@ -509,54 +486,55 @@ public class PaneInterface extends DisplayController implements Runnable {
 			geSearchResultLabelMap.put(instanceKeyGen, new GeSearchResultLabel(instanceKeyGen));
 		}
 
-		for(String resultLabel : geSearchResultLabelMap.keySet()){
-			geSearchResultLabelMap.get(resultLabel).getLabelImage().setFitWidth(iconWidth);
-			geSearchResultLabelMap.get(resultLabel).getLabelImage().setFitHeight(iconHeight);
+		for(String key : geSearchResultLabelMap.keySet()){
+			GeSearchResultLabel geSearchResultLabel = geSearchResultLabelMap.get(key);
+			geSearchResultLabel.getLabelImage().setFitWidth(iconWidth);
+			geSearchResultLabel.getLabelImage().setFitHeight(iconHeight);
 
-			geSearchResultLabelMap.get(resultLabel).getLabel().setPrefSize(sizeX, sizeY);
-			geSearchResultLabelMap.get(resultLabel).getLabel().setGraphic(geSearchResultLabelMap.get(resultLabel).getLabelImage());
-			geSearchResultLabelMap.get(resultLabel).getLabel().setWrapText(true);
+			geSearchResultLabel.getLabel().setPrefSize(sizeX, sizeY);
+			geSearchResultLabel.getLabel().setGraphic(geSearchResultLabel.getLabelImage());
+			geSearchResultLabel.getLabel().setWrapText(true);
 
-			switch(resultLabel){
+			switch(key){
 				case "geSearchResult1":
-					geSearchResultLabelMap.get("geSearchResult1").setLabelLocation(row1X,row1Y);
+					geSearchResultLabel.setLabelLocation(row1X,row1Y);
 					break;
 				case "geSearchResult2":
-					geSearchResultLabelMap.get("geSearchResult2").setLabelLocation(row2X,row1Y);
+					geSearchResultLabel.setLabelLocation(row2X,row1Y);
 					break;
 				case "geSearchResult3":
-					geSearchResultLabelMap.get("geSearchResult3").setLabelLocation(row3X,row1Y);
+					geSearchResultLabel.setLabelLocation(row3X,row1Y);
 					break;
 				case "geSearchResult4":
-					geSearchResultLabelMap.get("geSearchResult4").setLabelLocation(row4X,row1Y);
+					geSearchResultLabel.setLabelLocation(row4X,row1Y);
 					break;
 				case "geSearchResult5":
-					geSearchResultLabelMap.get("geSearchResult5").setLabelLocation(row1X,row2Y);
+					geSearchResultLabel.setLabelLocation(row1X,row2Y);
 					break;
 				case "geSearchResult6":
-					geSearchResultLabelMap.get("geSearchResult6").setLabelLocation(row2X,row2Y);
+					geSearchResultLabel.setLabelLocation(row2X,row2Y);
 					break;
 				case "geSearchResult7":
-					geSearchResultLabelMap.get("geSearchResult7").setLabelLocation(row3X,row2Y);
+					geSearchResultLabel.setLabelLocation(row3X,row2Y);
 					break;
 				case "geSearchResult8":
-					geSearchResultLabelMap.get("geSearchResult8").setLabelLocation(row4X,row2Y);
+					geSearchResultLabel.setLabelLocation(row4X,row2Y);
 					break;
 				case "geSearchResult9":
-					geSearchResultLabelMap.get("geSearchResult9").setLabelLocation(row1X,row3Y);
+					geSearchResultLabel.setLabelLocation(row1X,row3Y);
 					break;
 				case "geSearchResult10":
-					geSearchResultLabelMap.get("geSearchResult10").setLabelLocation(row2X,row3Y);
+					geSearchResultLabel.setLabelLocation(row2X,row3Y);
 					break;
 				case "geSearchResult11":
-					geSearchResultLabelMap.get("geSearchResult11").setLabelLocation(row3X,row3Y);
+					geSearchResultLabel.setLabelLocation(row3X,row3Y);
 					break;
 				case "geSearchResult12":
-					geSearchResultLabelMap.get("geSearchResult12").setLabelLocation(row4X,row3Y);
+					geSearchResultLabel.setLabelLocation(row4X,row3Y);
 					break;
 			}
 
-			tabInterface.getChildren().add(geSearchResultLabelMap.get(resultLabel).getLabel());
+			tabInterface.getChildren().add(geSearchResultLabel.getLabel());
 		}
 	}
 
