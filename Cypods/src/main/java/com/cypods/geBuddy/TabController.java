@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Date;
 
 import static com.cypods.geBuddy.ApplicationConstant.*;
 
@@ -33,6 +34,7 @@ public class TabController extends PaneInterface {
 	Tooltip tooltip;
 	private String itemToolTip = "Item Tool Tip";
 	protected int tab_itemID;
+	protected String selectedSearchItem = "";
 
 	/***************Connect and get data********************/
 	RequestController requestController =  new RequestController();
@@ -263,19 +265,18 @@ public class TabController extends PaneInterface {
 
 	/**
 	 * @Purpose
-	 * Clears Ge search results and images from ge search area
+	 * Clears Ge search results and images from ge search area and remove action listeners
 	 * */
 	private void clearGeSearchResults() {
-		removeLabelActionListeners();
-		addGeSearchResultDefaultItemImageViewsToArray();
-		addGeSearchResultLabelsToArray();
 
-		for(Label label : geSearchResultLabels)
-		{
-			label.setText(null);
-		}
-		for(ImageView view : geSearchResultImages){
-			view.setImage(null);
+		for(String current : geSearchResultLabelMap.keySet()){
+			GeSearchResultLabel geSearchResultLabel = geSearchResultLabelMap.get(current);
+			geSearchResultLabel.getLabel().setText(null);
+			geSearchResultLabel.getLabelImage().setImage(null);
+			geSearchResultLabel.getLabel().setOnMouseEntered((mouseEvent)-> {});
+			geSearchResultLabel.getLabel().setOnMouseExited((mouseEvent)-> {});
+			geSearchResultLabel.getLabel().setOnMousePressed((mouseEvent)-> {});
+			geSearchResultLabel.getLabel().setOnMouseClicked((mouseEvent -> {}));
 		}
 	}
 
@@ -291,8 +292,6 @@ public class TabController extends PaneInterface {
 	 * */
 	private void geSearchResults() {
 		clearGeSearchResults();
-		addGeSearchResultDefaultItemImageViewsToArray();
-		addGeSearchResultLabelsToArray();
 		addLabelActionListeners();
 
 		tc_itemListArray = requestController.returnItemListArray() ;
@@ -301,9 +300,15 @@ public class TabController extends PaneInterface {
 
 			for(int i = 0; i < requestController.get_getSearchResultSize() ; i++)
 			{
-				geSearchResultLabels[i].setText(tc_itemListArray[i][GE_SEARCH_NAME].concat("  (").concat(tc_itemListArray[i][GE_SEARCH_CURRENT_PRICE]).concat(")"));
-				input = new URL (tc_itemListArray[i][GE_SEARCH_ICON_URL]).openStream();
-				geSearchResultImages[i].setImage(new Image(input));
+				String keyGen = "geSearchResult" + (i+1);
+				GeSearchResultLabel geSearchResultLabel;
+
+				if(geSearchResultLabelMap.containsKey(keyGen)){
+					geSearchResultLabel = geSearchResultLabelMap.get(keyGen);
+					geSearchResultLabel.getLabel().setText(tc_itemListArray[i][GE_SEARCH_NAME].concat("  (").concat(tc_itemListArray[i][GE_SEARCH_CURRENT_PRICE]).concat(")"));
+					input = new URL (tc_itemListArray[i][GE_SEARCH_ICON_URL]).openStream();
+					geSearchResultLabel.getLabelImage().setImage(new Image(input));
+				}
 			}
 		}
 		catch(Exception e) {
@@ -325,79 +330,45 @@ public class TabController extends PaneInterface {
 	 * - Enable mouse Enter/Exit animation
 	 * - Allow items to be selected and displayed
 	 * */
-
-
 	protected void addLabelActionListeners() {
 		int arrLength = requestController.get_getSearchResultSize();
-		addGeSearchResultLabelsToArray();
 
 		for(int i = 0; i < arrLength ; i++)
 		{
-			Label label = geSearchResultLabels[i];
-			ImageView image = geSearchResultImages[i];
-			int j = i;
-			geSearchResultLabels[i].setOnMouseEntered((mouseEvent)-> {
-				label.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103,.5), null, null)));
-				label.getGraphic().setScaleX(.8);
-				label.getGraphic().setScaleY(.8);
-			});
-			geSearchResultLabels[i].setOnMouseExited ((mouseEvent)-> {
-				label.setBackground(new Background(new BackgroundFill(null, null, null)));
-				label.getGraphic().setScaleX(1);
-				label.getGraphic().setScaleY(1);
-			});
-			geSearchResultLabels[i].setOnMouseClicked((mouseEvent)->{
-				label.setBackground(new Background(new BackgroundFill(null, null, null)));
-				itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[j][1]));
-			});
+			String keyGen = "geSearchResult" + (i+1);
+			GeSearchResultLabel geSearchResultLabel = geSearchResultLabelMap.get(keyGen);
+
+			if (geSearchResultLabel != null) {
+				Label label = geSearchResultLabel.getLabel();
+				int j = i;
+				label.setOnMouseEntered((mouseEvent) -> {
+					label.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103, .5), null, null)));
+					label.getGraphic().setScaleX(1.1);
+					label.getGraphic().setScaleY(1.1);
+				});
+				label.setOnMouseExited((mouseEvent) -> {
+					//Only clear background highlight when the item is not selected
+					if (!selectedSearchItem.equals(geSearchResultLabel.getLabelInstanceName())) {
+						label.setBackground(new Background(new BackgroundFill(null, null, null)));
+					}
+					label.getGraphic().setScaleX(1);
+					label.getGraphic().setScaleY(1);
+				});
+				label.setOnMouseClicked((mouseEvent) -> {
+					//Clear previous selected highlight
+					if(geSearchResultLabelMap.containsKey(selectedSearchItem)){
+						geSearchResultLabelMap.get(selectedSearchItem).getLabel().setBackground(new Background(new BackgroundFill(null, null, null)));
+					}
+					itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[j][1]));
+					selectedSearchItem = geSearchResultLabel.getLabelInstanceName();
+				});
+				label.setOnMousePressed((mouseEvent) -> {
+					label.setBackground(new Background(new BackgroundFill(Color.rgb(168, 145, 103, .5), null, null)));
+					label.getGraphic().setScaleX(1);
+					label.getGraphic().setScaleY(1);
+				});
+			}
 		}
-	}
-
-
-	private void removeLabelActionListeners() {
-		int arrLength = requestController.get_getSearchResultSize();
-		addGeSearchResultLabelsToArray();
-
-
-		for(int i = 0; i < arrLength ; i++)
-		{
-			Label l = geSearchResultLabels[i];
-			l.setOnMouseEntered((mouseEvent)-> {});
-			l.setOnMouseClicked((mouseEvent)->{});
-		}
-
-	}
-
-	private void addGeSearchResultLabelsToArray() {
-
-		geSearchResultLabels[0] = geSearchResultLabelMap.get("geSearchResult1").getLabel();
-		geSearchResultLabels[1] = geSearchResultLabelMap.get("geSearchResult2").getLabel();
-		geSearchResultLabels[2] = geSearchResultLabelMap.get("geSearchResult3").getLabel();
-		geSearchResultLabels[3] = geSearchResultLabelMap.get("geSearchResult4").getLabel();
-		geSearchResultLabels[4] = geSearchResultLabelMap.get("geSearchResult5").getLabel();
-		geSearchResultLabels[5] = geSearchResultLabelMap.get("geSearchResult6").getLabel();
-		geSearchResultLabels[6] = geSearchResultLabelMap.get("geSearchResult7").getLabel();
-		geSearchResultLabels[7] = geSearchResultLabelMap.get("geSearchResult8").getLabel();
-		geSearchResultLabels[8] = geSearchResultLabelMap.get("geSearchResult9").getLabel();
-		geSearchResultLabels[9] = geSearchResultLabelMap.get("geSearchResult10").getLabel();
-		geSearchResultLabels[10] = geSearchResultLabelMap.get("geSearchResult11").getLabel();
-		geSearchResultLabels[11] = geSearchResultLabelMap.get("geSearchResult12").getLabel();
-	}
-
-	private void addGeSearchResultDefaultItemImageViewsToArray() {
-
-		geSearchResultImages[0]  = geSearchResultLabelMap.get("geSearchResult1").getLabelImage();
-		geSearchResultImages[1] = geSearchResultLabelMap.get("geSearchResult2").getLabelImage();
-		geSearchResultImages[2] = geSearchResultLabelMap.get("geSearchResult3").getLabelImage();
-		geSearchResultImages[3] = geSearchResultLabelMap.get("geSearchResult4").getLabelImage();
-		geSearchResultImages[4] = geSearchResultLabelMap.get("geSearchResult5").getLabelImage();
-		geSearchResultImages[5] = geSearchResultLabelMap.get("geSearchResult6").getLabelImage();
-		geSearchResultImages[6] = geSearchResultLabelMap.get("geSearchResult7").getLabelImage();
-		geSearchResultImages[7] = geSearchResultLabelMap.get("geSearchResult8").getLabelImage();
-		geSearchResultImages[8] = geSearchResultLabelMap.get("geSearchResult9").getLabelImage();
-		geSearchResultImages[9] = geSearchResultLabelMap.get("geSearchResult10").getLabelImage();
-		geSearchResultImages[10] = geSearchResultLabelMap.get("geSearchResult11").getLabelImage();
-		geSearchResultImages[11] = geSearchResultLabelMap.get("geSearchResult12").getLabelImage();
 	}
 
 	private void addButtonListeners() {
