@@ -35,7 +35,7 @@ public class ApplicationConstant {
 
         public static String osrsGetItemDetails = "https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=";
 
-        public static boolean DEBUG = true;
+        public static boolean DEBUG = false;
 
         public static String generateRuneLitePriceDataUrl(String timePeriod, Integer itemId){
                 if(timePeriod != null && itemId!= null){

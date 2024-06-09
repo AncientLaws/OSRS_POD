@@ -125,12 +125,11 @@ public class TabController extends PaneInterface {
 	 * Platform.runLater must be used when updating javafx components
 	 * */
 	private void itemSearchListener() {
-		itemSearchInput.setOnKeyPressed(KeyEvent ->
+		geSearchArea.getItemSearchInput().setOnKeyPressed(KeyEvent ->
 		{
 			if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
 				Thread thread = new Thread(() -> {
-					pane_ItemSearchInputText = itemSearchInput.getText();
-					requestController.set_osrs_api_parseItemJsonList(ApplicationConstant.osrsItemSearch, pane_ItemSearchInputText);
+					requestController.set_osrs_api_parseItemJsonList(ApplicationConstant.osrsItemSearch, geSearchArea.getItemSearchInput().getText());
 					Platform.runLater(() ->{
 						geSearchResults();
 					});
@@ -138,9 +137,9 @@ public class TabController extends PaneInterface {
 				thread.start();
 			}
 		});
-		itemSearchInput.setOnMousePressed((mouseEvent) -> {
-			itemSearchInput.setText("");
-			clearGeSearchResults();
+		geSearchArea.getItemSearchInput().setOnMousePressed((mouseEvent) -> {
+			geSearchArea.getItemSearchInput().setText("");
+			geSearchArea.clearGeSearchResults();
 		});
 	}
 
@@ -243,7 +242,7 @@ public class TabController extends PaneInterface {
 						,itemInfoArr[ITEM_TREND_180]						//180 day trend
 						,itemInfoArr[ITEM_CHANGE_180]						//180 day change
 				);
-				itemSearchInput.positionCaret(itemSearchInput.getText().length());  //
+				geSearchArea.getItemSearchInput().positionCaret(geSearchArea.getItemSearchInput().getText().length());  //
 				//pane_createChart();
 			}
 			catch(Exception e) {
@@ -265,23 +264,6 @@ public class TabController extends PaneInterface {
 
 	/**
 	 * @Purpose
-	 * Clears Ge search results and images from ge search area and remove action listeners
-	 * */
-	private void clearGeSearchResults() {
-
-		for(String current : geSearchResultLabelMap.keySet()){
-			GeSearchResultLabel geSearchResultLabel = geSearchResultLabelMap.get(current);
-			geSearchResultLabel.getLabel().setText(null);
-			geSearchResultLabel.getLabelImage().setImage(null);
-			geSearchResultLabel.getLabel().setOnMouseEntered((mouseEvent)-> {});
-			geSearchResultLabel.getLabel().setOnMouseExited((mouseEvent)-> {});
-			geSearchResultLabel.getLabel().setOnMousePressed((mouseEvent)-> {});
-			geSearchResultLabel.getLabel().setOnMouseClicked((mouseEvent -> {}));
-		}
-	}
-
-	/**
-	 * @Purpose
 	 * Dynamically add Ge search result item name and image to the ge search area
 	 *
 	 * @Steps
@@ -291,7 +273,7 @@ public class TabController extends PaneInterface {
 	 * - Add result to all labels
 	 * */
 	private void geSearchResults() {
-		clearGeSearchResults();
+		geSearchArea.clearGeSearchResults();
 		addLabelActionListeners();
 
 		tc_itemListArray = requestController.returnItemListArray() ;
@@ -303,8 +285,8 @@ public class TabController extends PaneInterface {
 				String keyGen = "geSearchResult" + (i+1);
 				GeSearchResultLabel geSearchResultLabel;
 
-				if(geSearchResultLabelMap.containsKey(keyGen)){
-					geSearchResultLabel = geSearchResultLabelMap.get(keyGen);
+				if(geSearchArea.geSearchResultLabelMap.containsKey(keyGen)){
+					geSearchResultLabel = geSearchArea.geSearchResultLabelMap.get(keyGen);
 					geSearchResultLabel.getLabel().setText(tc_itemListArray[i][GE_SEARCH_NAME].concat("  (").concat(tc_itemListArray[i][GE_SEARCH_CURRENT_PRICE]).concat(")"));
 					input = new URL (tc_itemListArray[i][GE_SEARCH_ICON_URL]).openStream();
 					geSearchResultLabel.getLabelImage().setImage(new Image(input));
@@ -336,7 +318,7 @@ public class TabController extends PaneInterface {
 		for(int i = 0; i < arrLength ; i++)
 		{
 			String keyGen = "geSearchResult" + (i+1);
-			GeSearchResultLabel geSearchResultLabel = geSearchResultLabelMap.get(keyGen);
+			GeSearchResultLabel geSearchResultLabel = geSearchArea.geSearchResultLabelMap.get(keyGen);
 
 			if (geSearchResultLabel != null) {
 				Label label = geSearchResultLabel.getLabel();
@@ -356,8 +338,8 @@ public class TabController extends PaneInterface {
 				});
 				label.setOnMouseClicked((mouseEvent) -> {
 					//Clear previous selected highlight
-					if(geSearchResultLabelMap.containsKey(selectedSearchItem)){
-						geSearchResultLabelMap.get(selectedSearchItem).getLabel().setBackground(new Background(new BackgroundFill(null, null, null)));
+					if(geSearchArea.geSearchResultLabelMap.containsKey(selectedSearchItem)){
+						geSearchArea.geSearchResultLabelMap.get(selectedSearchItem).getLabel().setBackground(new Background(new BackgroundFill(null, null, null)));
 					}
 					itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[j][1]));
 					selectedSearchItem = geSearchResultLabel.getLabelInstanceName();
