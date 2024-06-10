@@ -3,7 +3,8 @@ package com.cypods.geBuddy;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 
 
 public class GeSearchResultLabel {
@@ -46,8 +47,10 @@ public class GeSearchResultLabel {
         this.labelImage = labelImage;
     }
 
-    public void setLabelLocation(int x , int y){
-        getLabel().setTranslateX(x);
-        getLabel().setTranslateY(y);
+    public void setLabelLocation(int x , int y, Pane geSearchAreaPane){
+        getLabel().layoutXProperty().bind(geSearchAreaPane.layoutXProperty().add(x));
+        getLabel().layoutYProperty().bind(geSearchAreaPane.layoutYProperty().add(y));
+//        getLabel().setTranslateX(x);
+//        getLabel().setTranslateY(y);
     }
 }

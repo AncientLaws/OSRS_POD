@@ -13,6 +13,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,12 +29,11 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 	/************************** Images **************************/
 	Image image;
-	ImageView imageView;
-	ImageView geSearch;
 	ImageView inventory;
 	ImageView graphBackground;
 	ImageView itemTopMenu;
 	ImageView itemIconPaneImage;
+	Rectangle clipRect = new Rectangle();
 
 	/************************** Labels **************************/
 	Label name;
@@ -57,11 +57,9 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 	Label xyCoordinates;
 
+	GeSearchArea geSearchArea = new GeSearchArea();
 
-	String pane_ItemSearchInputText;
-
-
-	HashMap<String, GeSearchResultLabel> geSearchResultLabelMap = new HashMap<>(12);
+//	HashMap<String, GeSearchResultLabel> geSearchResultLabelMap = geSearchArea.getGeSearchResultLabelMap();
 
 	/*************** Buttons ********************/
 	ToggleButton day;
@@ -73,28 +71,12 @@ public class PaneInterface extends DisplayController implements Runnable {
 	//HBox box;
 	ButtonBar buttonBarLeft;
 	ButtonBar buttonBarRight;
-	
-	/*************** Ge search area locations ********************/
-	int row1X = 14;
-	int row2X = 190;
-	int row3X = 366;
-	int row4X = 542;
-
-	int row1Y = 435;
-	int row2Y = 495;
-	int row3Y = 555;
-
-	int iconWidth = 65;
-	int iconHeight = 65;
-	int sizeX = 175;
-	int sizeY = 50;
 
 	/*************** Event handlers ********************/
 	private EventHandler<MouseEvent> mouseMovedHandler;
 
 	/*************** Classes /other declarations **********/
 	protected Tooltip pane_Tooltip;
-	TextField itemSearchInput;
 	Font f;
 
 	protected Pane tabInterface = new Pane();
@@ -126,7 +108,15 @@ public class PaneInterface extends DisplayController implements Runnable {
 		if(DEBUG == true) {System.out.println("activateInterface");}
 		tabInterface.setTranslateX(0);
 		tabInterface.setTranslateY(91);		
-		tabInterface.setMinWidth(1000);
+		tabInterface.setMaxWidth(1080);
+		tabInterface.setStyle("-fx-border-color: green");
+
+		// Bind the Rectangle's dimensions to the Pane's dimensions
+		clipRect.widthProperty().bind(tabInterface.widthProperty());
+		clipRect.heightProperty().bind(tabInterface.heightProperty());
+
+		// Set the Rectangle as the clip of the Pane
+		tabInterface.setClip(clipRect);
 
 		tabInterfaceWidth  = group.getBoundsInLocal().getWidth();
 		tabInterfaceHeight = group.getBoundsInLocal().getHeight();
@@ -138,11 +128,13 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 		pane_drawChartArea();
 		pane_initLabels();
-		initTextField();
-		pane_initGeSearchLabels();
+		geSearchArea.initTextField();
+		geSearchArea.pane_initGeSearchLabels();
 		pane_createChart();
 		
 		pane_createButtons();
+
+
 
 		group.getChildren().add(tabInterface);
 		tabInterface.setVisible(true);
@@ -159,13 +151,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 	private void pane_drawItemScrollArea() {
 		if(DEBUG == true) {System.out.println("pane_drawItemScrollArea");}
-		geSearch = new ImageView(new Image(getClass().getClassLoader().getResource("images/GE_SEARCH_V6.png").toString(),true));
-		geSearch.setX(0);
-		geSearch.setY(405);
-		geSearch.setFitWidth(750);
-		geSearch.setFitHeight(225);
-		geSearch.setRotate(180);
-		tabInterface.getChildren().add(geSearch);
+		tabInterface.getChildren().add(geSearchArea.geSearchAreaPane);
 	}
 
 	private void pane_drawInventoryMenu() {
@@ -275,29 +261,6 @@ public class PaneInterface extends DisplayController implements Runnable {
 			cp.runChart(itemID, timePeriod);
 			tabInterface.getChildren().addAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
 		});
-	}
-
-	/**
-	 * Initializes input text field in the Ge search bar and adds mouse listener
-	 * that will remove the initial prompt text
-	 */
-	private void initTextField() {
-		if(DEBUG == true) {System.out.println("initTextField()");}
-		//f = new Font("runescape_uf.ttf", 12);
-		itemSearchInput = new TextField("What would you like to buy?");
-		itemSearchInput.end();
-		itemSearchInput.setOpacity(1);
-		itemSearchInput.setBackground(new Background(new BackgroundFill(Color.rgb(201, 182, 147), null, null)));
-		itemSearchInput.setLayoutX(8);
-		itemSearchInput.setLayoutY(411);
-		itemSearchInput.setPrefWidth(734);
-		itemSearchInput.setAlignment(Pos.CENTER);
-		itemSearchInput.setPromptText("What would you like to buy?");
-		if(DEBUG == true) {System.out.println("Caret Position: " + itemSearchInput.getCaretPosition());}
-		itemSearchInput.setStyle(
-				"-fx-text-fill: black; -fx-font-size: 13px; -fx-font-weight: bold;-fx-font-family: 'runescape_uf.ttf'");
-		itemSearchInput.setFocusTraversable(false);
-		tabInterface.getChildren().add(itemSearchInput);
 	}
 
 	/**
@@ -474,70 +437,6 @@ public class PaneInterface extends DisplayController implements Runnable {
 		;
 
 	}
-
-	/**
-	 * Generating the Object that will show the result of the item search
-	 * */
-	protected void pane_initGeSearchLabels() {
-		if(DEBUG == true) {System.out.println("pane_initGeSearchLabels()");}
-
-		for(int i = 0; i < 12 ; i++){
-			String instanceKeyGen = "geSearchResult"+(i+1);
-			geSearchResultLabelMap.put(instanceKeyGen, new GeSearchResultLabel(instanceKeyGen));
-		}
-
-		for(String key : geSearchResultLabelMap.keySet()){
-			GeSearchResultLabel geSearchResultLabel = geSearchResultLabelMap.get(key);
-			geSearchResultLabel.getLabelImage().setFitWidth(iconWidth);
-			geSearchResultLabel.getLabelImage().setFitHeight(iconHeight);
-
-			geSearchResultLabel.getLabel().setPrefSize(sizeX, sizeY);
-			geSearchResultLabel.getLabel().setGraphic(geSearchResultLabel.getLabelImage());
-			geSearchResultLabel.getLabel().setWrapText(true);
-
-			switch(key){
-				case "geSearchResult1":
-					geSearchResultLabel.setLabelLocation(row1X,row1Y);
-					break;
-				case "geSearchResult2":
-					geSearchResultLabel.setLabelLocation(row2X,row1Y);
-					break;
-				case "geSearchResult3":
-					geSearchResultLabel.setLabelLocation(row3X,row1Y);
-					break;
-				case "geSearchResult4":
-					geSearchResultLabel.setLabelLocation(row4X,row1Y);
-					break;
-				case "geSearchResult5":
-					geSearchResultLabel.setLabelLocation(row1X,row2Y);
-					break;
-				case "geSearchResult6":
-					geSearchResultLabel.setLabelLocation(row2X,row2Y);
-					break;
-				case "geSearchResult7":
-					geSearchResultLabel.setLabelLocation(row3X,row2Y);
-					break;
-				case "geSearchResult8":
-					geSearchResultLabel.setLabelLocation(row4X,row2Y);
-					break;
-				case "geSearchResult9":
-					geSearchResultLabel.setLabelLocation(row1X,row3Y);
-					break;
-				case "geSearchResult10":
-					geSearchResultLabel.setLabelLocation(row2X,row3Y);
-					break;
-				case "geSearchResult11":
-					geSearchResultLabel.setLabelLocation(row3X,row3Y);
-					break;
-				case "geSearchResult12":
-					geSearchResultLabel.setLabelLocation(row4X,row3Y);
-					break;
-			}
-
-			tabInterface.getChildren().add(geSearchResultLabel.getLabel());
-		}
-	}
-
 
 	private void pane_createButtons() {
 		day 		= new ToggleButton("1 Day");

@@ -46,10 +46,12 @@ public class Window extends Application {
 			primaryStage.setTitle("Grand Exchange Central - By Ancient laws");
 			Image icon = new Image 	(getClass().getClassLoader().getResource("images/icon.png").toString(), true);
 			primaryStage.getIcons().add(icon);
+
 			//primaryStage.setWidth(1080);
 			//primaryStage.setHeight(720);
 			
 			root.setPrefSize(primaryStage.getWidth(),primaryStage.getHeight()-28);
+			root.setStyle("-fx-border-color: yellow");
 			
 			Platform.runLater(new Runnable() {
 			    @Override
