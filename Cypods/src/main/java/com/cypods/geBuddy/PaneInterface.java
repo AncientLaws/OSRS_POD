@@ -73,9 +73,6 @@ public class PaneInterface extends DisplayController implements Runnable {
 	protected AnchorPane tabInterface = new AnchorPane();
 	//protected Pane chartPane = new Pane();
 	
-	protected double tabInterfaceWidth;
-	protected double tabInterfaceHeight;
-	
 	int delayW = 25;
 	
 	Charts cp;
@@ -99,7 +96,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 		if(DEBUG == true) {System.out.println("activateInterface");}
 		tabInterface.setTranslateX(0);
 		tabInterface.setTranslateY(91);		
-		tabInterface.setMaxWidth(1080);
+		tabInterface.setPrefWidth(1080);
 		tabInterface.setStyle("-fx-border-color: green");
 
 		// Bind the Rectangle's dimensions to the Pane's dimensions
@@ -108,11 +105,8 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 		// Set the Rectangle as the clip of the Pane
 		tabInterface.setClip(clipRect);
-
-		tabInterfaceWidth  = root.getBoundsInLocal().getWidth();
-		tabInterfaceHeight = root.getBoundsInLocal().getHeight();
      	 
-     	cp = new Charts(tabInterfaceWidth-12, tabInterfaceHeight);
+     	cp = new Charts(tabInterface.getPrefWidth(), tabInterface.getPrefHeight());
 
 		geSearchArea = new GeSearchArea(tabInterface);
 		geSearchArea.geSearchArea_initGeSearchLabels(tabInterface);

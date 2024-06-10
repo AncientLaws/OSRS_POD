@@ -27,13 +27,13 @@ import java.awt.geom.Rectangle2D;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
+
 
 //import org.jfree.chart.fx.ChartViewer;
 
 @Component
 public class Charts implements ChartMouseListenerFX {
-
-	public static boolean DEBUG = false;
 
 	private ChartViewer chartViewerPrice;
 	private ChartViewer chartViewerVolume;
@@ -77,6 +77,7 @@ public class Charts implements ChartMouseListenerFX {
 	public Charts(double chartWidth, double chartHeight) {
 		this.chartWidth = chartWidth;
 		this.chartHeight = chartHeight;
+		System.out.println("Charts: " + chartWidth + " x "  + chartHeight);
 
 		dataset = dataModeler.createRandomDataset();
 		volumeCategoryDataset = dataModeler.createRandomCategoryDataset();
@@ -101,7 +102,6 @@ public class Charts implements ChartMouseListenerFX {
 
 		priceChart = initPriceChart(priceChart);
 		volumeChart = initVolumeChart(volumeChart);
-
 
 	}
 
@@ -213,7 +213,7 @@ public class Charts implements ChartMouseListenerFX {
 		priceChart.getXYPlot().getRangeAxis().setFixedDimension(40);
 
 
-		chartViewerPrice.setPrefSize(1060, 351);
+		chartViewerPrice.setPrefSize(chartWidth, 351);
 		chartViewerPrice.setLayoutX(4);
 		chartViewerPrice.setLayoutY(52);
 		chartViewerPrice.addChartMouseListener(this);
@@ -229,7 +229,7 @@ public class Charts implements ChartMouseListenerFX {
 		volumeChart.getXYPlot().getDomainAxis().setTickLabelPaint(Color.ORANGE);
 		volumeChart.getXYPlot().getRangeAxis().setFixedDimension(40);
 
-		chartViewerVolume.setPrefSize(1060, 100);
+		chartViewerVolume.setPrefSize(chartWidth, 100);
 		chartViewerVolume.setLayoutX(4);
 		chartViewerVolume.setLayoutY(301);
 		chartViewerVolume.addChartMouseListener(this);
@@ -403,7 +403,7 @@ public class Charts implements ChartMouseListenerFX {
 	 * @return nothing
 	 */
 	protected void resizeChartW(ChartViewer chart, double w) {
-		//chart.setPrefWidth(w);
+		chart.setPrefWidth(w);
 
 	}
 
@@ -413,8 +413,9 @@ public class Charts implements ChartMouseListenerFX {
 	 *
 	 * @return nothing
 	 */
-	protected void resizeChartH(ChartViewer chart, double H) {
-		chart.setPrefHeight(H);
+	protected void resizeChartH(ChartViewer chart, double w) {
+		chart.setPrefWidth(w);
+		chartWidth = w;
 
 	}
 

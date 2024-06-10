@@ -97,6 +97,7 @@ public class TabController extends PaneInterface {
 		initImage();
 		try {
 			itemSearchListener();
+			initInterfaceSizeListeners();
 		}
 		catch(Exception e) {catchError();
 		}
@@ -107,8 +108,8 @@ public class TabController extends PaneInterface {
 
 	/**An attempt to dynamically anchor all the tob icons together*/
 	protected void setTabIconRelationships(double sceneWidth){
-				double offSetXValue = (((sceneWidth) - (tabSelectionLabel.getWidth()*10))/2)+(X-167); //TODO tuned the hell out of this
-				System.out.println("offsetXValue: " + offSetXValue + "for tab: " + getInstanceTabName());
+				double offSetXValue = ((sceneWidth - (tabSelectionLabel.getWidth()*10))/2)+(X-167); //TODO tuned the hell out of this
+//				System.out.println("offsetXValue: " + offSetXValue + "for tab: " + getInstanceTabName());
 				tabInterface.setTopAnchor(imageView,(double)Y);
 				tabInterface.setTopAnchor(tabSelectionLabel,(double)Y);
 				tabInterface.setRightAnchor(imageView,offSetXValue);
@@ -154,13 +155,6 @@ public class TabController extends PaneInterface {
 	 * Platform.runLater must be used when updating javafx components
 	 * */
 	private void itemSearchListener() {
-
-		Number oldWidth = (tabInterface.widthProperty().doubleValue());
-		tabInterface.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
-			setTabIconRelationships(newSceneWidth.doubleValue());
-			System.out.println("Width: " + newSceneWidth);
-		});
-
 		geSearchArea.getItemSearchInput().setOnKeyPressed(KeyEvent ->
 		{
 			if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
@@ -176,6 +170,15 @@ public class TabController extends PaneInterface {
 		geSearchArea.getItemSearchInput().setOnMousePressed((mouseEvent) -> {
 			geSearchArea.getItemSearchInput().setText("");
 			geSearchArea.clearGeSearchResults();
+		});
+	}
+
+	private void initInterfaceSizeListeners(){
+		Number oldWidth = (tabInterface.widthProperty().doubleValue());
+		tabInterface.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
+			setTabIconRelationships(newSceneWidth.doubleValue());
+			cp.resizeChartH(cp.charts_chartViewerPrice(), newSceneWidth.doubleValue());
+//			System.out.println("Width: " + newSceneWidth);
 		});
 	}
 
@@ -219,12 +222,6 @@ public class TabController extends PaneInterface {
 
 	private void iconImageSettings() {
 		if(DEBUG == true) {System.out.println("iconImageSettings InputStream: ");}
-//		Double x = (double) X;
-//		Double y = (double) Y;
-//		tabInterface.setTopAnchor(imageView,y);
-//		tabInterface.setLeftAnchor(imageView,x);
-//		imageView.setLayoutX(X);
-//		imageView.setLayoutY(Y);
 		imageView.setPreserveRatio(true);
 		imageView.setFitHeight(75);
 		imageView.setFitWidth(75);
@@ -255,10 +252,6 @@ public class TabController extends PaneInterface {
 		Double x = (double) X;
 		Double y = (double) Y;
 		tabSelectionLabel = new Label(getInstanceTabName()); //TODO remove instance name
-//		tabInterface.setTopAnchor(tabSelectionLabel,y);
-//		tabInterface.setLeftAnchor(tabSelectionLabel,x);
-//		tabSelectionLabel.setTranslateX(X);
-//		tabSelectionLabel.setTranslateY(Y);
 		tabSelectionLabel.setPrefSize(75, 75);
 		tabSelectionLabel.setStyle("-fx-border-color: green");
 		root.getChildren().add(tabSelectionLabel);
