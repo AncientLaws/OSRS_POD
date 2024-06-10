@@ -2,27 +2,18 @@ package com.cypods.geBuddy;
 
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
+import static com.cypods.geBuddy.Window.root;
 
 @Component
 public class PaneInterface extends DisplayController implements Runnable {
@@ -57,7 +48,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 	Label xyCoordinates;
 
-	GeSearchArea geSearchArea = new GeSearchArea();
+	GeSearchArea geSearchArea;
 
 //	HashMap<String, GeSearchResultLabel> geSearchResultLabelMap = geSearchArea.getGeSearchResultLabelMap();
 
@@ -79,7 +70,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 	protected Tooltip pane_Tooltip;
 	Font f;
 
-	protected Pane tabInterface = new Pane();
+	protected AnchorPane tabInterface = new AnchorPane();
 	//protected Pane chartPane = new Pane();
 	
 	protected double tabInterfaceWidth;
@@ -118,27 +109,35 @@ public class PaneInterface extends DisplayController implements Runnable {
 		// Set the Rectangle as the clip of the Pane
 		tabInterface.setClip(clipRect);
 
-		tabInterfaceWidth  = group.getBoundsInLocal().getWidth();
-		tabInterfaceHeight = group.getBoundsInLocal().getHeight();
+		tabInterfaceWidth  = root.getBoundsInLocal().getWidth();
+		tabInterfaceHeight = root.getBoundsInLocal().getHeight();
      	 
      	cp = new Charts(tabInterfaceWidth-12, tabInterfaceHeight);
-     	
+
+		geSearchArea = new GeSearchArea(tabInterface);
+		geSearchArea.geSearchArea_initGeSearchLabels(tabInterface);
+		geSearchArea.initTextField(tabInterface);
+
+
 		pane_drawItemScrollArea();
 		pane_drawInventoryMenu();
 
 		pane_drawChartArea();
 		pane_initLabels();
-		geSearchArea.initTextField();
-		geSearchArea.pane_initGeSearchLabels();
+
 		pane_createChart();
 		
 		pane_createButtons();
 
+		root.getChildren().add(tabInterface);
+		/**Anchoring tabInterface to root so it's dynamically resized*/
+		AnchorPane.setTopAnchor(tabInterface,0.0);
+		AnchorPane.setBottomAnchor(tabInterface,0.0);
+		AnchorPane.setLeftAnchor(tabInterface,0.0);
+		AnchorPane.setRightAnchor(tabInterface,0.0);
 
-
-		group.getChildren().add(tabInterface);
 		tabInterface.setVisible(true);
-		
+
 	}
 
 	private void createMonitoredLabel() {
@@ -150,8 +149,8 @@ public class PaneInterface extends DisplayController implements Runnable {
 	}
 
 	private void pane_drawItemScrollArea() {
-		if(DEBUG == true) {System.out.println("pane_drawItemScrollArea");}
-		tabInterface.getChildren().add(geSearchArea.geSearchAreaPane);
+		if(DEBUG == true) {System.out.println("geSearchArea_drawItemScrollArea");}
+		tabInterface.getChildren().add(geSearchArea.getGeSearchAreaPane());
 	}
 
 	private void pane_drawInventoryMenu() {
@@ -521,5 +520,13 @@ public class PaneInterface extends DisplayController implements Runnable {
 	public void run() {
 		syncChartSize();
 		
+	}
+
+	public Rectangle getClipRect() {
+		return clipRect;
+	}
+
+	public void setClipRect(Rectangle clipRect) {
+		this.clipRect = clipRect;
 	}
 }

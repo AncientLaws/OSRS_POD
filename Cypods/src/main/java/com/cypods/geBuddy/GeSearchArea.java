@@ -1,15 +1,10 @@
 package com.cypods.geBuddy;
 
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import org.springframework.stereotype.Component;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,26 +12,26 @@ import javafx.scene.image.ImageView;
 import java.util.HashMap;
 
 import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
-import static com.cypods.geBuddy.Window.root;
+//import static com.cypods.geBuddy.Window.root;
 
 //@Component
 public class GeSearchArea{
 
-	protected Pane geSearchAreaPane = new Pane();
+	protected AnchorPane geSearchAreaPane = new AnchorPane();
 
 	HashMap<String, GeSearchResultLabel> geSearchResultLabelMap = new HashMap<>(12);
 
 	Rectangle clipRect = new Rectangle();
 
 	/*************** Ge search area locations ********************/
-	int row1X = 14;
-	int row2X = 190;
-	int row3X = 366;
-	int row4X = 542;
+	double row1X = 14;
+	double row2X = 190;
+	double row3X = 366;
+	double row4X = 542;
 
-	int row1Y = 30;
-	int row2Y = 90;
-	int row3Y = 150;
+	double row1Y = 30;
+	double row2Y = 90;
+	double row3Y = 150;
 
 	int iconWidth = 65;
 	int iconHeight = 65;
@@ -48,41 +43,44 @@ public class GeSearchArea{
 
 	TextField itemSearchInput;
 
-	GeSearchArea(){
-		pane_drawItemScrollArea();
-		pane_initGeSearchLabels();
-		initTextField();
+//	GeSearchArea(){
+//		geSearchArea_drawItemScrollArea();
+//		geSearchArea_initGeSearchLabels();
+//		initTextField();
+//	}
+
+	GeSearchArea(AnchorPane anchorPane){
+		geSearchArea_drawItemScrollArea(anchorPane);
+		geSearchArea_initGeSearchLabels(anchorPane);
+		initTextField(anchorPane);
 	}
 
 
-	protected void pane_drawItemScrollArea() {
+	protected void geSearchArea_drawItemScrollArea(AnchorPane anchorPane) {
 		geSearchAreaBackground = new ImageView(new Image("/images/GE_SEARCH_V6.png"));
-//		geSearchAreaBackground.setX(0);
-//		geSearchAreaBackground.setY(405);
-		geSearchAreaBackground.fitWidthProperty().bind(geSearchAreaPane.widthProperty());
-		geSearchAreaBackground.fitHeightProperty().bind(geSearchAreaPane.heightProperty());
+		geSearchAreaBackground.setFitWidth(750);
+		geSearchAreaBackground.setFitHeight(225);
 		geSearchAreaBackground.setRotate(180);
+		geSearchAreaPane.getChildren().add(geSearchAreaBackground);
 
-		geSearchAreaPane.setTranslateX(0);
-		geSearchAreaPane.setTranslateY(405);
 		geSearchAreaPane.setPrefWidth(750);
 		geSearchAreaPane.setPrefHeight(225);
+		geSearchAreaPane.setBottomAnchor(geSearchAreaBackground,0.0);
+		geSearchAreaPane.setLeftAnchor(geSearchAreaBackground,0.0);
 		geSearchAreaPane.setStyle("-fx-border-color: red");
 
-		// Bind the Rectangle's dimensions to the Pane's dimensions
+		// Bind the Rectangle's dimensions to the Pane's dimensions and set the Rectangle as the clip of the Pane
 		clipRect.widthProperty().bind(geSearchAreaPane.widthProperty());
 		clipRect.heightProperty().bind(geSearchAreaPane.heightProperty());
-
-		// Set the Rectangle as the clip of the Pane
 		geSearchAreaPane.setClip(clipRect);
 
-//		geSearchAreaPane.layoutBoundsProperty().
-
-		geSearchAreaPane.getChildren().add(geSearchAreaBackground);
+		//Anchor the geSearchArea pane relative to the tabInterface
+		anchorPane.setBottomAnchor(geSearchAreaPane,85.0);
+		anchorPane.setLeftAnchor(geSearchAreaPane,0.0);
 	}
 
-	protected void pane_initGeSearchLabels() {
-		if(DEBUG == true) {System.out.println("pane_initGeSearchLabels()");}
+	protected void geSearchArea_initGeSearchLabels(AnchorPane anchorPane) {
+		if(DEBUG == true) {System.out.println("geSearchArea_initGeSearchLabels()");}
 
 		for(int i = 0; i < 12 ; i++){
 			String instanceKeyGen = "geSearchResult"+(i+1);
@@ -162,15 +160,17 @@ public class GeSearchArea{
 	 * Initializes input text field in the Ge search bar and adds mouse listener
 	 * that will remove the initial prompt text
 	 */
-	protected void initTextField() {
+	protected void initTextField(AnchorPane anchorPane) {
 		if(DEBUG == true) {System.out.println("initTextField()");}
 		//f = new Font("runescape_uf.ttf", 12);
 		itemSearchInput = new TextField("");
 		itemSearchInput.end();
 		itemSearchInput.setOpacity(1);
 		itemSearchInput.setBackground(new Background(new BackgroundFill(Color.rgb(201, 182, 147), null, null)));
-		itemSearchInput.layoutXProperty().bind(geSearchAreaPane.layoutXProperty().add(8));
-		itemSearchInput.layoutYProperty().bind(geSearchAreaPane.layoutYProperty().add(5));
+		anchorPane.setTopAnchor(itemSearchInput,5.0);
+		anchorPane.setLeftAnchor(itemSearchInput,8.0);
+//		itemSearchInput.layoutXProperty().bind(geSearchAreaPane.layoutXProperty().add(8));
+//		itemSearchInput.layoutYProperty().bind(geSearchAreaPane.layoutYProperty().add(5));
 		itemSearchInput.setPrefWidth(734);
 		itemSearchInput.setAlignment(Pos.CENTER);
 //		itemSearchInput.setPromptText("What would you like to buy?");
@@ -182,11 +182,11 @@ public class GeSearchArea{
 	}
 
 /**~~~~~~~~~~~~~~~Getters and setters~~~~~~~~~~~~~~~~~~~~~*/
-	public Pane getGeSearchAreaPane() {
+	public AnchorPane getGeSearchAreaPane() {
 		return geSearchAreaPane;
 	}
 
-	public void setGeSearchAreaPane(Pane geSearchAreaPane) {
+	public void setGeSearchAreaPane(AnchorPane geSearchAreaPane) {
 		this.geSearchAreaPane = geSearchAreaPane;
 	}
 
@@ -204,5 +204,13 @@ public class GeSearchArea{
 
 	public void setItemSearchInput(TextField itemSearchInput) {
 		this.itemSearchInput = itemSearchInput;
+	}
+
+	public Rectangle getClipRect() {
+		return clipRect;
+	}
+
+	public void setClipRect(Rectangle clipRect) {
+		this.clipRect = clipRect;
 	}
 }

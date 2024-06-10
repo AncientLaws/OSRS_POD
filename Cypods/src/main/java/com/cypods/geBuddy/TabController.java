@@ -2,11 +2,14 @@ package com.cypods.geBuddy;
 
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
@@ -17,6 +20,7 @@ import java.net.URL;
 import java.util.Date;
 
 import static com.cypods.geBuddy.ApplicationConstant.*;
+import static com.cypods.geBuddy.Window.root;
 
 //import static com.cypods.geBuddy.ApplicationConstant.*;
 
@@ -62,30 +66,53 @@ public class TabController extends PaneInterface {
 		this.instanceTabName = instanceTabName;
 		imageView = new ImageView();
 		tabSettings(this.instanceTabName);
-
+//		setTabIconRelationships((double) X, (double) Y);
 	}
 	//@Autowired
 	public int tabSettings(String instanceTabName) {
 		if(DEBUG == true) {System.out.println("tabSettings");}
 		switch (instanceTabName){
-			case "Tab1":{ X = 100; Y = 12; setTabActive(instanceTabName); break;}
-			case "Tab2":{ X = 189; Y = 12; setTabActive(instanceTabName); break;}
-			case "Tab3":{ X = 278; Y = 12; setTabActive(instanceTabName); break;}
-			case "Tab4":{ X = 367; Y = 12; setTabActive(instanceTabName); break;}
-			case "Tab5":{ X = 456; Y = 12; setTabActive(instanceTabName); break;}
-			case "Tab6":{ X = 545; Y = 12; setTabActive(instanceTabName); break;}
-			case "Tab7":{ X = 636; Y = 12; setTabActive(instanceTabName); break;}
-			case "Tab8":{ X = 728; Y = 12; setTabActive(instanceTabName); break;}
-			case "Tab9":{ X = 818; Y = 12; setTabActive(instanceTabName); break;}
-			case "Tab10":{X = 909; Y = 12; setTabActive(instanceTabName); break;}
+//			case "Tab1":{ X = 100; Y = 12; setTabActive(instanceTabName); break;}
+//			case "Tab2":{ X = 189; Y = 12; setTabActive(instanceTabName); break;}
+//			case "Tab3":{ X = 278; Y = 12; setTabActive(instanceTabName); break;}
+//			case "Tab4":{ X = 367; Y = 12; setTabActive(instanceTabName); break;}
+//			case "Tab5":{ X = 456; Y = 12; setTabActive(instanceTabName); break;}
+//			case "Tab6":{ X = 545; Y = 12; setTabActive(instanceTabName); break;}
+//			case "Tab7":{ X = 636; Y = 12; setTabActive(instanceTabName); break;}
+//			case "Tab8":{ X = 728; Y = 12; setTabActive(instanceTabName); break;}
+//			case "Tab9":{ X = 818; Y = 12; setTabActive(instanceTabName); break;}
+//			case "Tab10":{X = 909; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab10":{ X = 100; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab9": { X = 189; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab8": { X = 280; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab7": { X = 370; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab6": { X = 460; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab5": { X = 550; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab4": { X = 640; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab3": { X = 728; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab2": { X = 818; Y = 12; setTabActive(instanceTabName); break;}
+			case "Tab1": { X = 909; Y = 12; setTabActive(instanceTabName); break;}
 		}
 		initLabel();
 		initImage();
-		try { itemSearchListener();
+		try {
+			itemSearchListener();
 		}
 		catch(Exception e) {catchError();
 		}
 		return 1;
+	}
+
+
+
+	/**An attempt to dynamically anchor all the tob icons together*/
+	protected void setTabIconRelationships(double sceneWidth){
+				double offSetXValue = (((sceneWidth) - (tabSelectionLabel.getWidth()*10))/2)+(X-167); //TODO tuned the hell out of this
+				System.out.println("offsetXValue: " + offSetXValue + "for tab: " + getInstanceTabName());
+				tabInterface.setTopAnchor(imageView,(double)Y);
+				tabInterface.setTopAnchor(tabSelectionLabel,(double)Y);
+				tabInterface.setRightAnchor(imageView,offSetXValue);
+				tabInterface.setRightAnchor(tabSelectionLabel,offSetXValue);
 	}
 
 	protected void setInterfaceVisible(boolean b){
@@ -116,6 +143,8 @@ public class TabController extends PaneInterface {
 		tabNo = getTabActive();
 		setInterfaceVisible(true); 				//Setting current Objects paneInterface to be visible
 		root.setId(getTabActive());				//changing background to simulate tab change
+		geSearchArea.getClipRect().setViewOrder(1.0);
+		getClipRect().setViewOrder(0);
 		imageView.setOpacity(1);            	//returns item to full opacity
 		if(DEBUG == true) {System.out.println("setActive: " + getTabActive());}
 	}
@@ -125,6 +154,13 @@ public class TabController extends PaneInterface {
 	 * Platform.runLater must be used when updating javafx components
 	 * */
 	private void itemSearchListener() {
+
+		Number oldWidth = (tabInterface.widthProperty().doubleValue());
+		tabInterface.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
+			setTabIconRelationships(newSceneWidth.doubleValue());
+			System.out.println("Width: " + newSceneWidth);
+		});
+
 		geSearchArea.getItemSearchInput().setOnKeyPressed(KeyEvent ->
 		{
 			if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
@@ -183,8 +219,12 @@ public class TabController extends PaneInterface {
 
 	private void iconImageSettings() {
 		if(DEBUG == true) {System.out.println("iconImageSettings InputStream: ");}
-		imageView.setLayoutX(X);
-		imageView.setLayoutY(Y);
+//		Double x = (double) X;
+//		Double y = (double) Y;
+//		tabInterface.setTopAnchor(imageView,y);
+//		tabInterface.setLeftAnchor(imageView,x);
+//		imageView.setLayoutX(X);
+//		imageView.setLayoutY(Y);
 		imageView.setPreserveRatio(true);
 		imageView.setFitHeight(75);
 		imageView.setFitWidth(75);
@@ -212,10 +252,15 @@ public class TabController extends PaneInterface {
 	}
 
 	private void initLabel(){
-		tabSelectionLabel = new Label("");
-		tabSelectionLabel.setTranslateX(X);
-		tabSelectionLabel.setTranslateY(Y);
+		Double x = (double) X;
+		Double y = (double) Y;
+		tabSelectionLabel = new Label(getInstanceTabName()); //TODO remove instance name
+//		tabInterface.setTopAnchor(tabSelectionLabel,y);
+//		tabInterface.setLeftAnchor(tabSelectionLabel,x);
+//		tabSelectionLabel.setTranslateX(X);
+//		tabSelectionLabel.setTranslateY(Y);
 		tabSelectionLabel.setPrefSize(75, 75);
+		tabSelectionLabel.setStyle("-fx-border-color: green");
 		root.getChildren().add(tabSelectionLabel);
 	}
 
@@ -416,5 +461,21 @@ public class TabController extends PaneInterface {
 
 	public void setTabActive(String tabActive) {
 		this.tabActive = tabActive;
+	}
+
+	public ImageView getImageView() {
+		return imageView;
+	}
+
+	public void setImageView(ImageView imageView) {
+		this.imageView = imageView;
+	}
+
+	public String getSelectedSearchItem() {
+		return selectedSearchItem;
+	}
+
+	public void setSelectedSearchItem(String selectedSearchItem) {
+		this.selectedSearchItem = selectedSearchItem;
 	}
 }

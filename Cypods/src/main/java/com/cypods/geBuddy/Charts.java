@@ -56,7 +56,7 @@ public class Charts implements ChartMouseListenerFX {
 	private double chartHeight;
 
 	private double chartViewerVolumeOffset = 5;
-	private double chartViewerPriceOffset = 0;
+	private double chartViewerPriceOffset = 5;
 	private int chartViewerVolumeLastPrice = 0;
 	private int chartViewerVolumeLastVolume = 0;
 
@@ -192,11 +192,11 @@ public class Charts implements ChartMouseListenerFX {
 			//chartViewerVolume.setTranslateX(chartViewerPrice.getTranslateX());
 			System.out.println("ChartViewerPrice TranslateX: "  + chartViewerPrice.getTranslateX());
 			chartViewerVolume.setPrefSize(chartViewerVolume.getPrefWidth() - chartViewerVolumeOffset, chartViewerVolume.getPrefHeight());
+
 			formatChartValues();
 
 		});
-		chartViewerPrice.setPrefSize(chartWidth - 7, 250);
-
+		chartViewerPrice.setPrefSize(chartViewerPrice.getPrefWidth() - chartViewerPriceOffset, chartViewerPrice.getPrefHeight());
 	}
 
 	/**
@@ -207,10 +207,11 @@ public class Charts implements ChartMouseListenerFX {
 	 */
 
 	private void runPriceChartSettings(){
+		defaultChartSettings(priceChart);
 		priceChart.getXYPlot().getRangeAxis().setTickLabelPaint(Color.ORANGE);
 		priceChart.getXYPlot().getDomainAxis().setTickLabelPaint(Color.ORANGE);
 		priceChart.getXYPlot().getRangeAxis().setFixedDimension(40);
-		defaultChartSettings(priceChart);
+
 
 		chartViewerPrice.setPrefSize(1060, 351);
 		chartViewerPrice.setLayoutX(4);
