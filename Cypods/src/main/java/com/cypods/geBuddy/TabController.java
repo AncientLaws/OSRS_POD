@@ -142,6 +142,9 @@ public class TabController extends PaneInterface {
 		geSearchArea.getClipRect().setViewOrder(1.0);
 		getClipRect().setViewOrder(0);
 		imageView.setOpacity(1);            	//returns item to full opacity
+		/*Sets the item search input field to always be active and caret position to be at the end*/
+		geSearchArea.getItemSearchInput().requestFocus();
+		geSearchArea.getItemSearchInput().positionCaret(geSearchArea.getItemSearchInput().getText().length());
 		if(DEBUG == true) {System.out.println("setActive: " + getTabActive());}
 	}
 	/**
