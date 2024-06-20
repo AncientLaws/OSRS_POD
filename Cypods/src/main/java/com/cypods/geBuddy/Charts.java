@@ -1,6 +1,8 @@
 package com.cypods.geBuddy;
 
 import javafx.application.Platform;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -32,6 +34,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.cypods.geBuddy.ApplicationConstant.BORDERS;
 import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
 
 
@@ -82,7 +85,6 @@ public class Charts implements ChartMouseListenerFX {
 	public Charts(double chartWidth, double chartHeight) {
 		this.chartWidth = chartWidth;
 		this.chartHeight = chartHeight;
-		System.out.println("Charts: " + chartWidth + " x "  + chartHeight);
 
 		dataset = dataModeler.createRandomDataset();
 		volumeCategoryDataset = dataModeler.createRandomCategoryDataset();
@@ -97,6 +99,9 @@ public class Charts implements ChartMouseListenerFX {
 //		chartViewerVolume.setLayoutX(4);
 //		chartViewerVolume.setLayoutY(301);
 		chartViewerVolume.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
+//		XYPlot plot = volumeChart.getXYPlot();
+//		ValueAxis xAxis = plot.getDomainAxis();
+//		xAxis.setTickLabelsVisible(false);
 
 		chartViewerPrice = new ChartViewer(priceChart);
 		chartViewerPrice.setPrefSize(1063, 351); //.setPrefSize(chartWidth, chartHeight-chartViewerVolume.getPrefHeight());
@@ -107,9 +112,9 @@ public class Charts implements ChartMouseListenerFX {
 
 		priceChart = initPriceChart(priceChart);
 		volumeChart = initVolumeChart(volumeChart);
-
-		chartsPane.setStyle("-fx-border-color: orange");
-
+		if(BORDERS) {
+			chartsPane.setStyle("-fx-border-color: orange");
+		}
 		/*Allow the price and volume chart nodes to grow within the vbox*/
 		VBox.setVgrow(chartViewerPrice, Priority.ALWAYS);
 		VBox.setVgrow(chartViewerVolume, Priority.ALWAYS);
@@ -178,7 +183,6 @@ public class Charts implements ChartMouseListenerFX {
 		series = null;
 		volumeSeries = null;
 		chartsPane.getChildren().clear();
-
 
 		initCrosshairOverlay();
 
@@ -484,5 +488,6 @@ public class Charts implements ChartMouseListenerFX {
 	public void clearChartsPane(){
 		chartsPane.getChildren().clear();
 	}
+
 }
 
