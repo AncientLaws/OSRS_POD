@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 
 import java.util.HashMap;
 
+import static com.cypods.geBuddy.ApplicationConstant.BORDERS;
 import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
 //import static com.cypods.geBuddy.Window.root;
 
@@ -67,8 +68,9 @@ public class GeSearchArea{
 		geSearchAreaPane.setPrefHeight(225);
 		geSearchAreaPane.setBottomAnchor(geSearchAreaBackground,0.0);
 		geSearchAreaPane.setLeftAnchor(geSearchAreaBackground,0.0);
-		geSearchAreaPane.setStyle("-fx-border-color: red");
-
+		if(BORDERS) {
+			geSearchAreaPane.setStyle("-fx-border-color: red");
+		}
 		// Bind the Rectangle's dimensions to the Pane's dimensions and set the Rectangle as the clip of the Pane
 		clipRect.widthProperty().bind(geSearchAreaPane.widthProperty());
 		clipRect.heightProperty().bind(geSearchAreaPane.heightProperty());

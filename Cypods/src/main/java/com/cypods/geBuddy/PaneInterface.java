@@ -12,6 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import org.springframework.stereotype.Component;
 
+import static com.cypods.geBuddy.ApplicationConstant.BORDERS;
 import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
 import static com.cypods.geBuddy.Window.root;
 
@@ -27,7 +28,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 	Rectangle clipRect = new Rectangle();
 
 	/************************** Labels **************************/
-	Label name;
+	Label selectedItemNameLabel;
 	Label id;
 	//Label type;
 	//Label typeIcon;
@@ -96,8 +97,10 @@ public class PaneInterface extends DisplayController implements Runnable {
 		if(DEBUG == true) {System.out.println("activateInterface");}
 		tabInterface.setTranslateX(0);
 		tabInterface.setTranslateY(91);		
-		tabInterface.setPrefWidth(1080);
-		tabInterface.setStyle("-fx-border-color: green");
+		tabInterface.setPrefWidth(1060);
+		if(BORDERS){
+			tabInterface.setStyle("-fx-border-color: green");
+		}
 
 		// Bind the Rectangle's dimensions to the Pane's dimensions
 		clipRect.widthProperty().bind(tabInterface.widthProperty());
@@ -116,7 +119,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 		pane_drawItemScrollArea();
 		pane_drawInventoryMenu();
 
-//		pane_drawChartArea();
+		pane_drawChartArea();
 		pane_initLabels();
 
 		pane_createChart();
@@ -176,19 +179,12 @@ public class PaneInterface extends DisplayController implements Runnable {
 		tabInterface.getChildren().add(itemTopMenu);
 	}
 
+	/**
+	 * Draws the background color of the tab interface, where the top is a static color, and the bottom is fully
+	 * transparent (via gradient)
+	 * */
 	private void pane_drawChartArea() {
-		if(DEBUG == true) {System.out.println("pane_drawChartArea");}
-		graphBackground = new ImageView(new Image(getClass().getClassLoader().getResource("images/chartArea3.png").toString(),true));
-		graphBackground.setX(4);
-		graphBackground.setY(0);
-		graphBackground.setFitWidth(1065);
-		graphBackground.setFitHeight(404); // 215
-		try {tabInterface.getChildren().add(graphBackground);
-			
-		} catch (Exception e) {
-			System.out.println("Error adding background to tabInterface in method pane_drawChartArea");
-		}
-		if(DEBUG == true) {System.out.println("end pane_drawChartArea");}
+		tabInterface.setStyle("-fx-background-color: linear-gradient(to bottom, rgba(95, 73, 43,1) 20%, rgba(95, 73, 43,0) 45%);");
 	}
 	
 	
@@ -276,11 +272,10 @@ public class PaneInterface extends DisplayController implements Runnable {
 		xyCoordinates.setTranslateY(585);
 		xyCoordinates.setStyle("-fx-text-fill: orange; -fx-font-size: 20px; -fx-font-weight: bold");
 
-		name = new Label("Item");
-		name.setTranslateX(500);
-		name.setTranslateY(4);
-		name.setStyle("-fx-text-fill: orange; -fx-font-size: 30px; -fx-font-weight: bold");
-		name.getStyleClass().add("labelAll");
+		selectedItemNameLabel = new Label("item");
+		tabInterface.setTopAnchor(selectedItemNameLabel, 0.0);
+		selectedItemNameLabel.setStyle("-fx-text-fill: orange; -fx-font-size: 30px; -fx-font-weight: bold");
+		selectedItemNameLabel.getStyleClass().add("labelAll");
 
 		currentPrice_bigLabel = new Label(null);
 		currentPrice_bigLabel.setTranslateX(980);
@@ -361,11 +356,9 @@ public class PaneInterface extends DisplayController implements Runnable {
 		change180Days.setStyle("-fx-text-fill: orange;");
 		change180Days.getStyleClass().add("labelAll");
 
-		tabInterface.getChildren().addAll(name, id, description, members, currentPrice_bigLabel,currentPrice_descLabel,currentPrice_priceLabel ,todayPrice, day30_change,
+		tabInterface.getChildren().addAll(selectedItemNameLabel, id, description, members, currentPrice_bigLabel,currentPrice_descLabel,currentPrice_priceLabel ,todayPrice, day30_change,
 				day90_change, day180_change
-
 				, changeToday, change30Days, change90Days, change180Days
-
 				//, xyCoordinates
 		);
 
@@ -375,13 +368,12 @@ public class PaneInterface extends DisplayController implements Runnable {
 	 * A method that sets the labels in the main pane interface.
 	 **/
 
-	protected void setLabels(String name1, String id1, String description1, String members1, String currentPrice1,
-			String currentTrend1, String todayPrice1, String todayTrend1, String day30_trend1, String day30_change1,
-			String day90_trend1, String day90_change1, String day180_trend1, String day180_change1) {
-
-		createMonitoredLabel();
-		name.setText(name1);
-		name.setLayoutX(-((name.getText().length()*10)/2)); //Attempt at centering title
+	protected void updateLabels(String name1, String id1, String description1, String members1, String currentPrice1,
+								String currentTrend1, String todayPrice1, String todayTrend1, String day30_trend1, String day30_change1,
+								String day90_trend1, String day90_change1, String day180_trend1, String day180_change1) {
+//		createMonitoredLabel();
+		selectedItemNameLabel.setText(name1);
+		selectedItemNameLabel.setLayoutX((tabInterface.widthProperty().doubleValue() /2) - 110); //Attempt at centering title
 		description.setText(description1);
 		currentPrice_bigLabel.setText(currentPrice1);
 		currentPrice_priceLabel.setText(currentPrice1);
@@ -475,14 +467,11 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 		buttonBarLeft.getButtons().addAll(day,week, quarter);
 		buttonBarRight.getButtons().addAll(months3,months6);
-		
 
-		
-		buttonBarRight.setTranslateX(870);
-		buttonBarRight.setTranslateY(13);
-		
-		buttonBarLeft.setTranslateX(-5);
-		buttonBarLeft.setTranslateY(13);
+		tabInterface.setLeftAnchor(buttonBarLeft,0.0);
+		tabInterface.setRightAnchor(buttonBarRight,20.0);
+		tabInterface.setTopAnchor(buttonBarLeft,8.0);
+		tabInterface.setTopAnchor(buttonBarRight,8.0);
 		
 		tabInterface.getChildren().addAll(buttonBarLeft,buttonBarRight);
 		

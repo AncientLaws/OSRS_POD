@@ -2,14 +2,11 @@ package com.cypods.geBuddy;
 
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
@@ -17,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Date;
 
 import static com.cypods.geBuddy.ApplicationConstant.*;
 import static com.cypods.geBuddy.Window.root;
@@ -109,7 +105,6 @@ public class TabController extends PaneInterface {
 	/**An attempt to dynamically anchor all the tob icons together*/
 	protected void setTabIconRelationships(double sceneWidth){
 				double offSetXValue = ((sceneWidth - (tabSelectionLabel.getWidth()*10))/2)+(X-167); //TODO tuned the hell out of this
-//				System.out.println("offsetXValue: " + offSetXValue + "for tab: " + getInstanceTabName());
 				tabInterface.setTopAnchor(imageView,(double)Y);
 				tabInterface.setTopAnchor(tabSelectionLabel,(double)Y);
 				tabInterface.setRightAnchor(imageView,offSetXValue);
@@ -174,14 +169,9 @@ public class TabController extends PaneInterface {
 	}
 
 	private void initInterfaceSizeListeners(){
-
 		tabInterface.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
 			setTabIconRelationships(newSceneWidth.doubleValue());
-//			cp.resizeChartW(cp.getChartsPane(), newSceneWidth.doubleValue());
-		});
-
-		tabInterface.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
-//			cp.resizeChartH(cp.getChartsPane(), newHeight.doubleValue());
+			selectedItemNameLabel.setLayoutX((newSceneWidth.doubleValue() - selectedItemNameLabel.getWidth()) / 2);
 		});
 	}
 
@@ -196,7 +186,7 @@ public class TabController extends PaneInterface {
 			tab_itemID = itemID;
 			Platform.runLater(() -> {
 				setIcon();
-				setInterfaceLabels();					//Drawing everything
+				updateInterfaceLabels();					//Drawing everything
 				pane_updateChart(itemID, "1h");
 				addButtonListeners();
 				resetButtonClickedStyle();
@@ -251,23 +241,38 @@ public class TabController extends PaneInterface {
 		imageView.setVisible(false);       //hides all the added images, only sets visible once clicked
 	}
 
+	/**
+	 * Initialize label and set default location based on tab no
+	 **/
 	private void initLabel(){
 		Double x = (double) X;
 		Double y = (double) Y;
-		tabSelectionLabel = new Label(getInstanceTabName()); //TODO remove instance name
+		tabSelectionLabel = new Label();
+		if(BORDERS){
+			tabSelectionLabel.setText(getInstanceTabName());
+		}
 		tabSelectionLabel.setPrefSize(75, 75);
-		tabSelectionLabel.setStyle("-fx-border-color: purple");
+		if(BORDERS) {
+			tabSelectionLabel.setStyle("-fx-border-color: green");
+		}
 		root.getChildren().add(tabSelectionLabel);
+
+		/*Platform.run later is neccessary to get the correct widthProperty after application size has been initialized*/
+			Platform.runLater(() -> {
+			double offSetXValue = ((tabInterface.widthProperty().doubleValue() - (tabSelectionLabel.getWidth()*10))/2)+(X-167); //TODO tuned the hell out of this
+			tabInterface.setRightAnchor(imageView,offSetXValue);
+			tabInterface.setRightAnchor(tabSelectionLabel,offSetXValue);
+		});
 	}
 
-	private void setInterfaceLabels() {
+	private void updateInterfaceLabels() {
 
 		try {
 			try {
 				iconImageSettings();  //must have called getIcon() for it not to be null
 				pane_setItemTopMenu(image);
 				pane_iconTooltip(itemInfoArr[ITEM_NAME]);
-				setLabels(
+				updateLabels(
 						itemInfoArr[ITEM_NAME]								//name
 						,itemInfoArr[ITEM_ID] 								//Item ID
 						,itemInfoArr[ITEM_DESC]								//Description

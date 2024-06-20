@@ -23,6 +23,8 @@ import javax.swing.*;
 import java.net.URL;
 import java.util.Objects;
 
+import static com.cypods.geBuddy.ApplicationConstant.BORDERS;
+
 @Component
 @ComponentScan("com.cypods.geBuddy")
 
@@ -51,20 +53,13 @@ public class Window extends Application {
 			primaryStage.setTitle("Grand Exchange Central - By Ancient laws");
 			Image icon = new Image 	(getClass().getClassLoader().getResource("images/icon.png").toString(), true);
 			primaryStage.getIcons().add(icon);
-			root.setStyle("-fx-border-color: yellow");
-
-//			Platform.runLater(() -> {
-//				stageWidth = 750;//primaryStage.getWidth();
-//				stageheight = 1080;//primaryStage.getHeight();
-//				root.setPrefSize( stageWidth,stageheight-28);
-//			});
+			if(BORDERS) {
+				root.setStyle("-fx-border-color: yellow");
+			}
 			root.setId("Bank-Screen");
-            
-			scene = new Scene(root, primaryStage.widthProperty().doubleValue(), 719.0,Color.BEIGE);
-//			scene = new Scene(group);
-			//root.autosize();
-//			root.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight()-28);
-//			group.prefWidth(primaryStage.widthProperty().doubleValue());
+
+			scene = new Scene(root, primaryStage.widthProperty().doubleValue(), 714.0,Color.BEIGE);
+
             dc = ac.getBean(DisplayController.class);
 			dc.getTab();
 			dc.setListeners();
