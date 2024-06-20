@@ -116,7 +116,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 		pane_drawItemScrollArea();
 		pane_drawInventoryMenu();
 
-		pane_drawChartArea();
+//		pane_drawChartArea();
 		pane_initLabels();
 
 		pane_createChart();
@@ -129,6 +129,9 @@ public class PaneInterface extends DisplayController implements Runnable {
 		AnchorPane.setBottomAnchor(tabInterface,0.0);
 		AnchorPane.setLeftAnchor(tabInterface,0.0);
 		AnchorPane.setRightAnchor(tabInterface,0.0);
+
+		AnchorPane.setTopAnchor(cp.chartsPane,30.0);
+		AnchorPane.setBottomAnchor(cp.chartsPane,300.0);
 
 		tabInterface.setVisible(true);
 
@@ -243,16 +246,16 @@ public class PaneInterface extends DisplayController implements Runnable {
 	protected void pane_createChart() {
 		if(DEBUG == true) {System.out.println("pane_createChart()");}
 		Platform.runLater(()->{
-				tabInterface.getChildren().removeAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
-				tabInterface.getChildren().addAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
+				tabInterface.getChildren().removeAll(cp.chartsPane);
+				tabInterface.getChildren().addAll(cp.chartsPane);
 		});
 	}
 	
 	public void pane_updateChart(int itemID, String timePeriod) {
 		Platform.runLater(()->{
-			tabInterface.getChildren().removeAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
+			tabInterface.getChildren().removeAll(cp.chartsPane);
 			cp.runChart(itemID, timePeriod);
-			tabInterface.getChildren().addAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
+			tabInterface.getChildren().addAll(cp.chartsPane);
 		});
 	}
 
@@ -479,40 +482,9 @@ public class PaneInterface extends DisplayController implements Runnable {
 		tabInterface.getChildren().addAll(buttonBarLeft,buttonBarRight);
 		
 	}
-	
-	/**
-	 * Purpose: Update Chart size based on the size of the application (re-sizable mode)
-	 * Note: Platform.runLater is used so the listener is added after all dependencies are initialized
-	 * otherwise you get null pointer exception
-	 * */
-	public void syncChartSize() {
-	
-		
-//	Platform.runLater(() -> {
-//		 	w.primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
-//		 		//new Thread(() -> {
-//		 		delayW++;
-//		 		if((delayW % 3) == 0) {
-//		 			//System.out.println("Starting WidthProperty thread in synchCHartSize....");
-//		 		cp.resizeChartW(cp.charts_chartViewerPrice(), (double)newVal - 8);
-//		 		cp.resizeChartW(cp.charts_chartViewerVolume(), (double)newVal - 8);
-//		 		//}).start();
-//		 		}
-//		 });
-////		 	w.primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
-////		 		//new Thread(() -> {
-////		 		cp.resizeChartH(cp.charts_chartViewerPrice(), (double)newVal);
-////		 		cp.resizeChartH(cp.charts_chartViewerVolume(), (double)newVal);
-////		 		//});
-////	 	 });
-//
-//	});
-	
-	}
 
 	@Override
 	public void run() {
-		syncChartSize();
 		
 	}
 

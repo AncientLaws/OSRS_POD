@@ -177,8 +177,12 @@ public class TabController extends PaneInterface {
 		Number oldWidth = (tabInterface.widthProperty().doubleValue());
 		tabInterface.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
 			setTabIconRelationships(newSceneWidth.doubleValue());
-			cp.resizeChartH(cp.charts_chartViewerPrice(), newSceneWidth.doubleValue());
+			cp.resizeChartW(cp.getChartsPane(), newSceneWidth.doubleValue());
 //			System.out.println("Width: " + newSceneWidth);
+		});
+
+		tabInterface.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
+			cp.resizeChartH(cp.getChartsPane(), newHeight.doubleValue());
 		});
 	}
 
