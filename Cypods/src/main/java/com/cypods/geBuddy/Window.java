@@ -53,14 +53,14 @@ public class Window extends Application {
 			primaryStage.getIcons().add(icon);
 			root.setStyle("-fx-border-color: yellow");
 
-			Platform.runLater(() -> {
-				stageWidth = 750;//primaryStage.getWidth();
-				stageheight = 1080;//primaryStage.getHeight();
-				root.setPrefSize( stageWidth,stageheight-28);
-			});
+//			Platform.runLater(() -> {
+//				stageWidth = 750;//primaryStage.getWidth();
+//				stageheight = 1080;//primaryStage.getHeight();
+//				root.setPrefSize( stageWidth,stageheight-28);
+//			});
 			root.setId("Bank-Screen");
             
-			scene = new Scene(root, primaryStage.widthProperty().doubleValue(), primaryStage.heightProperty().doubleValue()-28,Color.BEIGE);
+			scene = new Scene(root, primaryStage.widthProperty().doubleValue(), 719.0,Color.BEIGE);
 //			scene = new Scene(group);
 			//root.autosize();
 //			root.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight()-28);

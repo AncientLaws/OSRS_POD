@@ -130,8 +130,13 @@ public class PaneInterface extends DisplayController implements Runnable {
 		AnchorPane.setLeftAnchor(tabInterface,0.0);
 		AnchorPane.setRightAnchor(tabInterface,0.0);
 
-		AnchorPane.setTopAnchor(cp.chartsPane,30.0);
-		AnchorPane.setBottomAnchor(cp.chartsPane,300.0);
+		AnchorPane.setTopAnchor(cp.chartsPane,45.0);
+		AnchorPane.setBottomAnchor(cp.chartsPane, 310.0);
+
+		AnchorPane.setRightAnchor(cp.chartsPane,2.0);
+		AnchorPane.setLeftAnchor(cp.chartsPane,2.0);
+
+//		AnchorPane.setTopAnchor(geSearchArea.getGeSearchAreaPane(),100.0);
 
 		tabInterface.setVisible(true);
 

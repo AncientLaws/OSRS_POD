@@ -2,6 +2,7 @@ package com.cypods.geBuddy;
 
 import javafx.application.Platform;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import org.jfree.chart.ChartFactory;
@@ -25,6 +26,8 @@ import org.jfree.data.xy.XYDataset;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
+import javafx.scene.shape.Rectangle;
+
 import java.awt.geom.Rectangle2D;
 import java.util.Calendar;
 import java.util.Date;
@@ -71,7 +74,7 @@ public class Charts implements ChartMouseListenerFX {
 
 	VBox chartsPane = new VBox();
 
-
+	Rectangle clipRect = new Rectangle();
 
 	public Charts() {
 	}
@@ -90,21 +93,32 @@ public class Charts implements ChartMouseListenerFX {
 
 		chartViewerVolume = new ChartViewer(volumeChart);
 		chartViewerVolume.setPrefSize(chartWidth, 100);
+		chartViewerVolume.setMinHeight(100);
 //		chartViewerVolume.setLayoutX(4);
 //		chartViewerVolume.setLayoutY(301);
 		chartViewerVolume.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
 
 		chartViewerPrice = new ChartViewer(priceChart);
-		chartViewerPrice.setPrefSize(chartWidth, chartHeight-chartViewerVolume.getPrefHeight()); //.setPrefSize(1063, 351)
+		chartViewerPrice.setPrefSize(1063, 351); //.setPrefSize(chartWidth, chartHeight-chartViewerVolume.getPrefHeight());
+		chartViewerPrice.setMinHeight(151); //351
 //		chartViewerPrice.setLayoutX(4);  //setLayoutX(4);
 //		chartViewerPrice.setLayoutY(52);  //setLayoutY(52);
 		chartViewerPrice.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
 
-
-
 		priceChart = initPriceChart(priceChart);
 		volumeChart = initVolumeChart(volumeChart);
-		chartsPane.setStyle("-fx-border-color: purple");
+
+		chartsPane.setStyle("-fx-border-color: orange");
+
+		/*Allow the price and volume chart nodes to grow within the vbox*/
+		VBox.setVgrow(chartViewerPrice, Priority.ALWAYS);
+		VBox.setVgrow(chartViewerVolume, Priority.ALWAYS);
+
+		/*Clips off charts when the VBox area gets too small*/
+		clipRect.widthProperty().bind(chartsPane.widthProperty());
+		clipRect.heightProperty().bind(chartsPane.heightProperty());
+		chartsPane.setClip(clipRect);
+
 		chartsPane.getChildren().addAll(chartViewerPrice,chartViewerVolume);
 	}
 
@@ -184,6 +198,7 @@ public class Charts implements ChartMouseListenerFX {
 		runPriceChartSettings();
 		runVolumeChartSettings();
 
+
 		Platform.runLater(() -> {
 			this.yCrosshair.setLabelVisible(true);
 			crosshairOverlay.addDomainCrosshair(xCrosshair);
@@ -191,19 +206,19 @@ public class Charts implements ChartMouseListenerFX {
 
 			this.chartViewerPrice.getCanvas().addOverlay(crosshairOverlay);
 			this.chartViewerVolume.getCanvas().addOverlay(crosshairOverlay);
-			//chartViewerVolume.setTranslateX(chartViewerPrice.getTranslateX());
-			System.out.println("ChartViewerPrice TranslateX: "  + chartViewerPrice.getTranslateX());
+
 			chartViewerVolume.setPrefSize(chartViewerVolume.getPrefWidth(), chartViewerVolume.getPrefHeight());
 			chartViewerPrice.setPrefSize(chartViewerPrice.getPrefWidth(), chartViewerPrice.getPrefHeight());
 
 			formatChartValues(priceChart, chartViewerPrice);
 			formatChartValues(volumeChart, chartViewerVolume);
 
+			/*Clips off chart node when the VBox area gets too small (stops overflow)*/
+			clipRect.widthProperty().bind(chartsPane.widthProperty());
+			clipRect.heightProperty().bind(chartsPane.heightProperty());
+			chartsPane.setClip(clipRect);
+
 			chartsPane.getChildren().addAll(chartViewerPrice,chartViewerVolume);
-
-			AnchorPane.setBottomAnchor(chartViewerPrice,100.0);
-
-
 		});
 
 	}
@@ -227,7 +242,8 @@ public class Charts implements ChartMouseListenerFX {
 		chartViewerPrice.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
 //		chartViewerPrice.setTranslateX(5);
 		chartViewerPrice.setPrefSize(chartWidth, 500); //new
-
+		chartViewerPrice.setMinHeight(151); //351
+		VBox.setVgrow(chartViewerPrice, Priority.ALWAYS); // Allow the price chart to grow
 	}
 
 	private void runVolumeChartSettings(){
@@ -240,7 +256,9 @@ public class Charts implements ChartMouseListenerFX {
 		chartViewerVolume.addChartMouseListener(this);
 //		chartViewerVolume.setTranslateX(chartViewerVolumeOffset);
 		chartViewerVolume.setPrefSize(chartWidth, 100);
+		chartViewerVolume.setMinHeight(100);
 		chartViewerVolume.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
+		VBox.setVgrow(chartViewerVolume, Priority.ALWAYS); // Allow the volume chart to grow
 	}
 
 	private void defaultChartSettings(JFreeChart volumeChart) {

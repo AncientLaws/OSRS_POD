@@ -174,15 +174,14 @@ public class TabController extends PaneInterface {
 	}
 
 	private void initInterfaceSizeListeners(){
-		Number oldWidth = (tabInterface.widthProperty().doubleValue());
+
 		tabInterface.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
 			setTabIconRelationships(newSceneWidth.doubleValue());
-			cp.resizeChartW(cp.getChartsPane(), newSceneWidth.doubleValue());
-//			System.out.println("Width: " + newSceneWidth);
+//			cp.resizeChartW(cp.getChartsPane(), newSceneWidth.doubleValue());
 		});
 
 		tabInterface.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
-			cp.resizeChartH(cp.getChartsPane(), newHeight.doubleValue());
+//			cp.resizeChartH(cp.getChartsPane(), newHeight.doubleValue());
 		});
 	}
 
@@ -257,7 +256,7 @@ public class TabController extends PaneInterface {
 		Double y = (double) Y;
 		tabSelectionLabel = new Label(getInstanceTabName()); //TODO remove instance name
 		tabSelectionLabel.setPrefSize(75, 75);
-		tabSelectionLabel.setStyle("-fx-border-color: green");
+		tabSelectionLabel.setStyle("-fx-border-color: purple");
 		root.getChildren().add(tabSelectionLabel);
 	}
 
