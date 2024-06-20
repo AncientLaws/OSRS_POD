@@ -2,27 +2,19 @@ package com.cypods.geBuddy;
 
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
+import static com.cypods.geBuddy.ApplicationConstant.BORDERS;
 import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
+import static com.cypods.geBuddy.Window.root;
 
 @Component
 public class PaneInterface extends DisplayController implements Runnable {
@@ -36,7 +28,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 	Rectangle clipRect = new Rectangle();
 
 	/************************** Labels **************************/
-	Label name;
+	Label selectedItemNameLabel;
 	Label id;
 	//Label type;
 	//Label typeIcon;
@@ -57,7 +49,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 	Label xyCoordinates;
 
-	GeSearchArea geSearchArea = new GeSearchArea();
+	GeSearchArea geSearchArea;
 
 //	HashMap<String, GeSearchResultLabel> geSearchResultLabelMap = geSearchArea.getGeSearchResultLabelMap();
 
@@ -79,11 +71,8 @@ public class PaneInterface extends DisplayController implements Runnable {
 	protected Tooltip pane_Tooltip;
 	Font f;
 
-	protected Pane tabInterface = new Pane();
+	protected AnchorPane tabInterface = new AnchorPane();
 	//protected Pane chartPane = new Pane();
-	
-	protected double tabInterfaceWidth;
-	protected double tabInterfaceHeight;
 	
 	int delayW = 25;
 	
@@ -108,8 +97,10 @@ public class PaneInterface extends DisplayController implements Runnable {
 		if(DEBUG == true) {System.out.println("activateInterface");}
 		tabInterface.setTranslateX(0);
 		tabInterface.setTranslateY(91);		
-		tabInterface.setMaxWidth(1080);
-		tabInterface.setStyle("-fx-border-color: green");
+		tabInterface.setPrefWidth(1060);
+		if(BORDERS){
+			tabInterface.setStyle("-fx-border-color: green");
+		}
 
 		// Bind the Rectangle's dimensions to the Pane's dimensions
 		clipRect.widthProperty().bind(tabInterface.widthProperty());
@@ -117,28 +108,41 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 		// Set the Rectangle as the clip of the Pane
 		tabInterface.setClip(clipRect);
-
-		tabInterfaceWidth  = group.getBoundsInLocal().getWidth();
-		tabInterfaceHeight = group.getBoundsInLocal().getHeight();
      	 
-     	cp = new Charts(tabInterfaceWidth-12, tabInterfaceHeight);
-     	
+     	cp = new Charts(tabInterface.getPrefWidth(), tabInterface.getPrefHeight());
+
+		geSearchArea = new GeSearchArea(tabInterface);
+		geSearchArea.geSearchArea_initGeSearchLabels(tabInterface);
+		geSearchArea.initTextField(tabInterface);
+
+
 		pane_drawItemScrollArea();
 		pane_drawInventoryMenu();
 
 		pane_drawChartArea();
 		pane_initLabels();
-		geSearchArea.initTextField();
-		geSearchArea.pane_initGeSearchLabels();
+
 		pane_createChart();
 		
 		pane_createButtons();
 
+		root.getChildren().add(tabInterface);
+		/**Anchoring tabInterface to root so it's dynamically resized*/
+		AnchorPane.setTopAnchor(tabInterface,0.0);
+		AnchorPane.setBottomAnchor(tabInterface,0.0);
+		AnchorPane.setLeftAnchor(tabInterface,0.0);
+		AnchorPane.setRightAnchor(tabInterface,0.0);
 
+		AnchorPane.setTopAnchor(cp.chartsPane,45.0);
+		AnchorPane.setBottomAnchor(cp.chartsPane, 310.0);
 
-		group.getChildren().add(tabInterface);
+		AnchorPane.setRightAnchor(cp.chartsPane,2.0);
+		AnchorPane.setLeftAnchor(cp.chartsPane,2.0);
+
+//		AnchorPane.setTopAnchor(geSearchArea.getGeSearchAreaPane(),100.0);
+
 		tabInterface.setVisible(true);
-		
+
 	}
 
 	private void createMonitoredLabel() {
@@ -150,8 +154,8 @@ public class PaneInterface extends DisplayController implements Runnable {
 	}
 
 	private void pane_drawItemScrollArea() {
-		if(DEBUG == true) {System.out.println("pane_drawItemScrollArea");}
-		tabInterface.getChildren().add(geSearchArea.geSearchAreaPane);
+		if(DEBUG == true) {System.out.println("geSearchArea_drawItemScrollArea");}
+		tabInterface.getChildren().add(geSearchArea.getGeSearchAreaPane());
 	}
 
 	private void pane_drawInventoryMenu() {
@@ -175,19 +179,12 @@ public class PaneInterface extends DisplayController implements Runnable {
 		tabInterface.getChildren().add(itemTopMenu);
 	}
 
+	/**
+	 * Draws the background color of the tab interface, where the top is a static color, and the bottom is fully
+	 * transparent (via gradient)
+	 * */
 	private void pane_drawChartArea() {
-		if(DEBUG == true) {System.out.println("pane_drawChartArea");}
-		graphBackground = new ImageView(new Image(getClass().getClassLoader().getResource("images/chartArea3.png").toString(),true));
-		graphBackground.setX(4);
-		graphBackground.setY(0);
-		graphBackground.setFitWidth(1065);
-		graphBackground.setFitHeight(404); // 215
-		try {tabInterface.getChildren().add(graphBackground);
-			
-		} catch (Exception e) {
-			System.out.println("Error adding background to tabInterface in method pane_drawChartArea");
-		}
-		if(DEBUG == true) {System.out.println("end pane_drawChartArea");}
+		tabInterface.setStyle("-fx-background-color: linear-gradient(to bottom, rgba(95, 73, 43,1) 20%, rgba(95, 73, 43,0) 45%);");
 	}
 	
 	
@@ -250,16 +247,16 @@ public class PaneInterface extends DisplayController implements Runnable {
 	protected void pane_createChart() {
 		if(DEBUG == true) {System.out.println("pane_createChart()");}
 		Platform.runLater(()->{
-				tabInterface.getChildren().removeAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
-				tabInterface.getChildren().addAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
+				tabInterface.getChildren().removeAll(cp.chartsPane);
+				tabInterface.getChildren().addAll(cp.chartsPane);
 		});
 	}
 	
 	public void pane_updateChart(int itemID, String timePeriod) {
 		Platform.runLater(()->{
-			tabInterface.getChildren().removeAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
+			tabInterface.getChildren().removeAll(cp.chartsPane);
 			cp.runChart(itemID, timePeriod);
-			tabInterface.getChildren().addAll(cp.charts_chartViewerPrice(), cp.charts_chartViewerVolume());
+			tabInterface.getChildren().addAll(cp.chartsPane);
 		});
 	}
 
@@ -275,11 +272,10 @@ public class PaneInterface extends DisplayController implements Runnable {
 		xyCoordinates.setTranslateY(585);
 		xyCoordinates.setStyle("-fx-text-fill: orange; -fx-font-size: 20px; -fx-font-weight: bold");
 
-		name = new Label("Item");
-		name.setTranslateX(500);
-		name.setTranslateY(4);
-		name.setStyle("-fx-text-fill: orange; -fx-font-size: 30px; -fx-font-weight: bold");
-		name.getStyleClass().add("labelAll");
+		selectedItemNameLabel = new Label("item");
+		tabInterface.setTopAnchor(selectedItemNameLabel, 0.0);
+		selectedItemNameLabel.setStyle("-fx-text-fill: orange; -fx-font-size: 30px; -fx-font-weight: bold");
+		selectedItemNameLabel.getStyleClass().add("labelAll");
 
 		currentPrice_bigLabel = new Label(null);
 		currentPrice_bigLabel.setTranslateX(980);
@@ -360,11 +356,9 @@ public class PaneInterface extends DisplayController implements Runnable {
 		change180Days.setStyle("-fx-text-fill: orange;");
 		change180Days.getStyleClass().add("labelAll");
 
-		tabInterface.getChildren().addAll(name, id, description, members, currentPrice_bigLabel,currentPrice_descLabel,currentPrice_priceLabel ,todayPrice, day30_change,
+		tabInterface.getChildren().addAll(selectedItemNameLabel, id, description, members, currentPrice_bigLabel,currentPrice_descLabel,currentPrice_priceLabel ,todayPrice, day30_change,
 				day90_change, day180_change
-
 				, changeToday, change30Days, change90Days, change180Days
-
 				//, xyCoordinates
 		);
 
@@ -374,13 +368,12 @@ public class PaneInterface extends DisplayController implements Runnable {
 	 * A method that sets the labels in the main pane interface.
 	 **/
 
-	protected void setLabels(String name1, String id1, String description1, String members1, String currentPrice1,
-			String currentTrend1, String todayPrice1, String todayTrend1, String day30_trend1, String day30_change1,
-			String day90_trend1, String day90_change1, String day180_trend1, String day180_change1) {
-
-		createMonitoredLabel();
-		name.setText(name1);
-		name.setLayoutX(-((name.getText().length()*10)/2)); //Attempt at centering title
+	protected void updateLabels(String name1, String id1, String description1, String members1, String currentPrice1,
+								String currentTrend1, String todayPrice1, String todayTrend1, String day30_trend1, String day30_change1,
+								String day90_trend1, String day90_change1, String day180_trend1, String day180_change1) {
+//		createMonitoredLabel();
+		selectedItemNameLabel.setText(name1);
+		selectedItemNameLabel.setLayoutX((tabInterface.widthProperty().doubleValue() /2) - 110); //Attempt at centering title
 		description.setText(description1);
 		currentPrice_bigLabel.setText(currentPrice1);
 		currentPrice_priceLabel.setText(currentPrice1);
@@ -474,52 +467,26 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 		buttonBarLeft.getButtons().addAll(day,week, quarter);
 		buttonBarRight.getButtons().addAll(months3,months6);
-		
 
-		
-		buttonBarRight.setTranslateX(870);
-		buttonBarRight.setTranslateY(13);
-		
-		buttonBarLeft.setTranslateX(-5);
-		buttonBarLeft.setTranslateY(13);
+		tabInterface.setLeftAnchor(buttonBarLeft,0.0);
+		tabInterface.setRightAnchor(buttonBarRight,20.0);
+		tabInterface.setTopAnchor(buttonBarLeft,8.0);
+		tabInterface.setTopAnchor(buttonBarRight,8.0);
 		
 		tabInterface.getChildren().addAll(buttonBarLeft,buttonBarRight);
 		
 	}
-	
-	/**
-	 * Purpose: Update Chart size based on the size of the application (re-sizable mode)
-	 * Note: Platform.runLater is used so the listener is added after all dependencies are initialized
-	 * otherwise you get null pointer exception
-	 * */
-	public void syncChartSize() {
-	
-		
-//	Platform.runLater(() -> {
-//		 	w.primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
-//		 		//new Thread(() -> {
-//		 		delayW++;
-//		 		if((delayW % 3) == 0) {
-//		 			//System.out.println("Starting WidthProperty thread in synchCHartSize....");
-//		 		cp.resizeChartW(cp.charts_chartViewerPrice(), (double)newVal - 8);
-//		 		cp.resizeChartW(cp.charts_chartViewerVolume(), (double)newVal - 8);
-//		 		//}).start();
-//		 		}
-//		 });
-////		 	w.primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
-////		 		//new Thread(() -> {
-////		 		cp.resizeChartH(cp.charts_chartViewerPrice(), (double)newVal);
-////		 		cp.resizeChartH(cp.charts_chartViewerVolume(), (double)newVal);
-////		 		//});
-////	 	 });
-//
-//	});
-	
-	}
 
 	@Override
 	public void run() {
-		syncChartSize();
 		
+	}
+
+	public Rectangle getClipRect() {
+		return clipRect;
+	}
+
+	public void setClipRect(Rectangle clipRect) {
+		this.clipRect = clipRect;
 	}
 }

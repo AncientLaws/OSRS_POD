@@ -7,6 +7,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -22,16 +23,21 @@ import javax.swing.*;
 import java.net.URL;
 import java.util.Objects;
 
+import static com.cypods.geBuddy.ApplicationConstant.BORDERS;
+
 @Component
 @ComponentScan("com.cypods.geBuddy")
 
 public class Window extends Application {
 	
-	public static Pane root = new Pane();
-	public static Group group = new Group(root);
+	public static AnchorPane root = new AnchorPane();
+//	public static Group group = new Group(root);
 	Scene scene;
 	Button bt  = new Button("");
 	public static Stage primaryStage;
+
+	double stageWidth;
+	double stageheight;
 
 	@Autowired
 	public  ConfigurableApplicationContext ac;
@@ -43,41 +49,24 @@ public class Window extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			this.primaryStage =  primaryStage;
+
 			primaryStage.setTitle("Grand Exchange Central - By Ancient laws");
 			Image icon = new Image 	(getClass().getClassLoader().getResource("images/icon.png").toString(), true);
 			primaryStage.getIcons().add(icon);
-
-			//primaryStage.setWidth(1080);
-			//primaryStage.setHeight(720);
-			
-			root.setPrefSize(primaryStage.getWidth(),primaryStage.getHeight()-28);
-			root.setStyle("-fx-border-color: yellow");
-			
-			Platform.runLater(new Runnable() {
-			    @Override
-			    public void run() {
-			    	root.setPrefSize( primaryStage.getWidth(),primaryStage.getHeight()-28);
-			    	System.out.println("PrimaryStage Height: "+ (primaryStage.getHeight()-28)+ " PrimaryStage Width: " + primaryStage.getWidth());
-					root.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight()-28);
-					group.prefWidth(primaryStage.getWidth());
-
-			    	//scene = new Scene(group, primaryStage.getWidth(), primaryStage.getHeight()-28,Color.BEIGE);
-			    }
-			});
+			if(BORDERS) {
+				root.setStyle("-fx-border-color: yellow");
+			}
 			root.setId("Bank-Screen");
-            
-			scene = new Scene(group, primaryStage.getWidth(), primaryStage.getHeight()-28,Color.BEIGE);
-			//root.autosize();
-			root.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight()-28);
-			group.prefWidth(primaryStage.getWidth());
+
+			scene = new Scene(root, primaryStage.widthProperty().doubleValue(), 714.0,Color.BEIGE);
+
             dc = ac.getBean(DisplayController.class);
 			dc.getTab();
 			dc.setListeners();
 
-			
-			//scene.getStylesheets().add((getClass().getResource("application.css")).toExternalForm());
+
 			scene.getStylesheets().add((getClass().getResource("/application.css")).toExternalForm());
-			//scene.getStylesheets().add("application.css");
+
 			primaryStage.setScene(scene);
 			primaryStage.setAlwaysOnTop(false);
 			

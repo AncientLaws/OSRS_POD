@@ -1,6 +1,11 @@
 package com.cypods.geBuddy;
 
 import javafx.application.Platform;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -23,9 +28,14 @@ import org.jfree.data.xy.XYDataset;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
+import javafx.scene.shape.Rectangle;
+
 import java.awt.geom.Rectangle2D;
 import java.util.Calendar;
 import java.util.Date;
+
+import static com.cypods.geBuddy.ApplicationConstant.BORDERS;
+import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
 
 
 //import org.jfree.chart.fx.ChartViewer;
@@ -33,14 +43,12 @@ import java.util.Date;
 @Component
 public class Charts implements ChartMouseListenerFX {
 
-	public static boolean DEBUG = false;
-
 	private ChartViewer chartViewerPrice;
 	private ChartViewer chartViewerVolume;
 
 	private Crosshair xCrosshair;
-
 	private Crosshair yCrosshair;
+
 	JFreeChart priceChart;
 	JFreeChart volumeChart;
 	XYDataset dataset;
@@ -56,7 +64,7 @@ public class Charts implements ChartMouseListenerFX {
 	private double chartHeight;
 
 	private double chartViewerVolumeOffset = 5;
-	private double chartViewerPriceOffset = 0;
+	private double chartViewerPriceOffset = 5;
 	private int chartViewerVolumeLastPrice = 0;
 	private int chartViewerVolumeLastVolume = 0;
 
@@ -67,12 +75,12 @@ public class Charts implements ChartMouseListenerFX {
 
 	DataModeler dataModeler =  new DataModeler();
 
+	VBox chartsPane = new VBox();
+
+	Rectangle clipRect = new Rectangle();
 
 	public Charts() {
-
 	}
-
-	;
 
 	public Charts(double chartWidth, double chartHeight) {
 		this.chartWidth = chartWidth;
@@ -85,24 +93,38 @@ public class Charts implements ChartMouseListenerFX {
 		volumeChart = createChart(volumeCategoryDataset);
 		screenBounds = Screen.getPrimary().getVisualBounds();
 
-		chartViewerPrice = new ChartViewer(priceChart);
-		chartViewerPrice.setPrefSize(chartWidth, 250); //.setPrefSize(1063, 351)
-		chartViewerPrice.setLayoutX(4);  //setLayoutX(4);
-		chartViewerPrice.setLayoutY(52);  //setLayoutY(52);
-		chartViewerPrice.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
-
-
 		chartViewerVolume = new ChartViewer(volumeChart);
 		chartViewerVolume.setPrefSize(chartWidth, 100);
-		chartViewerVolume.setLayoutX(4);
-		chartViewerVolume.setLayoutY(301);
+		chartViewerVolume.setMinHeight(100);
+//		chartViewerVolume.setLayoutX(4);
+//		chartViewerVolume.setLayoutY(301);
 		chartViewerVolume.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
+//		XYPlot plot = volumeChart.getXYPlot();
+//		ValueAxis xAxis = plot.getDomainAxis();
+//		xAxis.setTickLabelsVisible(false);
 
+		chartViewerPrice = new ChartViewer(priceChart);
+		chartViewerPrice.setPrefSize(1063, 351); //.setPrefSize(chartWidth, chartHeight-chartViewerVolume.getPrefHeight());
+		chartViewerPrice.setMinHeight(151); //351
+//		chartViewerPrice.setLayoutX(4);  //setLayoutX(4);
+//		chartViewerPrice.setLayoutY(52);  //setLayoutY(52);
+		chartViewerPrice.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
 
 		priceChart = initPriceChart(priceChart);
 		volumeChart = initVolumeChart(volumeChart);
+		if(BORDERS) {
+			chartsPane.setStyle("-fx-border-color: orange");
+		}
+		/*Allow the price and volume chart nodes to grow within the vbox*/
+		VBox.setVgrow(chartViewerPrice, Priority.ALWAYS);
+		VBox.setVgrow(chartViewerVolume, Priority.ALWAYS);
 
+		/*Clips off charts when the VBox area gets too small*/
+		clipRect.widthProperty().bind(chartsPane.widthProperty());
+		clipRect.heightProperty().bind(chartsPane.heightProperty());
+		chartsPane.setClip(clipRect);
 
+		chartsPane.getChildren().addAll(chartViewerPrice,chartViewerVolume);
 	}
 
 
@@ -122,7 +144,6 @@ public class Charts implements ChartMouseListenerFX {
 		chart.getXYPlot().getRenderer().setSeriesVisible(0, true);
 		chart.getXYPlot().getRangeAxis().setTickLabelPaint(Color.ORANGE);
 		chart.getXYPlot().getDomainAxis().setTickLabelPaint(Color.ORANGE);
-
 
 		return chart;
 	}
@@ -145,8 +166,6 @@ public class Charts implements ChartMouseListenerFX {
 
 		chart.removeLegend();
 
-
-
 		return chart;
 	}
 
@@ -163,8 +182,9 @@ public class Charts implements ChartMouseListenerFX {
 		volumeCategoryDataset = null;
 		series = null;
 		volumeSeries = null;
+		chartsPane.getChildren().clear();
 
-		initCrosshairOverlay ();
+		initCrosshairOverlay();
 
 		createItemPriceAndVolumeDataset(itemID, timePeriod);
 		priceChart = createChart(dataset);
@@ -182,6 +202,7 @@ public class Charts implements ChartMouseListenerFX {
 		runPriceChartSettings();
 		runVolumeChartSettings();
 
+
 		Platform.runLater(() -> {
 			this.yCrosshair.setLabelVisible(true);
 			crosshairOverlay.addDomainCrosshair(xCrosshair);
@@ -189,13 +210,20 @@ public class Charts implements ChartMouseListenerFX {
 
 			this.chartViewerPrice.getCanvas().addOverlay(crosshairOverlay);
 			this.chartViewerVolume.getCanvas().addOverlay(crosshairOverlay);
-			//chartViewerVolume.setTranslateX(chartViewerPrice.getTranslateX());
-			System.out.println("ChartViewerPrice TranslateX: "  + chartViewerPrice.getTranslateX());
-			chartViewerVolume.setPrefSize(chartViewerVolume.getPrefWidth() - chartViewerVolumeOffset, chartViewerVolume.getPrefHeight());
-			formatChartValues();
 
+			chartViewerVolume.setPrefSize(chartViewerVolume.getPrefWidth(), chartViewerVolume.getPrefHeight());
+			chartViewerPrice.setPrefSize(chartViewerPrice.getPrefWidth(), chartViewerPrice.getPrefHeight());
+
+			formatChartValues(priceChart, chartViewerPrice);
+			formatChartValues(volumeChart, chartViewerVolume);
+
+			/*Clips off chart node when the VBox area gets too small (stops overflow)*/
+			clipRect.widthProperty().bind(chartsPane.widthProperty());
+			clipRect.heightProperty().bind(chartsPane.heightProperty());
+			chartsPane.setClip(clipRect);
+
+			chartsPane.getChildren().addAll(chartViewerPrice,chartViewerVolume);
 		});
-		chartViewerPrice.setPrefSize(chartWidth - 7, 250);
 
 	}
 
@@ -207,19 +235,19 @@ public class Charts implements ChartMouseListenerFX {
 	 */
 
 	private void runPriceChartSettings(){
+		defaultChartSettings(priceChart);
 		priceChart.getXYPlot().getRangeAxis().setTickLabelPaint(Color.ORANGE);
 		priceChart.getXYPlot().getDomainAxis().setTickLabelPaint(Color.ORANGE);
 		priceChart.getXYPlot().getRangeAxis().setFixedDimension(40);
-		defaultChartSettings(priceChart);
 
-		chartViewerPrice.setPrefSize(1060, 351);
-		chartViewerPrice.setLayoutX(4);
-		chartViewerPrice.setLayoutY(52);
+
+//		chartViewerPrice.setPrefSize(chartWidth, 351);
 		chartViewerPrice.addChartMouseListener(this);
 		chartViewerPrice.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
-		chartViewerPrice.setTranslateX(5);
-		chartViewerPrice.setPrefSize(chartViewerPrice.getPrefWidth() - chartViewerPriceOffset, chartViewerPrice.getPrefHeight()); //new
-
+//		chartViewerPrice.setTranslateX(5);
+		chartViewerPrice.setPrefSize(chartWidth, 500); //new
+		chartViewerPrice.setMinHeight(151); //351
+		VBox.setVgrow(chartViewerPrice, Priority.ALWAYS); // Allow the price chart to grow
 	}
 
 	private void runVolumeChartSettings(){
@@ -228,13 +256,13 @@ public class Charts implements ChartMouseListenerFX {
 		volumeChart.getXYPlot().getDomainAxis().setTickLabelPaint(Color.ORANGE);
 		volumeChart.getXYPlot().getRangeAxis().setFixedDimension(40);
 
-		chartViewerVolume.setPrefSize(1060, 100);
-		chartViewerVolume.setLayoutX(4);
-		chartViewerVolume.setLayoutY(301);
+//		chartViewerVolume.setPrefSize(chartWidth, 100);
 		chartViewerVolume.addChartMouseListener(this);
-		chartViewerVolume.setTranslateX(chartViewerVolumeOffset);
-		chartViewerVolume.setPrefSize(chartViewerVolume.getPrefWidth() - chartViewerVolumeOffset, chartViewerVolume.getPrefHeight());
+//		chartViewerVolume.setTranslateX(chartViewerVolumeOffset);
+		chartViewerVolume.setPrefSize(chartWidth, 100);
+		chartViewerVolume.setMinHeight(100);
 		chartViewerVolume.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
+		VBox.setVgrow(chartViewerVolume, Priority.ALWAYS); // Allow the volume chart to grow
 	}
 
 	private void defaultChartSettings(JFreeChart volumeChart) {
@@ -401,9 +429,9 @@ public class Charts implements ChartMouseListenerFX {
 	 *
 	 * @return nothing
 	 */
-	protected void resizeChartW(ChartViewer chart, double w) {
-		//chart.setPrefWidth(w);
-
+	protected void resizeChartH(VBox chartsPane, double h) {
+		chartsPane.setPrefHeight(h);
+		chartHeight = h;
 	}
 
 	/**
@@ -412,9 +440,9 @@ public class Charts implements ChartMouseListenerFX {
 	 *
 	 * @return nothing
 	 */
-	protected void resizeChartH(ChartViewer chart, double H) {
-		chart.setPrefHeight(H);
-
+	protected void resizeChartW(VBox chartsPane, double w) {
+		chartsPane.setPrefWidth(w);
+		chartWidth = w;
 	}
 
 
@@ -422,21 +450,44 @@ public class Charts implements ChartMouseListenerFX {
 	 * @Purpose
 	 * Shortens the numbers in the axis of graphs to make it easily read-able  j
 	 * */
-	private void formatChartValues(){
+	private void formatChartValues(JFreeChart chart, ChartViewer chartViewer){
 		final long MILLION = 1000000L;
 		final long BILLION = 1000000000L;
 		final long TRILLION = 1000000000000L;
 		final long THOUSAND = 1000L;
 
-		NumberAxis priceChartRangeAxis = (NumberAxis) priceChart.getXYPlot().getRangeAxis();
-		NumberAxis volumeChartRangeAxis = (NumberAxis) volumeChart.getXYPlot().getRangeAxis();
-
-		dataModeler.setNumberFormatOverrideAxis(MILLION, BILLION, TRILLION, THOUSAND, priceChartRangeAxis);
-		dataModeler.setNumberFormatOverrideAxis(MILLION, BILLION, TRILLION, THOUSAND, volumeChartRangeAxis);
-		chartViewerPrice.getChart().getXYPlot().setRangeAxis(priceChartRangeAxis);
-		chartViewerVolume.getChart().getXYPlot().setRangeAxis(volumeChartRangeAxis);
+		NumberAxis chartRangeAxis = (NumberAxis) chart.getXYPlot().getRangeAxis();
+		dataModeler.setNumberFormatOverrideAxis(MILLION, BILLION, TRILLION, THOUSAND, chartRangeAxis);
+		chartViewer.getChart().getXYPlot().setRangeAxis(chartRangeAxis);
 	}
 
+	public VBox getChartsPane() {
+		return chartsPane;
+	}
+
+	public void setChartsPane(VBox chartsPane) {
+		this.chartsPane = chartsPane;
+	}
+
+	public ChartViewer getChartViewerPrice() {
+		return chartViewerPrice;
+	}
+
+	public void setChartViewerPrice(ChartViewer chartViewerPrice) {
+		this.chartViewerPrice = chartViewerPrice;
+	}
+
+	public ChartViewer getChartViewerVolume() {
+		return chartViewerVolume;
+	}
+
+	public void setChartViewerVolume(ChartViewer chartViewerVolume) {
+		this.chartViewerVolume = chartViewerVolume;
+	}
+
+	public void clearChartsPane(){
+		chartsPane.getChildren().clear();
+	}
 
 }
 

@@ -4,6 +4,10 @@ package com.cypods.geBuddy;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
@@ -19,16 +23,16 @@ public class DisplayController implements ChangeListener{
 	
 	//@Autowired
 	Window window;
-	protected Pane root = new Pane();
-	protected  Group group = new Group(root);
+//	protected Pane root = new Pane();
+//	protected  Group group = new Group(root);
 	List<TabController> tabControllerList = new ArrayList<>();
 	String tabNo;
 
 
 	 DisplayController (){
 		 window = new Window();
-		 this.root = window.root;
-		 this.group = window.group;
+//		 this.root = window.root;
+//		 this.group = window.group;
 	 }
 
 	public void getTab() {
