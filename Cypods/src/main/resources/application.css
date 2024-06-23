@@ -36,7 +36,7 @@
     -fx-background-repeat: stretch;
     -fx-background-size: 1080 720;
     -fx-background-position: top center;
-    -fx-background-size: cover, auto;
+    -fx-background-size: auto, auto;
     /*-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);*/
 }
 #Tab2{
@@ -44,7 +44,7 @@
     -fx-background-repeat: stretch;
     -fx-background-size: 1080 720;
     -fx-background-position: top center;
-    -fx-background-size: cover, auto;
+    -fx-background-size: auto, auto;
     /*-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);*/
 }
 #Tab3{
@@ -52,7 +52,7 @@
     -fx-background-repeat: stretch;
     -fx-background-size: 1080 720;
     -fx-background-position: top center;
-    -fx-background-size: cover, auto;
+    -fx-background-size: auto, auto;
     /*-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);*/
 }
 #Tab4{
@@ -60,7 +60,7 @@
     -fx-background-repeat: stretch;
     -fx-background-size: 1080 720;
     -fx-background-position: top center;
-    -fx-background-size: cover, auto;
+    -fx-background-size: auto, auto;
     /*-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);*/
 }
 #Tab5{
@@ -68,7 +68,7 @@
     -fx-background-repeat: stretch;
     -fx-background-size: 1080 720;
     -fx-background-position: top center;
-    -fx-background-size: cover, auto;
+    -fx-background-size: auto, auto;
     /*-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);*/
 }
 #Tab6{
@@ -76,7 +76,7 @@
     -fx-background-repeat: stretch;
     -fx-background-size: 1080 720;
     -fx-background-position: top center;
-    -fx-background-size: cover, auto;
+    -fx-background-size: auto, auto;
     /*-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);*/
 }
 #Tab7{
@@ -84,7 +84,7 @@
     -fx-background-repeat: stretch;
     -fx-background-size: 1080 720;
     -fx-background-position: top center;
-    -fx-background-size: cover, auto;
+    -fx-background-size: auto, auto;
     /*-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);*/
 }
 #Tab8{
@@ -92,7 +92,7 @@
     -fx-background-repeat: stretch;
     -fx-background-size: 1080 720;
     -fx-background-position: top center;
-    -fx-background-size: cover, auto;
+    -fx-background-size: auto, auto;
     /*-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);*/
 }
 #Tab9{
@@ -100,7 +100,7 @@
     -fx-background-repeat: stretch;
     -fx-background-size: 1080 720;
     -fx-background-position: top center;
-    -fx-background-size: cover, auto;
+    -fx-background-size: auto, auto;
     /*-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);*/
 }
 #Tab10{
@@ -108,7 +108,7 @@
     -fx-background-repeat: stretch;
     -fx-background-size: 1080 720;
     -fx-background-position: top center;
-    -fx-background-size: cover, auto;
+    -fx-background-size: auto, auto;
     /*-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);*/
 }
 /*#tabInterface{
