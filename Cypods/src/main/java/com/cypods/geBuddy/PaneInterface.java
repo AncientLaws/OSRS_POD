@@ -147,7 +147,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 		AnchorPane.setLeftAnchor(cp.chartsPane,2.0);
 
 		tabInterface.setBottomAnchor(itemInformation.getvBox(),85.0);
-		tabInterface.setRightAnchor(itemInformation.getvBox(),0.0);
+		tabInterface.setRightAnchor(itemInformation.getvBox(),2.0);
 
 //		AnchorPane.setTopAnchor(geSearchArea.getGeSearchAreaPane(),100.0);
 
@@ -201,19 +201,10 @@ public class PaneInterface extends DisplayController implements Runnable {
 	protected void pane_setItemTopMenu(Image input) {
 		// Item Menu Icon 
 		if(DEBUG == true) {System.out.println("START - pane_setItemTopMenu(Image input)");}
-//		tabInterface.getChildren().remove(itemIconPaneImage);
 		itemInformation.getGridPane().getChildren().remove(itemInformation.getItemIconPaneImage());
 		try {
 			if(DEBUG == true) {System.out.println("setItemTopMenu InputStream: " + input);}
 			itemInformation.setItemIconPaneImage(new ImageView(input));
-//			itemIconPaneImage = new ImageView(input);
-//			itemIconPaneImage.setPreserveRatio(true);
-//			itemIconPaneImage.setFitHeight(50);
-//			itemIconPaneImage.setFitWidth(50);
-//			itemIconPaneImage.setLayoutX(750);
-//			itemIconPaneImage.setLayoutY(400);
-//			tabInterface.getChildren().add(itemIconPaneImage);
-//			itemIconPaneImage.setOnMousePressed((mouseEvent) -> System.out.println("Teeehee clicked me"));
 			pane_iconTooltip("Icon!");
 			if(DEBUG == true) {System.out.println("END - pane_setItemTopMenu(Image input)");}
 		} catch (Exception e) {
@@ -279,7 +270,6 @@ public class PaneInterface extends DisplayController implements Runnable {
 		if(DEBUG == true) {System.out.println("pane_initLabels");}
 		xyCoordinates = new Label("Coordinates");
 		xyCoordinates.setTranslateX(10);
-		//xyCoordinates.setTranslateY(375);
 		xyCoordinates.setTranslateY(585);
 		xyCoordinates.setStyle("-fx-text-fill: orange; -fx-font-size: 20px; -fx-font-weight: bold");
 
@@ -288,92 +278,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 		selectedItemNameLabel.setStyle("-fx-text-fill: orange; -fx-font-size: 30px; -fx-font-weight: bold");
 		selectedItemNameLabel.getStyleClass().add("labelAll");
 
-//		currentPrice_bigLabel = new Label(null);
-//		currentPrice_bigLabel.setTranslateX(980);
-//		currentPrice_bigLabel.setTranslateY(85);
-//		currentPrice_bigLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold");
-//		currentPrice_bigLabel.getStyleClass().add("labelAll");
-//
-//		id = new Label("");
-//		id.setTranslateX(825);
-//		id.setTranslateY(190);
-//
-//		description = new Label(null);
-//		//description.setTranslateX(763);
-//		//description.setTranslateY(50);
-//		description.setTranslateX(800);
-//		description.setTranslateY(405);
-//		description.setWrapText(true);
-//		description.setStyle("-fx-text-fill: white; -fx-font-size: 13px;");
-//		description.setMaxWidth(260);
-//		description.getStyleClass().add("labelAll");
-//
-//		members = new Label("");
-//		members.setTranslateX(990);
-//		members.setTranslateY(135);
-//
-//		currentPrice_descLabel = new Label("Current Price: ");
-//		currentPrice_descLabel.setTranslateX(755);
-//		currentPrice_descLabel.setTranslateY(447);
-//		currentPrice_descLabel.setStyle("-fx-text-fill: orange;");
-//		currentPrice_descLabel.getStyleClass().add("labelAll");
-//
-//		currentPrice_priceLabel = new Label(null);
-//		currentPrice_priceLabel.setTranslateX(842);
-//		currentPrice_priceLabel.setTranslateY(447);
-//		currentPrice_priceLabel.getStyleClass().add("labelAll");
-//
-//		todayPrice = new Label(null);
-//		todayPrice.setTranslateX(842);
-//		todayPrice.setTranslateY(473);
-//		todayPrice.getStyleClass().add("labelAll");
-//
-//		changeToday = new Label("Change today:");
-//		changeToday.setTranslateX(755);
-//		changeToday.setTranslateY(472);
-//		changeToday.setStyle("-fx-text-fill: orange;");
-//		changeToday.getStyleClass().add("labelAll");
-//
-//		day30_change = new Label(null);
-//		day30_change.setTranslateX(812);
-//		day30_change.setTranslateY(500);
-//		day30_change.getStyleClass().add("labelAll");
-//
-//		change30Days = new Label("30 days: ");
-//		change30Days.setTranslateX(755);
-//		change30Days.setTranslateY(500);
-//		change30Days.setStyle("-fx-text-fill: orange;");
-//		change30Days.getStyleClass().add("labelAll");
-//
-//		day90_change = new Label(null);
-//		day90_change.setTranslateX(812);
-//		day90_change.setTranslateY(528);
-//		day90_change.getStyleClass().add("labelAll");
-//
-//		change90Days = new Label("90 days: ");
-//		change90Days.setTranslateX(755);
-//		change90Days.setTranslateY(528);
-//		change90Days.setStyle("-fx-text-fill: orange;");
-//		change90Days.getStyleClass().add("labelAll");
-//
-//		day180_change = new Label(null);
-//		day180_change.setTranslateX(812);
-//		day180_change.setTranslateY(556);
-//		day180_change.getStyleClass().add("labelAll");
-//
-//		change180Days = new Label("180 days: ");
-//		change180Days.setTranslateX(755);
-//		change180Days.setTranslateY(556);
-//		change180Days.setStyle("-fx-text-fill: orange;");
-//		change180Days.getStyleClass().add("labelAll");
-
-		tabInterface.getChildren().addAll(selectedItemNameLabel
-//				, id, description, members, currentPrice_bigLabel,currentPrice_descLabel,currentPrice_priceLabel ,todayPrice, day30_change,
-//				day90_change, day180_change
-//				, changeToday, change30Days, change90Days, change180Days
-				//, xyCoordinates
-		);
-
+		tabInterface.getChildren().addAll(selectedItemNameLabel);
 	}
 
 	/**
