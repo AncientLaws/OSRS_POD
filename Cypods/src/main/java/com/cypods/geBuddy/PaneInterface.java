@@ -21,7 +21,6 @@ import static com.cypods.geBuddy.Window.root;
 public class PaneInterface extends DisplayController implements Runnable {
 
 	/************************** Images **************************/
-	Image image;
 	ImageView inventory;
 	ImageView itemTopMenu;
 	ImageView itemIconPaneImage;
@@ -29,23 +28,6 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 	/************************** Labels **************************/
 	Label selectedItemNameLabel;
-	Label id;
-	//Label type;
-	//Label typeIcon;
-	Label description;
-	Label members;
-	Label currentPrice_bigLabel;
-	Label currentPrice_priceLabel;
-	Label currentPrice_descLabel;
-	Label todayPrice;
-	Label day30_change;
-	Label day90_change;
-	Label day180_change;
-
-	Label changeToday;
-	Label change30Days;
-	Label change90Days;
-	Label change180Days;
 
 	Label xyCoordinates;
 
@@ -71,18 +53,10 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 	/*************** Classes /other declarations **********/
 	protected Tooltip pane_Tooltip;
-	Font f;
 
 	protected AnchorPane tabInterface = new AnchorPane();
-	//protected Pane chartPane = new Pane();
-	
-	int delayW = 25;
-	
+
 	Charts cp;
-
-
-	//StockChart stockChart = new StockChart("Stock chart");
-	//ChartViewer chartViewer;
 
 	/*************** End variable declaration **************/
 
@@ -149,8 +123,6 @@ public class PaneInterface extends DisplayController implements Runnable {
 		tabInterface.setBottomAnchor(itemInformation.getvBox(),85.0);
 		tabInterface.setRightAnchor(itemInformation.getvBox(),2.0);
 
-//		AnchorPane.setTopAnchor(geSearchArea.getGeSearchAreaPane(),100.0);
-
 		tabInterface.setVisible(true);
 
 	}
@@ -196,39 +168,6 @@ public class PaneInterface extends DisplayController implements Runnable {
 	private void pane_drawChartArea() {
 		tabInterface.setStyle("-fx-background-color: linear-gradient(to bottom, rgba(95, 73, 43,1) 20%, rgba(95, 73, 43,0) 45%);");
 	}
-	
-	
-	protected void pane_setItemTopMenu(Image input) {
-		// Item Menu Icon 
-		if(DEBUG == true) {System.out.println("START - pane_setItemTopMenu(Image input)");}
-		itemInformation.getGridPane().getChildren().remove(itemInformation.getItemIconPaneImage());
-		try {
-			if(DEBUG == true) {System.out.println("setItemTopMenu InputStream: " + input);}
-			itemInformation.setItemIconPaneImage(new ImageView(input));
-			pane_iconTooltip("Icon!");
-			if(DEBUG == true) {System.out.println("END - pane_setItemTopMenu(Image input)");}
-		} catch (Exception e) {
-			System.out.println("ERROR - pane_setItemTopMenu(Image input)");
-//			pane_setItemTopMenuError();
-		}
-	}
-
-	protected void pane_setItemTopMenuError() {
-
-		if(DEBUG == true) {System.out.println("pane_setItemTopMenuError()");}
-		tabInterface.getChildren().remove(itemIconPaneImage);
-		image = new Image(getClass().getClassLoader().getResource("images/Item_UnAvailable.png").toString(),true);
-		itemIconPaneImage = new ImageView(image);
-		itemIconPaneImage.setPreserveRatio(true);
-		itemIconPaneImage.setFitHeight(75);
-		itemIconPaneImage.setFitWidth(75);
-		itemIconPaneImage.setStyle("-fx-background-color: BLACK");
-		itemIconPaneImage.setLayoutX(960);
-		itemIconPaneImage.setLayoutY(5);
-		itemIconPaneImage.setCache(true);
-		tabInterface.getChildren().add(itemIconPaneImage);
-		if(DEBUG == true) {pane_iconTooltip("Item unavailable or unable to retrieve item");}
-	}
 
 	protected void pane_setItemTopMenuVisible(boolean b) {
 
@@ -237,7 +176,6 @@ public class PaneInterface extends DisplayController implements Runnable {
 
 	protected void pane_iconTooltip(String s) {
 		pane_Tooltip = new Tooltip(s);
-		// pane_Tooltip.setShowDelay(Duration.millis(100));
 		pane_Tooltip.install(itemInformation.getItemIconPaneImage(), pane_Tooltip);
 	}
 	

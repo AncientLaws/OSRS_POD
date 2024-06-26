@@ -44,12 +44,6 @@ public class GeSearchArea{
 
 	TextField itemSearchInput;
 
-//	GeSearchArea(){
-//		geSearchArea_drawItemScrollArea();
-//		geSearchArea_initGeSearchLabels();
-//		initTextField();
-//	}
-
 	GeSearchArea(AnchorPane anchorPane){
 		geSearchArea_drawItemScrollArea(anchorPane);
 		geSearchArea_initGeSearchLabels(anchorPane);

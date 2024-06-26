@@ -20,19 +20,14 @@ import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
 @Component
 @Primary
 public class DisplayController implements ChangeListener{
-	
-	//@Autowired
+
 	Window window;
-//	protected Pane root = new Pane();
-//	protected  Group group = new Group(root);
 	List<TabController> tabControllerList = new ArrayList<>();
 	String tabNo;
 
 
 	 DisplayController (){
 		 window = new Window();
-//		 this.root = window.root;
-//		 this.group = window.group;
 	 }
 
 	public void getTab() {

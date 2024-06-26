@@ -152,17 +152,7 @@ public class RequestController extends Connect implements Runnable {
 					}
 
 				}
-
-
-				/*
-				 * System.out.println("timestamp: " +"\t " +itemPriceNode [0]
-				 * +"\navgHighPrice: " + "\t " +itemPriceNode [1] +"\navgLowPrice: " + "\t "
-				 * +itemPriceNode [2] +"\nhighPriceVolume: " + "\t " +itemPriceNode [3]
-				 * +"\nlowPriceVolume: " + "\t " +itemPriceNode [4]);
-				 */
-
 				itemPriceArray[i] = itemPriceNode;
-
 			}
 
 		} catch (Exception e) {

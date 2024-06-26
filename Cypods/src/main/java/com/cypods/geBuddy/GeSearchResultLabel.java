@@ -49,11 +49,7 @@ public class GeSearchResultLabel {
     }
 
     public void setLabelLocation(double x , double y, AnchorPane geSearchAreaPane){
-//        getLabel().layoutXProperty().bind(geSearchAreaPane.layoutXProperty().add(x));
-//        getLabel().layoutYProperty().bind(geSearchAreaPane.layoutYProperty().add(y));
         geSearchAreaPane.setTopAnchor(getLabel(),y);
         geSearchAreaPane.setLeftAnchor(getLabel(),x);
-//        getLabel().setTranslateX(x);
-//        getLabel().setTranslateY(y);
     }
 }
