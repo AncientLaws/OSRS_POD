@@ -22,7 +22,6 @@ public class Connect {
 					http.setRequestMethod("GET");
 					http.setDoInput(true);
 					http.setRequestProperty("Host", url.getHost());
-					//System.out.println("Host is: " + url.getHost());
 					http.setRequestProperty("Accept","application/json");
 					http.setRequestProperty("User-Agent", "PostmanRuntime/7.29.2");
 					responseCode = ((HttpURLConnection) con).getResponseCode();

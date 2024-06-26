@@ -1,9 +1,6 @@
 package com.cypods.geBuddy;
 
 import javafx.application.Platform;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
@@ -32,7 +29,6 @@ import javafx.scene.shape.Rectangle;
 
 import java.awt.geom.Rectangle2D;
 import java.util.Calendar;
-import java.util.Date;
 
 import static com.cypods.geBuddy.ApplicationConstant.BORDERS;
 import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
@@ -96,18 +92,11 @@ public class Charts implements ChartMouseListenerFX {
 		chartViewerVolume = new ChartViewer(volumeChart);
 		chartViewerVolume.setPrefSize(chartWidth, 100);
 		chartViewerVolume.setMinHeight(100);
-//		chartViewerVolume.setLayoutX(4);
-//		chartViewerVolume.setLayoutY(301);
 		chartViewerVolume.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
-//		XYPlot plot = volumeChart.getXYPlot();
-//		ValueAxis xAxis = plot.getDomainAxis();
-//		xAxis.setTickLabelsVisible(false);
 
 		chartViewerPrice = new ChartViewer(priceChart);
-		chartViewerPrice.setPrefSize(1063, 351); //.setPrefSize(chartWidth, chartHeight-chartViewerVolume.getPrefHeight());
+		chartViewerPrice.setPrefSize(1063, 351);
 		chartViewerPrice.setMinHeight(151); //351
-//		chartViewerPrice.setLayoutX(4);  //setLayoutX(4);
-//		chartViewerPrice.setLayoutY(52);  //setLayoutY(52);
 		chartViewerPrice.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
 
 		priceChart = initPriceChart(priceChart);

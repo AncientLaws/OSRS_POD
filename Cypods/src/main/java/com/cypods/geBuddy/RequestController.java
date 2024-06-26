@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.Set;
@@ -80,14 +79,9 @@ public class RequestController extends Connect implements Runnable {
 	 * Method parses the JSON response of the Runescape API (item query search
 	 * result), and adds it to an array
 	 **/
-	protected boolean set_osrs_api_parseItemJsonList(String url , String params) {
+	protected boolean osrsSearchItemsParseJsonList(String url , String params) {
 
 		try {
-
-			/**Fix 11/23/2022:- API update by Jagex forced the use of URL encoder
-			 * @Before:- passed query parameters in the url could be =dragon claws
-			 * @After:- Url must be encoded correctly by removing spaces =dragon+claws
-			 * */
 			url = url +  URLEncoder.encode(params, "UTF-8");
 			obj = requestItemData(url);
 			JSONArray jsonArray = obj.getJSONArray("items");
@@ -158,17 +152,7 @@ public class RequestController extends Connect implements Runnable {
 					}
 
 				}
-
-
-				/*
-				 * System.out.println("timestamp: " +"\t " +itemPriceNode [0]
-				 * +"\navgHighPrice: " + "\t " +itemPriceNode [1] +"\navgLowPrice: " + "\t "
-				 * +itemPriceNode [2] +"\nhighPriceVolume: " + "\t " +itemPriceNode [3]
-				 * +"\nlowPriceVolume: " + "\t " +itemPriceNode [4]);
-				 */
-
 				itemPriceArray[i] = itemPriceNode;
-
 			}
 
 		} catch (Exception e) {

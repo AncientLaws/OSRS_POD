@@ -100,5 +100,3 @@ public class Window extends Application {
 	}
 
 }
-
-//VBOX to add list of items in ge after search?

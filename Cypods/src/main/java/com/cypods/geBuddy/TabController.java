@@ -1,6 +1,7 @@
 package com.cypods.geBuddy;
 
 
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
@@ -10,6 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
@@ -35,6 +37,7 @@ public class TabController extends PaneInterface {
 	private String itemToolTip = "Item Tool Tip";
 	protected int tab_itemID;
 	protected String selectedSearchItem = "";
+	private double newSceneWidth;
 
 	/***************Connect and get data********************/
 	RequestController requestController =  new RequestController();
@@ -44,13 +47,16 @@ public class TabController extends PaneInterface {
 	private String[] itemInfoArr = new String [18];
 	private String[][] tc_itemListArray = new String[100][6];
 
-
 	/***************Tab icon settings********************/
 	int X;
 	int Y;
 
 	/***************End variable declaration**************/
-//@Autowired
+
+	/*********************Other*************************/
+	private PauseTransition pauseTransition;
+
+	/********************End Other*************************/
 	TabController() {
 		imageView = new ImageView();
 		initLabel();
@@ -157,7 +163,7 @@ public class TabController extends PaneInterface {
 		{
 			if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
 				Thread thread = new Thread(() -> {
-					requestController.set_osrs_api_parseItemJsonList(ApplicationConstant.osrsItemSearch, geSearchArea.getItemSearchInput().getText());
+					requestController.osrsSearchItemsParseJsonList(ApplicationConstant.osrsItemSearch, geSearchArea.getItemSearchInput().getText());
 					Platform.runLater(() ->{
 						geSearchResults();
 					});
@@ -170,11 +176,24 @@ public class TabController extends PaneInterface {
 			geSearchArea.clearGeSearchResults();
 		});
 	}
-
+	/**
+	 * Update tab icon label locations based on windows size. Added delay to improve performance
+	 * */
 	private void initInterfaceSizeListeners(){
+		pauseTransition = new PauseTransition(Duration.millis(50));
+
+		pauseTransition.setOnFinished(event -> {
+			setTabIconRelationships(newSceneWidth);
+			selectedItemNameLabel.setLayoutX((newSceneWidth - selectedItemNameLabel.getWidth()) / 2);
+		});
+
 		tabInterface.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
-			setTabIconRelationships(newSceneWidth.doubleValue());
-			selectedItemNameLabel.setLayoutX((newSceneWidth.doubleValue() - selectedItemNameLabel.getWidth()) / 2);
+			this.newSceneWidth = newSceneWidth.doubleValue();
+			pauseTransition.playFromStart();
+		});
+
+		cp.chartsPane.widthProperty().addListener((observable, oldValue ,newValue) -> {
+			pauseTransition.playFromStart();
 		});
 	}
 
@@ -273,7 +292,7 @@ public class TabController extends PaneInterface {
 		try {
 			try {
 				iconImageSettings();  //must have called getIcon() for it not to be null
-				pane_setItemTopMenu(image);
+				itemInformation.setSelectedItemIcon(image);
 				pane_iconTooltip(itemInfoArr[ITEM_NAME]);
 				updateLabels(
 						itemInfoArr[ITEM_NAME]								//name
@@ -296,7 +315,7 @@ public class TabController extends PaneInterface {
 			}
 			catch(Exception e) {
 				System.out.println("Error in setInterfaceLabels()");
-				pane_setItemTopMenuError();
+//				pane_setItemTopMenuError();
 				catchError();
 			}
 		} catch (Exception e) {
