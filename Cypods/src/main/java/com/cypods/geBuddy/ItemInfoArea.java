@@ -50,8 +50,9 @@ public class ItemInfoArea {
         gridPane.setMinSize(307, 165);
         gridPane.setMaxSize(307, 165);
 
-        vBox.setMinSize(307,225);
-        vBox.setMaxSize(307,225);
+        vBox.setMinSize(307,232);
+        vBox.setMaxSize(307,232);
+        vBox.setStyle("-fx-border-color: rgba(90, 82, 66, 1); -fx-border-width: 4;");
 
         //Setting the padding
         gridPane.setPadding(new Insets(0, 10, 5, 10));

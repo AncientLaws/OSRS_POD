@@ -115,13 +115,13 @@ public class PaneInterface extends DisplayController implements Runnable {
 		AnchorPane.setRightAnchor(tabInterface,0.0);
 
 		AnchorPane.setTopAnchor(cp.chartsPane,45.0);
-		AnchorPane.setBottomAnchor(cp.chartsPane, 310.0);
+		AnchorPane.setBottomAnchor(cp.chartsPane, 324.0);
 
 		AnchorPane.setRightAnchor(cp.chartsPane,2.0);
 		AnchorPane.setLeftAnchor(cp.chartsPane,2.0);
 
-		tabInterface.setBottomAnchor(itemInformation.getvBox(),85.0);
-		tabInterface.setRightAnchor(itemInformation.getvBox(),2.0);
+		tabInterface.setBottomAnchor(itemInformation.getvBox(),91.0);
+		tabInterface.setRightAnchor(itemInformation.getvBox(),0.0);
 
 		tabInterface.setVisible(true);
 
