@@ -52,7 +52,7 @@ public class ItemInfoArea {
 
         vBox.setMinSize(307,232);
         vBox.setMaxSize(307,232);
-        vBox.setStyle("-fx-border-color: rgba(90, 82, 66, 1); -fx-border-width: 4;");
+//        vBox.setStyle("-fx-border-color: rgba(90, 82, 66, 1); -fx-border-width: 2;");
 
         //Setting the padding
         gridPane.setPadding(new Insets(0, 10, 5, 10));
@@ -210,7 +210,7 @@ public class ItemInfoArea {
         if(BORDERS){
             gridPane.setGridLinesVisible(true);
         }
-          vBox.setStyle("-fx-background-color: linear-gradient(to right, rgba(95, 73, 43,.2) 100%, rgba(95, 73, 43,.2) 100%);");
+          vBox.setStyle("-fx-background-color: linear-gradient(to right, rgba(95, 73, 43,.2) 100%, rgba(95, 73, 43,.2) 100%); -fx-border-color: rgba(90, 82, 66, 1); -fx-border-width: 2;");
     }
 
     public void setSelectedItemIcon(Image input){
