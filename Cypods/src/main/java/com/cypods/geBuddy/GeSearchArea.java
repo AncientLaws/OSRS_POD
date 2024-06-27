@@ -62,7 +62,7 @@ public class GeSearchArea{
 		geSearchAreaPane.setPrefHeight(225);
 		geSearchAreaPane.setBottomAnchor(geSearchAreaBackground,0.0);
 		geSearchAreaPane.setLeftAnchor(geSearchAreaBackground,0.0);
-		geSearchAreaPane.setBackground(new Background(new BackgroundFill(Color.rgb(188, 173, 138, .3), null, null)));
+		geSearchAreaPane.setBackground(new Background(new BackgroundFill(Color.rgb(188, 173, 138, .7), null, null)));
 		geSearchAreaPane.setStyle("-fx-border-color: rgba(80, 73, 57, 0.5); -fx-border-width: 4;");
 		if(BORDERS) {
 			geSearchAreaPane.setStyle("-fx-border-color: red");
@@ -175,7 +175,7 @@ public class GeSearchArea{
 //		itemSearchInput.setPromptText("What would you like to buy?");
 		if(DEBUG == true) {System.out.println("Caret Position: " + itemSearchInput.getCaretPosition());}
 		itemSearchInput.setStyle(
-				"-fx-text-fill: black; -fx-font-size: 13px; -fx-font-weight: bold;-fx-font-family: 'runescape_uf.ttf'");
+				"-fx-border-width: 0 0 1 0; -fx-border-color: rgba(80, 73, 57, 0.3); -fx-text-fill: black; -fx-font-size: 13px; -fx-font-weight: bold;-fx-font-family: 'runescape_uf.ttf'");
 		itemSearchInput.setFocusTraversable(false);
 		geSearchAreaPane.getChildren().add(itemSearchInput);
 	}

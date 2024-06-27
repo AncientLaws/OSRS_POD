@@ -36,7 +36,6 @@ import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
 
 //import org.jfree.chart.fx.ChartViewer;
 
-@Component
 public class Charts implements ChartMouseListenerFX {
 
 	private ChartViewer chartViewerPrice;
@@ -87,20 +86,21 @@ public class Charts implements ChartMouseListenerFX {
 
 		priceChart = createChart(dataset);
 		volumeChart = createChart(volumeCategoryDataset);
+
 		screenBounds = Screen.getPrimary().getVisualBounds();
 
 		chartViewerVolume = new ChartViewer(volumeChart);
 		chartViewerVolume.setPrefSize(chartWidth, 100);
 		chartViewerVolume.setMinHeight(100);
-		chartViewerVolume.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
+		chartViewerVolume.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56, 100));
 
 		chartViewerPrice = new ChartViewer(priceChart);
 		chartViewerPrice.setPrefSize(1063, 351);
 		chartViewerPrice.setMinHeight(151); //351
-		chartViewerPrice.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
+		chartViewerPrice.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56,100));
 
-		priceChart = initPriceChart(priceChart);
-		volumeChart = initVolumeChart(volumeChart);
+		initPriceChart(priceChart);
+		initVolumeChart(volumeChart);
 		if(BORDERS) {
 			chartsPane.setStyle("-fx-border-color: orange");
 		}
@@ -124,7 +124,7 @@ public class Charts implements ChartMouseListenerFX {
 	private JFreeChart initPriceChart(JFreeChart chart) {
 
 		chart.getXYPlot().getRenderer().setSeriesVisibleInLegend(0, false, false); //Makes legend invisible
-		Color chartBackgroundColor = new Color(126, 102, 64); //new Color(124, 101, 61);
+		Color chartBackgroundColor = new Color(126, 102, 64, 100); //new Color(124, 101, 61);
 		Color chartSeriesColor = new Color(120, 173, 255);
 
 		chart.getPlot().setBackgroundPaint(chartBackgroundColor);//0x866b46
@@ -139,7 +139,7 @@ public class Charts implements ChartMouseListenerFX {
 	private JFreeChart initVolumeChart(JFreeChart chart) {
 
 
-		Color chartBackgroundColor = new Color(126, 102, 64); //new Color(124, 101, 61);
+		Color chartBackgroundColor = new Color(126, 102, 64,100); //new Color(124, 101, 61);
 		Color chartSeriesColor = new Color(120, 173, 255);
 
 		chart.getPlot().setBackgroundPaint(chartBackgroundColor);//0x866b46
@@ -162,8 +162,8 @@ public class Charts implements ChartMouseListenerFX {
 	 * Method to create a price/volume/etc chart once the item is selected by the user.
 	 */
 	protected void runChart(int itemID, String timePeriod) {
-		chartViewerPrice = null;
-		chartViewerVolume = null;
+//		chartViewerPrice = null;
+//		chartViewerVolume = null;
 		volumeChart = null;
 		priceChart = null;
 		dataset = null;
@@ -181,11 +181,11 @@ public class Charts implements ChartMouseListenerFX {
 		//volumeChart = createChart(volumeCategoryDataset);
 		//volumeCategoryDataset = dataModeler.createRandomCategoryDataset();
 
-		chartViewerPrice = new ChartViewer(priceChart);
-		chartViewerVolume = new ChartViewer(volumeChart);
+		chartViewerPrice.setChart(priceChart);
+		chartViewerVolume.setChart(volumeChart);
 
 
-		chartBackgroundColor = new Color(126, 102, 64); //new Color(124, 101, 61);
+		chartBackgroundColor = new Color(126, 102, 64,100); //new Color(124, 101, 61);
 		chartSeriesColor = new Color(120, 173, 255);
 
 		runPriceChartSettings();
@@ -232,7 +232,7 @@ public class Charts implements ChartMouseListenerFX {
 
 //		chartViewerPrice.setPrefSize(chartWidth, 351);
 		chartViewerPrice.addChartMouseListener(this);
-		chartViewerPrice.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
+		chartViewerPrice.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56,100));
 //		chartViewerPrice.setTranslateX(5);
 		chartViewerPrice.setPrefSize(chartWidth, 500); //new
 		chartViewerPrice.setMinHeight(151); //351
@@ -250,7 +250,7 @@ public class Charts implements ChartMouseListenerFX {
 //		chartViewerVolume.setTranslateX(chartViewerVolumeOffset);
 		chartViewerVolume.setPrefSize(chartWidth, 100);
 		chartViewerVolume.setMinHeight(100);
-		chartViewerVolume.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56));
+		chartViewerVolume.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56,100));
 		VBox.setVgrow(chartViewerVolume, Priority.ALWAYS); // Allow the volume chart to grow
 	}
 
