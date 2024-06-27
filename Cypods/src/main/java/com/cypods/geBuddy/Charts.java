@@ -58,10 +58,6 @@ public class Charts implements ChartMouseListenerFX {
 	private double chartWidth;
 	private double chartHeight;
 
-	private double chartViewerVolumeOffset = 5;
-	private double chartViewerPriceOffset = 5;
-	private int chartViewerVolumeLastPrice = 0;
-	private int chartViewerVolumeLastVolume = 0;
 
 	Color chartSeriesColor;
 	Color chartBackgroundColor;

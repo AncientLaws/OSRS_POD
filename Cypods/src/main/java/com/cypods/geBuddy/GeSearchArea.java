@@ -60,8 +60,8 @@ public class GeSearchArea{
 
 		geSearchAreaPane.setPrefWidth(750);
 		geSearchAreaPane.setPrefHeight(225);
-		geSearchAreaPane.setBottomAnchor(geSearchAreaBackground,0.0);
-		geSearchAreaPane.setLeftAnchor(geSearchAreaBackground,0.0);
+		AnchorPane.setBottomAnchor(geSearchAreaBackground,0.0);
+		AnchorPane.setLeftAnchor(geSearchAreaBackground,0.0);
 		geSearchAreaPane.setBackground(new Background(new BackgroundFill(Color.rgb(188, 173, 138, .7), null, null)));
 		geSearchAreaPane.setStyle("-fx-border-color: rgba(80, 73, 57, 0.8); -fx-border-width: 4;");
 		if(BORDERS) {
@@ -73,8 +73,8 @@ public class GeSearchArea{
 		geSearchAreaPane.setClip(clipRect);
 
 		//Anchor the geSearchArea pane relative to the tabInterface
-		anchorPane.setBottomAnchor(geSearchAreaPane,90.0);
-		anchorPane.setLeftAnchor(geSearchAreaPane,0.0);
+		AnchorPane.setBottomAnchor(geSearchAreaPane,90.0);
+		AnchorPane.setLeftAnchor(geSearchAreaPane,0.0);
 	}
 
 	protected void geSearchArea_initGeSearchLabels(AnchorPane anchorPane) {

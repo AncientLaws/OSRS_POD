@@ -128,11 +128,6 @@ public class RequestController extends Connect implements Runnable {
 			if (DEBUG == true) {
 				System.out.println("getItemJsonPrice_RuneLine");
 			}
-			/* Clearing old item data (if applicable) */
-			// for(int i = 0, x = itemListArray.length - 1; i < x; i++) {
-			// for(int j = 0, y = itemListArray[x].length - 1; j < y; j++)
-			// itemListArray[i][j] = null;
-			// }
 
 			/* Looping through the prices */
 			for (int i = 0, size = jsonArray.length(); i < size; i++) {

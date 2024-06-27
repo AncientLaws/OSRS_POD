@@ -12,12 +12,6 @@ public class GeApplication {
 	org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	public static void main(String[] args) {
-		//SpringApplication.run(GeApplication.class, args);
-		
-		//test
-
-		//test2
-
 		Application.launch(Window.class, args);
 	}
 
