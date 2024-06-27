@@ -63,7 +63,7 @@ public class GeSearchArea{
 		geSearchAreaPane.setBottomAnchor(geSearchAreaBackground,0.0);
 		geSearchAreaPane.setLeftAnchor(geSearchAreaBackground,0.0);
 		geSearchAreaPane.setBackground(new Background(new BackgroundFill(Color.rgb(188, 173, 138, .7), null, null)));
-		geSearchAreaPane.setStyle("-fx-border-color: rgba(80, 73, 57, 0.5); -fx-border-width: 4;");
+		geSearchAreaPane.setStyle("-fx-border-color: rgba(80, 73, 57, 0.8); -fx-border-width: 4;");
 		if(BORDERS) {
 			geSearchAreaPane.setStyle("-fx-border-color: red");
 		}

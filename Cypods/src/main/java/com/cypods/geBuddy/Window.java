@@ -57,14 +57,12 @@ public class Window extends Application {
 				root.setStyle("-fx-border-color: yellow");
 			}
 			root.setId("Bank-Screen");
-			root.setStyle("-fx-border-color: rgba(90, 82, 66, 1); -fx-border-width: 2;");
 
-			scene = new Scene(root, primaryStage.widthProperty().doubleValue(), 714.0,Color.BEIGE);
+			scene = new Scene(root, primaryStage.widthProperty().doubleValue(), 714.0, Color.BEIGE);
 
             dc = ac.getBean(DisplayController.class);
 			dc.getTab();
 			dc.setListeners();
-
 
 			scene.getStylesheets().add((getClass().getResource("/application.css")).toExternalForm());
 
