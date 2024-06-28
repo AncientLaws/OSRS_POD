@@ -133,8 +133,6 @@ public class TabController extends PaneInterface {
 		tabNo = getTabActive();
 		setInterfaceVisible(true); 				//Setting current Objects paneInterface to be visible
 		root.setId(getTabActive());				//changing background to simulate tab change
-		geSearchArea.getClipRect().setViewOrder(1.0);
-		getClipRect().setViewOrder(0);
 		imageView.setOpacity(1);            	//returns item to full opacity
 		/*Sets the item search input field to always be active and caret position to be at the end*/
 		geSearchArea.getItemSearchInput().requestFocus();

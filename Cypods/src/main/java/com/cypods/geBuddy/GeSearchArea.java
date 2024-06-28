@@ -13,9 +13,7 @@ import java.util.HashMap;
 
 import static com.cypods.geBuddy.ApplicationConstant.BORDERS;
 import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
-//import static com.cypods.geBuddy.Window.root;
 
-//@Component
 public class GeSearchArea{
 
 	protected AnchorPane geSearchAreaPane = new AnchorPane();

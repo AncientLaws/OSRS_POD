@@ -99,9 +99,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 		geSearchArea.geSearchArea_initGeSearchLabels(tabInterface);
 		geSearchArea.initTextField(tabInterface);
 
-
 		pane_drawItemScrollArea();
-//		pane_drawInventoryMenu();
 
 		pane_drawChartArea();
 		pane_initLabels();

@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.shape.Rectangle;
 import org.springframework.stereotype.Component;
 
 import static com.cypods.geBuddy.ApplicationConstant.BORDERS;
@@ -37,7 +38,7 @@ public class ItemInfoArea {
     Label change90Days;
     Label change180Days;
 
-
+    Rectangle clipRect = new Rectangle();
 
     ItemInfoArea(){
         drawInventoryMenu();
@@ -68,7 +69,9 @@ public class ItemInfoArea {
         gridPane.setAlignment(Pos.BASELINE_LEFT);
         itemGridPane.setAlignment(Pos.BASELINE_LEFT);
 
-        itemGridPane.setStyle("");
+        clipRect.widthProperty().bind(vBox.widthProperty());
+        clipRect.heightProperty().bind(vBox.heightProperty());
+        vBox.setClip(clipRect);
 
         vBox.getChildren().addAll(itemGridPane,gridPane);
     }
@@ -394,5 +397,13 @@ public class ItemInfoArea {
 
     public void setChange180Days(Label change180Days) {
         this.change180Days = change180Days;
+    }
+
+    public Rectangle getClipRect() {
+        return clipRect;
+    }
+
+    public void setClipRect(Rectangle clipRect) {
+        this.clipRect = clipRect;
     }
 }
