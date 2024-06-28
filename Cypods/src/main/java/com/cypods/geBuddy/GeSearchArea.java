@@ -180,12 +180,15 @@ public class GeSearchArea{
 			itemSearchInput.setBackground(new Background(new BackgroundFill(Color.rgb(201, 182, 147), null, null)));
 			itemSearchInput.setStyle(
 					"-fx-border-width: 0 0 1 0; -fx-border-color: rgba(80, 73, 57, 0.3); -fx-text-fill: black; -fx-font-size: 13px; -fx-font-weight: bold;-fx-font-family: 'runescape_uf.ttf'");
-			anchorPane.setTopAnchor(itemSearchInput,6.0);
+			anchorPane.setTopAnchor(itemSearchInput,2.0);
+			anchorPane.setLeftAnchor(itemSearchInput,2.0);
 		}
 		else{
 			anchorPane.setTopAnchor(itemSearchInput,6.0);
+			anchorPane.setLeftAnchor(itemSearchInput,10.0);
+			anchorPane.setRightAnchor(itemSearchInput,10.0);
 		}
-		anchorPane.setLeftAnchor(itemSearchInput,2.0);
+
 //		itemSearchInput.layoutXProperty().bind(geSearchAreaPane.layoutXProperty().add(8));
 //		itemSearchInput.layoutYProperty().bind(geSearchAreaPane.layoutYProperty().add(5));
 		itemSearchInput.setPrefWidth(geSearchAreaPane.getPrefWidth());
