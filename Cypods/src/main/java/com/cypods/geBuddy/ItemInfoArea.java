@@ -9,8 +9,7 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import org.springframework.stereotype.Component;
 
-import static com.cypods.geBuddy.ApplicationConstant.BORDERS;
-import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
+import static com.cypods.geBuddy.ApplicationConstant.*;
 
 @Component
 public class ItemInfoArea {
@@ -51,8 +50,14 @@ public class ItemInfoArea {
         gridPane.setMinSize(307, 165);
         gridPane.setMaxSize(307, 165);
 
-        vBox.setMinSize(307,232);
-        vBox.setMaxSize(307,232);
+        if(transparentBackground){
+            vBox.setMinSize(307,232);
+            vBox.setMaxSize(307,232);
+        }
+        else{
+            vBox.setMinSize(309,232);
+            vBox.setMaxSize(309,232);
+        }
 //        vBox.setStyle("-fx-border-color: rgba(90, 82, 66, 1); -fx-border-width: 2;");
 
         //Setting the padding
