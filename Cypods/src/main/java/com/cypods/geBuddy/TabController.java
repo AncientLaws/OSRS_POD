@@ -12,6 +12,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
@@ -58,32 +59,19 @@ public class TabController extends PaneInterface {
 
 	/********************End Other*************************/
 	TabController() {
-		imageView = new ImageView();
-		initLabel();
-		initImage();
 	}
 
-	//@Autowired
 	TabController (String instanceTabName){
+		super(true);
 		this.instanceTabName = instanceTabName;
 		imageView = new ImageView();
 		tabSettings(this.instanceTabName);
-//		setTabIconRelationships((double) X, (double) Y);
+
 	}
-	//@Autowired
+
 	public int tabSettings(String instanceTabName) {
 		if(DEBUG == true) {System.out.println("tabSettings");}
 		switch (instanceTabName){
-//			case "Tab1":{ X = 100; Y = 12; setTabActive(instanceTabName); break;}
-//			case "Tab2":{ X = 189; Y = 12; setTabActive(instanceTabName); break;}
-//			case "Tab3":{ X = 278; Y = 12; setTabActive(instanceTabName); break;}
-//			case "Tab4":{ X = 367; Y = 12; setTabActive(instanceTabName); break;}
-//			case "Tab5":{ X = 456; Y = 12; setTabActive(instanceTabName); break;}
-//			case "Tab6":{ X = 545; Y = 12; setTabActive(instanceTabName); break;}
-//			case "Tab7":{ X = 636; Y = 12; setTabActive(instanceTabName); break;}
-//			case "Tab8":{ X = 728; Y = 12; setTabActive(instanceTabName); break;}
-//			case "Tab9":{ X = 818; Y = 12; setTabActive(instanceTabName); break;}
-//			case "Tab10":{X = 909; Y = 12; setTabActive(instanceTabName); break;}
 			case "Tab10":{ X = 100; Y = 12; setTabActive(instanceTabName); break;}
 			case "Tab9": { X = 189; Y = 12; setTabActive(instanceTabName); break;}
 			case "Tab8": { X = 280; Y = 12; setTabActive(instanceTabName); break;}
@@ -145,8 +133,6 @@ public class TabController extends PaneInterface {
 		tabNo = getTabActive();
 		setInterfaceVisible(true); 				//Setting current Objects paneInterface to be visible
 		root.setId(getTabActive());				//changing background to simulate tab change
-		geSearchArea.getClipRect().setViewOrder(1.0);
-		getClipRect().setViewOrder(0);
 		imageView.setOpacity(1);            	//returns item to full opacity
 		/*Sets the item search input field to always be active and caret position to be at the end*/
 		geSearchArea.getItemSearchInput().requestFocus();

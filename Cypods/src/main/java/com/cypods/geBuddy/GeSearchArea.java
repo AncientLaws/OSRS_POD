@@ -11,11 +11,8 @@ import javafx.scene.image.ImageView;
 
 import java.util.HashMap;
 
-import static com.cypods.geBuddy.ApplicationConstant.BORDERS;
-import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
-//import static com.cypods.geBuddy.Window.root;
+import static com.cypods.geBuddy.ApplicationConstant.*;
 
-//@Component
 public class GeSearchArea{
 
 	protected AnchorPane geSearchAreaPane = new AnchorPane();
@@ -52,16 +49,27 @@ public class GeSearchArea{
 
 
 	protected void geSearchArea_drawItemScrollArea(AnchorPane anchorPane) {
-		geSearchAreaBackground = new ImageView(new Image("/images/GE_SEARCH_V6.png"));
-		geSearchAreaBackground.setFitWidth(750);
-		geSearchAreaBackground.setFitHeight(225);
-		geSearchAreaBackground.setRotate(180);
-		geSearchAreaPane.getChildren().add(geSearchAreaBackground);
-
+		if(transparentBackground){
+			geSearchAreaBackground = new ImageView();
+			geSearchAreaBackground.setFitHeight(233);
+			geSearchAreaPane.setPrefHeight(233);
+		}
+		else{
+			geSearchAreaBackground = new ImageView(new Image("/images/GE_SEARCH_V6.png"));
+			geSearchAreaBackground.setFitWidth(750);
+			geSearchAreaBackground.setFitHeight(235);
+			geSearchAreaPane.setPrefHeight(235);
+			geSearchAreaBackground.setRotate(180);
+			geSearchAreaPane.getChildren().add(geSearchAreaBackground);
+			AnchorPane.setBottomAnchor(geSearchAreaBackground,0.0);
+			AnchorPane.setLeftAnchor(geSearchAreaBackground,0.0);
+		}
 		geSearchAreaPane.setPrefWidth(750);
-		geSearchAreaPane.setPrefHeight(225);
-		geSearchAreaPane.setBottomAnchor(geSearchAreaBackground,0.0);
-		geSearchAreaPane.setLeftAnchor(geSearchAreaBackground,0.0);
+
+		if(transparentBackground){
+			geSearchAreaPane.setBackground(new Background(new BackgroundFill(Color.rgb(188, 173, 138, .7), null, null)));
+			geSearchAreaPane.setStyle("-fx-border-color: rgba(80, 73, 57, 0.8); -fx-border-width: 4;");
+		}
 		if(BORDERS) {
 			geSearchAreaPane.setStyle("-fx-border-color: red");
 		}
@@ -71,8 +79,14 @@ public class GeSearchArea{
 		geSearchAreaPane.setClip(clipRect);
 
 		//Anchor the geSearchArea pane relative to the tabInterface
-		anchorPane.setBottomAnchor(geSearchAreaPane,85.0);
-		anchorPane.setLeftAnchor(geSearchAreaPane,0.0);
+		if(transparentBackground){
+			AnchorPane.setBottomAnchor(geSearchAreaPane,90.0);
+		}
+		else{
+			AnchorPane.setBottomAnchor(geSearchAreaPane,87.0);
+		}
+
+		AnchorPane.setLeftAnchor(geSearchAreaPane,0.0);
 	}
 
 	protected void geSearchArea_initGeSearchLabels(AnchorPane anchorPane) {
@@ -143,6 +157,7 @@ public class GeSearchArea{
 
 		for(String current : geSearchResultLabelMap.keySet()){
 			GeSearchResultLabel geSearchResultLabel = geSearchResultLabelMap.get(current);
+			geSearchResultLabel.getLabel().setBackground(new Background(new BackgroundFill(null, null, null)));
 			geSearchResultLabel.getLabel().setText(null);
 			geSearchResultLabel.getLabelImage().setImage(null);
 			geSearchResultLabel.getLabel().setOnMouseEntered((mouseEvent)-> {});
@@ -158,21 +173,25 @@ public class GeSearchArea{
 	 */
 	protected void initTextField(AnchorPane anchorPane) {
 		if(DEBUG == true) {System.out.println("initTextField()");}
-		//f = new Font("runescape_uf.ttf", 12);
 		itemSearchInput = new TextField("");
 		itemSearchInput.end();
 		itemSearchInput.setOpacity(1);
-		itemSearchInput.setBackground(new Background(new BackgroundFill(Color.rgb(201, 182, 147), null, null)));
-		anchorPane.setTopAnchor(itemSearchInput,5.0);
-		anchorPane.setLeftAnchor(itemSearchInput,8.0);
+		if(transparentBackground){
+			itemSearchInput.setBackground(new Background(new BackgroundFill(Color.rgb(201, 182, 147), null, null)));
+			itemSearchInput.setStyle(
+					"-fx-border-width: 0 0 1 0; -fx-border-color: rgba(80, 73, 57, 0.3); -fx-text-fill: black; -fx-font-size: 13px; -fx-font-weight: bold;-fx-font-family: 'runescape_uf.ttf'");
+			anchorPane.setTopAnchor(itemSearchInput,6.0);
+		}
+		else{
+			anchorPane.setTopAnchor(itemSearchInput,6.0);
+		}
+		anchorPane.setLeftAnchor(itemSearchInput,2.0);
 //		itemSearchInput.layoutXProperty().bind(geSearchAreaPane.layoutXProperty().add(8));
 //		itemSearchInput.layoutYProperty().bind(geSearchAreaPane.layoutYProperty().add(5));
-		itemSearchInput.setPrefWidth(734);
+		itemSearchInput.setPrefWidth(geSearchAreaPane.getPrefWidth());
 		itemSearchInput.setAlignment(Pos.CENTER);
 //		itemSearchInput.setPromptText("What would you like to buy?");
 		if(DEBUG == true) {System.out.println("Caret Position: " + itemSearchInput.getCaretPosition());}
-		itemSearchInput.setStyle(
-				"-fx-text-fill: black; -fx-font-size: 13px; -fx-font-weight: bold;-fx-font-family: 'runescape_uf.ttf'");
 		itemSearchInput.setFocusTraversable(false);
 		geSearchAreaPane.getChildren().add(itemSearchInput);
 	}

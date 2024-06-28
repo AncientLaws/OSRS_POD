@@ -31,18 +31,13 @@ import static com.cypods.geBuddy.ApplicationConstant.BORDERS;
 public class Window extends Application {
 	
 	public static AnchorPane root = new AnchorPane();
-//	public static Group group = new Group(root);
 	Scene scene;
 	Button bt  = new Button("");
 	public static Stage primaryStage;
 
-	double stageWidth;
-	double stageheight;
-
 	@Autowired
 	public  ConfigurableApplicationContext ac;
-	
-    //@Autowired
+
     DisplayController dc; 
 
 	@Override
@@ -58,12 +53,11 @@ public class Window extends Application {
 			}
 			root.setId("Bank-Screen");
 
-			scene = new Scene(root, primaryStage.widthProperty().doubleValue(), 714.0,Color.BEIGE);
+			scene = new Scene(root, primaryStage.widthProperty().doubleValue(), 714.0, Color.BEIGE);
 
             dc = ac.getBean(DisplayController.class);
 			dc.getTab();
 			dc.setListeners();
-
 
 			scene.getStylesheets().add((getClass().getResource("/application.css")).toExternalForm());
 
@@ -94,7 +88,6 @@ public class Window extends Application {
 
 		public StageReadyEvent(Stage primaryStage) {
 			super(primaryStage);
-			// TODO Auto-generated constructor stub
 		}
 
 	}

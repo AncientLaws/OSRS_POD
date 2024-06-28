@@ -17,7 +17,7 @@ import static com.cypods.geBuddy.ApplicationConstant.BORDERS;
 import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
 import static com.cypods.geBuddy.Window.root;
 
-@Component
+
 public class PaneInterface extends DisplayController implements Runnable {
 
 	/************************** Images **************************/
@@ -32,7 +32,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 	Label xyCoordinates;
 
 	GeSearchArea geSearchArea;
-	@Autowired
+
 	ItemInfoArea itemInformation;
 
 //	HashMap<String, GeSearchResultLabel> geSearchResultLabelMap = geSearchArea.getGeSearchResultLabelMap();
@@ -61,6 +61,9 @@ public class PaneInterface extends DisplayController implements Runnable {
 	/*************** End variable declaration **************/
 
 	public PaneInterface() {
+	}
+
+	public PaneInterface(Boolean init) {
 		pane_activateInterface();
 	}
 
@@ -96,9 +99,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 		geSearchArea.geSearchArea_initGeSearchLabels(tabInterface);
 		geSearchArea.initTextField(tabInterface);
 
-
 		pane_drawItemScrollArea();
-//		pane_drawInventoryMenu();
 
 		pane_drawChartArea();
 		pane_initLabels();
@@ -115,13 +116,13 @@ public class PaneInterface extends DisplayController implements Runnable {
 		AnchorPane.setRightAnchor(tabInterface,0.0);
 
 		AnchorPane.setTopAnchor(cp.chartsPane,45.0);
-		AnchorPane.setBottomAnchor(cp.chartsPane, 310.0);
+		AnchorPane.setBottomAnchor(cp.chartsPane, 324.0);
 
 		AnchorPane.setRightAnchor(cp.chartsPane,2.0);
 		AnchorPane.setLeftAnchor(cp.chartsPane,2.0);
 
-		tabInterface.setBottomAnchor(itemInformation.getvBox(),85.0);
-		tabInterface.setRightAnchor(itemInformation.getvBox(),2.0);
+		tabInterface.setBottomAnchor(itemInformation.getvBox(),91.0);
+		tabInterface.setRightAnchor(itemInformation.getvBox(),0.0);
 
 		tabInterface.setVisible(true);
 
@@ -166,7 +167,7 @@ public class PaneInterface extends DisplayController implements Runnable {
 	 * transparent (via gradient)
 	 * */
 	private void pane_drawChartArea() {
-		tabInterface.setStyle("-fx-background-color: linear-gradient(to bottom, rgba(95, 73, 43,1) 20%, rgba(95, 73, 43,0) 45%);");
+		tabInterface.setStyle("-fx-background-color: linear-gradient(to bottom, rgba(95, 73, 43,.8) 7%, rgba(95, 73, 43,.2) 10%);");
 	}
 
 	protected void pane_setItemTopMenuVisible(boolean b) {

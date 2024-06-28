@@ -6,10 +6,10 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.shape.Rectangle;
 import org.springframework.stereotype.Component;
 
-import static com.cypods.geBuddy.ApplicationConstant.BORDERS;
-import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
+import static com.cypods.geBuddy.ApplicationConstant.*;
 
 @Component
 public class ItemInfoArea {
@@ -37,7 +37,7 @@ public class ItemInfoArea {
     Label change90Days;
     Label change180Days;
 
-
+    Rectangle clipRect = new Rectangle();
 
     ItemInfoArea(){
         drawInventoryMenu();
@@ -50,12 +50,19 @@ public class ItemInfoArea {
         gridPane.setMinSize(307, 165);
         gridPane.setMaxSize(307, 165);
 
-        vBox.setMinSize(307,225);
-        vBox.setMaxSize(307,225);
+        if(transparentBackground){
+            vBox.setMinSize(307,232);
+            vBox.setMaxSize(307,232);
+        }
+        else{
+            vBox.setMinSize(309,232);
+            vBox.setMaxSize(309,232);
+        }
+//        vBox.setStyle("-fx-border-color: rgba(90, 82, 66, 1); -fx-border-width: 2;");
 
         //Setting the padding
-        gridPane.setPadding(new Insets(0, 10, 5, 10));
-        itemGridPane.setPadding(new Insets(0, 10, 0, 0));
+        gridPane.setPadding(new Insets(0, 10, 5, 15));
+        itemGridPane.setPadding(new Insets(0, 10, 0, 10));
 
         //Setting the vertical and horizontal gaps between the columns
         gridPane.setVgap(10);
@@ -66,6 +73,10 @@ public class ItemInfoArea {
         //Setting the Grid alignment
         gridPane.setAlignment(Pos.BASELINE_LEFT);
         itemGridPane.setAlignment(Pos.BASELINE_LEFT);
+
+        clipRect.widthProperty().bind(vBox.widthProperty());
+        clipRect.heightProperty().bind(vBox.heightProperty());
+        vBox.setClip(clipRect);
 
         vBox.getChildren().addAll(itemGridPane,gridPane);
     }
@@ -209,7 +220,7 @@ public class ItemInfoArea {
         if(BORDERS){
             gridPane.setGridLinesVisible(true);
         }
-          vBox.setStyle("-fx-background-color: linear-gradient(to right, rgba(95, 73, 43,.2) 100%, rgba(95, 73, 43,.2) 100%);");
+          vBox.setStyle("-fx-background-color: linear-gradient(to right, rgba(95, 73, 43,.4) 100%, rgba(95, 73, 43,.4) 100%); -fx-border-color: rgba(90, 82, 66, 1); -fx-border-width: 2;");
     }
 
     public void setSelectedItemIcon(Image input){
@@ -391,5 +402,13 @@ public class ItemInfoArea {
 
     public void setChange180Days(Label change180Days) {
         this.change180Days = change180Days;
+    }
+
+    public Rectangle getClipRect() {
+        return clipRect;
+    }
+
+    public void setClipRect(Rectangle clipRect) {
+        this.clipRect = clipRect;
     }
 }

@@ -39,6 +39,8 @@ public class ApplicationConstant {
 
         public static boolean BORDERS = false;
 
+        public static boolean transparentBackground = false;
+
         public static String generateRuneLitePriceDataUrl(String timePeriod, Integer itemId){
                 if(timePeriod != null && itemId!= null){
                         return runeLitePriceData.concat(timePeriod).concat("&id=").concat(itemId.toString());

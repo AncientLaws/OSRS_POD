@@ -16,7 +16,6 @@ public class Connect {
 			try {
 					System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
 					url = new URL(inputURL);
-					//url. URLEncoder.encode(url,"UTF-8");
 					URLConnection con = url.openConnection();
 					http = (HttpURLConnection)con;
 					http.setRequestMethod("GET");
