@@ -281,9 +281,12 @@ public class Charts implements ChartMouseListenerFX {
 
 	private CrosshairOverlay initCrosshairOverlay (){
 
+		if(crosshairOverlay != null){
+			crosshairOverlay.clearDomainCrosshairs();
+			crosshairOverlay.clearRangeCrosshairs();
+		}
 		crosshairOverlay = new CrosshairOverlayFX();
 		this.xCrosshair = new Crosshair(Double.NaN, Color.WHITE, new BasicStroke(0f));
-		Crosshair zCrosshair = new Crosshair();
 		this.xCrosshair.setStroke(
 				new BasicStroke(1.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[]{2.0f, 2.0f}, 0));
 		this.xCrosshair.setLabelVisible(false);
