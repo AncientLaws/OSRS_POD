@@ -1,6 +1,7 @@
 package com.cypods.geBuddy;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -8,13 +9,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import org.controlsfx.control.ToggleSwitch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static com.cypods.geBuddy.ApplicationConstant.BORDERS;
-import static com.cypods.geBuddy.ApplicationConstant.DEBUG;
+import static com.cypods.geBuddy.ApplicationConstant.*;
 import static com.cypods.geBuddy.Window.root;
 
 
@@ -47,6 +50,8 @@ public class PaneInterface extends DisplayController implements Runnable {
 	//HBox box;
 	ButtonBar buttonBarLeft;
 	ButtonBar buttonBarRight;
+
+	public ToggleSwitch toggleSwitch = new ToggleSwitch();
 
 	/*************** Event handlers ********************/
 	private EventHandler<MouseEvent> mouseMovedHandler;
@@ -280,8 +285,18 @@ public class PaneInterface extends DisplayController implements Runnable {
 		tabInterface.setRightAnchor(buttonBarRight,20.0);
 		tabInterface.setTopAnchor(buttonBarLeft,8.0);
 		tabInterface.setTopAnchor(buttonBarRight,8.0);
-		
-		tabInterface.getChildren().addAll(buttonBarLeft,buttonBarRight);
+
+
+		toggleSwitch.setStyle("-fx-toggle-switch-color: derive(-fx-primary, 20%);"); // Example of customizing color
+
+		toggleSwitch.selectedProperty().addListener((observable, oldValue, newValue) -> {
+			System.out.println("ToggleSwitch state changed: " + newValue);
+			transparentBackground = newValue;
+			geSearchArea.updateInterface();
+		});
+		buttonBarRight.getButtons().add(toggleSwitch);
+
+		tabInterface.getChildren().addAll(buttonBarLeft,buttonBarRight, toggleSwitch);
 		
 	}
 

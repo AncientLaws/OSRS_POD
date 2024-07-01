@@ -199,6 +199,60 @@ public class GeSearchArea{
 		geSearchAreaPane.getChildren().add(itemSearchInput);
 	}
 
+	public void updateInterface(){
+		if(transparentBackground){
+			geSearchAreaPane.setBackground(new Background(new BackgroundFill(Color.rgb(188, 173, 138, .7), null, null)));
+			geSearchAreaPane.setStyle("-fx-border-color: rgba(80, 73, 57, 0.8); -fx-border-width: 4;");
+		}
+		else{
+			geSearchAreaPane.backgroundProperty().setValue(null);
+			geSearchAreaPane.setStyle(null);
+		}
+
+		if(transparentBackground){
+			AnchorPane.setBottomAnchor(geSearchAreaPane,90.0);
+		}
+		else{
+			AnchorPane.setBottomAnchor(geSearchAreaPane,87.0);
+		}
+		if(transparentBackground){
+			itemSearchInput.setBackground(new Background(new BackgroundFill(Color.rgb(201, 182, 147), null, null)));
+			itemSearchInput.setStyle(
+					"-fx-border-width: 0 0 1 0; -fx-border-color: rgba(80, 73, 57, 0.3); -fx-text-fill: black; -fx-font-size: 13px; -fx-font-weight: bold;-fx-font-family: 'runescape_uf.ttf'");
+			AnchorPane.setTopAnchor(itemSearchInput,2.0);
+			AnchorPane.setLeftAnchor(itemSearchInput,2.0);
+		}
+		else{
+			AnchorPane.setTopAnchor(itemSearchInput,6.0);
+			AnchorPane.setLeftAnchor(itemSearchInput,10.0);
+			AnchorPane.setRightAnchor(itemSearchInput,10.0);
+		}
+		if(transparentBackground){
+//			if(geSearchAreaPane.getChildren().contains(geSearchAreaBackground)){
+//				geSearchAreaPane.getChildren().remove(geSearchAreaBackground);
+//			}
+			geSearchAreaBackground = new ImageView();
+			geSearchAreaBackground.setFitHeight(233);
+			geSearchAreaPane.setPrefHeight(233);
+			geSearchAreaBackground.setRotate(90);
+//			geSearchAreaPane.getChildren().add(geSearchAreaBackground);
+
+		}
+		else{
+//			if(geSearchAreaPane.getChildren().contains(geSearchAreaBackground)){
+//				geSearchAreaPane.getChildren().remove(geSearchAreaBackground);
+//			}
+			geSearchAreaBackground = new ImageView(new Image("/images/GE_SEARCH_V6.png"));
+			geSearchAreaBackground.setFitWidth(750);
+			geSearchAreaBackground.setFitHeight(235);
+			geSearchAreaPane.setPrefHeight(235);
+			geSearchAreaBackground.setRotate(180);
+			AnchorPane.setBottomAnchor(geSearchAreaBackground,0.0);
+			AnchorPane.setLeftAnchor(geSearchAreaBackground,0.0);
+//			geSearchAreaPane.getChildren().add(geSearchAreaBackground);
+		}
+	}
+
 /**~~~~~~~~~~~~~~~Getters and setters~~~~~~~~~~~~~~~~~~~~~*/
 	public AnchorPane getGeSearchAreaPane() {
 		return geSearchAreaPane;

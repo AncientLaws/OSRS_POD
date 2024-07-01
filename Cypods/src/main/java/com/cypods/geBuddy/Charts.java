@@ -101,8 +101,8 @@ public class Charts implements ChartMouseListenerFX {
 			chartsPane.setStyle("-fx-border-color: orange");
 		}
 		/*Allow the price and volume chart nodes to grow within the vbox*/
-		VBox.setVgrow(chartViewerPrice, Priority.ALWAYS);
-		VBox.setVgrow(chartViewerVolume, Priority.ALWAYS);
+		VBox.setVgrow(chartViewerPrice, Priority.SOMETIMES);
+//		VBox.setVgrow(chartViewerVolume, Priority.SOMETIMES);
 
 		/*Clips off charts when the VBox area gets too small*/
 		clipRect.widthProperty().bind(chartsPane.widthProperty());
@@ -232,7 +232,7 @@ public class Charts implements ChartMouseListenerFX {
 //		chartViewerPrice.setTranslateX(5);
 		chartViewerPrice.setPrefSize(chartWidth, 500); //new
 		chartViewerPrice.setMinHeight(151); //351
-		VBox.setVgrow(chartViewerPrice, Priority.ALWAYS); // Allow the price chart to grow
+//		VBox.setVgrow(chartViewerPrice, Priority.ALWAYS); // Allow the price chart to grow
 	}
 
 	private void runVolumeChartSettings(){
@@ -247,7 +247,7 @@ public class Charts implements ChartMouseListenerFX {
 		chartViewerVolume.setPrefSize(chartWidth, 100);
 		chartViewerVolume.setMinHeight(100);
 		chartViewerVolume.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56,100));
-		VBox.setVgrow(chartViewerVolume, Priority.ALWAYS); // Allow the volume chart to grow
+//		VBox.setVgrow(chartViewerVolume, Priority.ALWAYS); // Allow the volume chart to grow
 	}
 
 	private void defaultChartSettings(JFreeChart volumeChart) {
