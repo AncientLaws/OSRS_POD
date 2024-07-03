@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.springframework.stereotype.Component;
 
@@ -220,7 +221,14 @@ public class ItemInfoArea {
         if(BORDERS){
             gridPane.setGridLinesVisible(true);
         }
-          vBox.setStyle("-fx-background-color: linear-gradient(to right, rgba(95, 73, 43,.4) 100%, rgba(95, 73, 43,.4) 100%); -fx-border-color: rgba(90, 82, 66, 1); -fx-border-width: 2;");
+//        vBox.setBackground(new Background(new BackgroundFill(Color.rgb(201, 182, 147,0.5), null, null)));
+        vBox.setBorder(new Border(new BorderStroke(
+                Color.rgb(79, 72, 53,0.8), // Border color
+                BorderStrokeStyle.SOLID, // Border style
+                new CornerRadii(3), // Corner radius
+                new BorderWidths(4) // Border widths
+        )));
+          vBox.setStyle("-fx-background-color: linear-gradient(to right, rgba(95, 73, 43,.6) 100%, rgba(95, 73, 43,.6) 100%); "); //-fx-border-color: rgba(90, 82, 66, 1); -fx-border-width: 2;
     }
 
     public void setSelectedItemIcon(Image input){

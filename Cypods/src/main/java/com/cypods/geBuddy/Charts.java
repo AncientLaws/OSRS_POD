@@ -88,12 +88,12 @@ public class Charts implements ChartMouseListenerFX {
 		chartViewerVolume = new ChartViewer(volumeChart);
 		chartViewerVolume.setPrefSize(chartWidth, 100);
 		chartViewerVolume.setMinHeight(100);
-		chartViewerVolume.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56, 100));
+		chartViewerVolume.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56, 150));
 
 		chartViewerPrice = new ChartViewer(priceChart);
 		chartViewerPrice.setPrefSize(1063, 351);
 		chartViewerPrice.setMinHeight(151); //351
-		chartViewerPrice.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56,100));
+		chartViewerPrice.getCanvas().getChart().setBackgroundPaint(new Color(108, 88, 56,150));
 
 		initPriceChart(priceChart);
 		initVolumeChart(volumeChart);
