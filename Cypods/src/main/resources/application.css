@@ -1,19 +1,19 @@
 
-#RSGIF1{
-    -fx-background-image: url("/images/RunescapeLoginScreen.gif");
-    -fx-background-repeat: stretch;
-    -fx-background-size: 1080 720;
-    -fx-background-position: center center;
-    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
-}
+/*#RSGIF1{*/
+/*    -fx-background-image: url("/images/RunescapeLoginScreen.gif");*/
+/*    -fx-background-repeat: stretch;*/
+/*    -fx-background-size: 1080 720;*/
+/*    -fx-background-position: center center;*/
+/*    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);*/
+/*}*/
 
-#RSGIF2{
-    -fx-background-image: url("/images/RunescapeLogoGIFCustom.gif");
-    -fx-background-repeat: stretch;
-    -fx-background-size: 1080 720;
-    -fx-background-position: center center;
-    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
-}
+/*#RSGIF2{*/
+/*    -fx-background-image: url("/images/RunescapeLogoGIFCustom.gif");*/
+/*    -fx-background-repeat: stretch;*/
+/*    -fx-background-size: 1080 720;*/
+/*    -fx-background-position: center center;*/
+/*    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);*/
+/*}*/
 
 
 /*#GE-Screen{*/
