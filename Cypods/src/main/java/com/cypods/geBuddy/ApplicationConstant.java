@@ -41,6 +41,8 @@ public class ApplicationConstant {
 
         public static boolean transparentBackground = false;
 
+        public static String RUNESCAPE_API_ITEM_LOOKUP_URL ="https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=";
+
         public static String generateRuneLitePriceDataUrl(String timePeriod, Integer itemId){
                 if(timePeriod != null && itemId!= null){
                         return runeLitePriceData.concat(timePeriod).concat("&id=").concat(itemId.toString());

@@ -1,5 +1,6 @@
 package com.cypods.geBuddy;
 
+import com.cypods.dbupdater.DatabaseUpdater;
 import com.sun.tools.javac.Main;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -16,6 +17,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Component;
 import java.awt.image.*;
 
@@ -26,8 +28,7 @@ import java.util.Objects;
 import static com.cypods.geBuddy.ApplicationConstant.BORDERS;
 
 @Component
-@ComponentScan("com.cypods.geBuddy")
-
+@ComponentScan(basePackages = {"com.cypods.geBuddy", "com.cypods.dbupdater"})
 public class Window extends Application {
 	
 	public static AnchorPane root = new AnchorPane();
@@ -36,7 +37,10 @@ public class Window extends Application {
 	public static Stage primaryStage;
 
 	@Autowired
-	public  ConfigurableApplicationContext ac;
+	public DatabaseUpdater databaseUpdater;
+
+	@Autowired
+	public  ConfigurableApplicationContext ac ;
 
     DisplayController dc; 
 
@@ -66,6 +70,8 @@ public class Window extends Application {
 			
 			primaryStage.setResizable(true);
 			primaryStage.show();
+
+
 	
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -92,4 +98,59 @@ public class Window extends Application {
 
 	}
 
+	public static AnchorPane getRoot() {
+		return root;
+	}
+
+	public static void setRoot(AnchorPane root) {
+		Window.root = root;
+	}
+
+	public Scene getScene() {
+		return scene;
+	}
+
+	public void setScene(Scene scene) {
+		this.scene = scene;
+	}
+
+	public Button getBt() {
+		return bt;
+	}
+
+	public void setBt(Button bt) {
+		this.bt = bt;
+	}
+
+	public static Stage getPrimaryStage() {
+		return primaryStage;
+	}
+
+	public static void setPrimaryStage(Stage primaryStage) {
+		Window.primaryStage = primaryStage;
+	}
+
+	public DatabaseUpdater getDatabaseUpdater() {
+		return databaseUpdater;
+	}
+
+	public void setDatabaseUpdater(DatabaseUpdater databaseUpdater) {
+		this.databaseUpdater = databaseUpdater;
+	}
+
+	public ConfigurableApplicationContext getAc() {
+		return ac;
+	}
+
+	public void setAc(ConfigurableApplicationContext ac) {
+		this.ac = ac;
+	}
+
+	public DisplayController getDc() {
+		return dc;
+	}
+
+	public void setDc(DisplayController dc) {
+		this.dc = dc;
+	}
 }
