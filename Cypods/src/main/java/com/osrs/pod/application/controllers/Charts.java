@@ -1,6 +1,8 @@
 package com.osrs.pod.application.controllers;
 
 import com.osrs.pod.application.services.DataModeler;
+import com.osrs.pod.database.configuration.ApplicationContextProvider;
+import com.osrs.pod.database.service.ItemsDao;
 import javafx.application.Platform;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -24,16 +26,22 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DatasetUtils;
 import org.jfree.data.time.*;
 import org.jfree.data.xy.XYDataset;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.Calendar;
+import java.util.Optional;
 
 import static com.osrs.pod.application.ApplicationConstant.BORDERS;
 import static com.osrs.pod.application.ApplicationConstant.DEBUG;
 
+@Component
 public class Charts implements ChartMouseListenerFX {
+
+	private ItemsDao itemsDao;
+
 
 	private ChartViewer chartViewerPrice;
 	private ChartViewer chartViewerVolume;
@@ -68,9 +76,11 @@ public class Charts implements ChartMouseListenerFX {
 	Rectangle clipRect = new Rectangle();
 
 	public Charts() {
+//		itemsDao = ApplicationContextProvider.getApplicationContext().getBean(ItemsDao.class);
 	}
 
 	public Charts(double chartWidth, double chartHeight) {
+		itemsDao = ApplicationContextProvider.getApplicationContext().getBean(ItemsDao.class);
 		this.chartWidth = chartWidth;
 		this.chartHeight = chartHeight;
 
@@ -167,6 +177,10 @@ public class Charts implements ChartMouseListenerFX {
 		chartsPane.getChildren().clear();
 
 		initCrosshairOverlay();
+
+		if(DEBUG){
+			System.out.println("DB call when changing chart time period for item name: " + itemsDao.findAll().size());
+		}
 
 		createItemPriceAndVolumeDataset(itemID, timePeriod);
 		priceChart = createChart(dataset);

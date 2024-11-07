@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.Random;
 
 @Component
-@ComponentScan(basePackages = {"com.cypods.geBuddy", "com.cypods.dbupdater"})
-@EntityScan(basePackages = "com.cypods.dbupdater.database.entities")
+@ComponentScan(basePackages = {"com.osrs.pod.database"})
+@EntityScan(basePackages = "com.osrs.pod.database.domain.entities")
 public class DatabaseUpdater implements CommandLineRunner {
 
     @Autowired
@@ -37,7 +37,8 @@ public class DatabaseUpdater implements CommandLineRunner {
 //        getItemIconAndSaveIt(13652, "https://secure.runescape.com/m=itemdb_oldschool/1688984225416_obj_big.gif?id=13652");
     }
 
-    public DatabaseUpdater(ItemsDao itemsDao, ItemsDb itemsDb, DatabaseUpdaterController databaseUpdaterController, ApplicationConstant applicationConstant, ItemPriceOsrsDTO itemPriceOsrsDTO, RestTemplate restTemplate, RestTemplateBuilder restTemplateBuilder, String itemPriceURI) {
+    public DatabaseUpdater(DatabaseTestService databaseTestService , ItemsDao itemsDao, ItemsDb itemsDb, DatabaseUpdaterController databaseUpdaterController, ApplicationConstant applicationConstant, ItemPriceOsrsDTO itemPriceOsrsDTO, RestTemplate restTemplate, RestTemplateBuilder restTemplateBuilder, String itemPriceURI) {
+        this.databaseTestService = databaseTestService;
         this.itemsDao = itemsDao;
         this.itemsDb = itemsDb;
         this.databaseUpdaterController = databaseUpdaterController;
@@ -46,6 +47,8 @@ public class DatabaseUpdater implements CommandLineRunner {
         this.restTemplate = restTemplate;
         this.restTemplateBuilder = restTemplateBuilder;
         this.itemPriceURI = itemPriceURI;
+
+
     }
 
     @Autowired
@@ -69,12 +72,14 @@ public class DatabaseUpdater implements CommandLineRunner {
     @Autowired
     RestTemplateBuilder restTemplateBuilder;
 
+    @Autowired
+    DatabaseTestService databaseTestService;
+
     String itemPriceURI = "https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=7323";
 
     @Override
     public void run(String... args) throws Exception {
-
-        System.out.println("Running database updater");
+//        databaseTestService.testConnection();
 
 //        long i = 13652L;
 //        getItemIconAndSaveIt(i,"https://secure.runescape.com/m=itemdb_oldschool/1688984225416_obj_big.gif?id=13652");

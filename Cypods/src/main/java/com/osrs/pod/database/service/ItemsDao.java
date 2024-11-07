@@ -13,16 +13,18 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@ComponentScan(basePackages = {"com.cypods.geBuddy", "com.cypods.dbupdater"})
+@ComponentScan(basePackages = {"com.osrs.pod.database.domain.entities", "com.osrs.pod.database"})
 public class ItemsDao {
 
     private final JdbcTemplate jdbc;
-    @Autowired
+
     private final ItemsRepository repository;
 
     public ItemsDao(JdbcTemplate jdbc, ItemsRepository repository) {
         this.jdbc = jdbc;
         this.repository = repository;
+        System.out.println("Calling db count after init: " + repository.findAll().size());
+
     }
 //
 //    @Autowired
@@ -49,12 +51,12 @@ public class ItemsDao {
 //        return repository.findByItemIdEquals(item_id);
 //    }
 
-    @Transactional
+
     public List<ItemsDb> findAll(){
         return repository.findAll();
     }
 
-    @Transactional
+
     public ItemsDb findById(long id){
         if(repository.existsById(id)){
             return repository.findById(id);

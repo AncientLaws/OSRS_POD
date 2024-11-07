@@ -12,18 +12,24 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.springframework.beans.BeansException;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
 
 import static com.osrs.pod.application.ApplicationConstant.BORDERS;
-
+@Component
 public class Window extends Application {
-	
+
+	private static ApplicationContext context;
 	public static AnchorPane root = new AnchorPane();
 	Scene scene;
 	Button bt  = new Button("");
 	public static Stage primaryStage;
+
 
 //	@Autowired
 //	public static DatabaseUpdater databaseUpdater;
@@ -80,6 +86,7 @@ public class Window extends Application {
 		ac.close();
 		Platform.exit();
 	}
+
 	static class StageReadyEvent extends ApplicationEvent {
 
 		public StageReadyEvent(Stage primaryStage) {

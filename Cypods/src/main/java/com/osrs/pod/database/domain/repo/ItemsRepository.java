@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface ItemsRepository extends CrudRepository<ItemsDb,Long> {
 
     ItemsDb findById(long id);
