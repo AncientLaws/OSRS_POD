@@ -2,7 +2,9 @@ package com.osrs.pod.database.domain.repo;
 
 
 import com.osrs.pod.database.domain.entities.ItemsDb;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,4 +24,7 @@ public interface ItemsRepository extends CrudRepository<ItemsDb,Long> {
     void deleteById(Long id);
 
     ItemsDb findByItemIdEquals(Integer item_id);
+
+    @Query("select i from ItemsDb i where lower(i.item_name) like lower(concat('%', :item, '%')) order by i.item_name asc")
+    List<ItemsDb> findByItemName(@Param("item") String item);
 }

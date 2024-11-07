@@ -3,6 +3,9 @@ package com.osrs.pod.application.controllers;
 
 import com.osrs.pod.application.ApplicationConstant;
 import com.osrs.pod.application.models.GeSearchResultLabel;
+import com.osrs.pod.database.configuration.ApplicationContextProvider;
+import com.osrs.pod.database.domain.entities.ItemsDb;
+import com.osrs.pod.database.service.ItemsDao;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -10,14 +13,17 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.springframework.stereotype.Component;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
 
 import static com.osrs.pod.application.ApplicationConstant.*;
 import static com.osrs.pod.application.Window.root;
@@ -53,6 +59,9 @@ public class TabController extends PaneInterfaceController {
 
 	/*********************Other*************************/
 	private PauseTransition pauseTransition;
+	private ItemsDao itemsDao;
+	private PauseTransition pause;
+	private boolean searchHasRun = false; // Flag to ensure it only runs once
 
 	/********************End Other*************************/
 	TabController() {
@@ -63,6 +72,10 @@ public class TabController extends PaneInterfaceController {
 		this.instanceTabName = instanceTabName;
 		imageView = new ImageView();
 		tabSettings(this.instanceTabName);
+		itemsDao = ApplicationContextProvider.getApplicationContext().getBean(ItemsDao.class);
+		// Set up the delay for after the user stops typing
+		pause = new PauseTransition(Duration.millis(200)); //ms delay
+//		pause.setOnFinished(event -> geSearchResultsDb(geSearchArea.getItemSearchInput().getText()));
 
 	}
 
@@ -144,21 +157,52 @@ public class TabController extends PaneInterfaceController {
 	private void itemSearchListener() {
 		geSearchArea.getItemSearchInput().setOnKeyPressed(KeyEvent ->
 		{
-			if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
+//			if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
+//				Thread thread = new Thread(() -> {
+//					requestController.osrsSearchItemsParseJsonList(ApplicationConstant.osrsItemSearch, geSearchArea.getItemSearchInput().getText());
+//					Platform.runLater(() ->{
+//						geSearchResultsDb(geSearchArea.getItemSearchInput().getText());
+//					});
+//				});
+//				thread.start();
+//			}
+			onKeyReleased(KeyEvent);
+//			if(KeyEvent.getCode().equals(KeyCode.ENTER)) {
+			pause.setOnFinished(event -> {
 				Thread thread = new Thread(() -> {
-					requestController.osrsSearchItemsParseJsonList(ApplicationConstant.osrsItemSearch, geSearchArea.getItemSearchInput().getText());
+//					requestController.osrsSearchItemsParseJsonList(ApplicationConstant.osrsItemSearch, geSearchArea.getItemSearchInput().getText());
 					Platform.runLater(() ->{
-						geSearchResults();
+						if(!geSearchArea.getItemSearchInput().getText().isBlank()) {
+							geSearchResultsDb(geSearchArea.getItemSearchInput().getText());
+						}
+						else{
+							geSearchArea.clearGeSearchResults();
+						}
 					});
 				});
 				thread.start();
-			}
+			});
 		});
 		geSearchArea.getItemSearchInput().setOnMousePressed((mouseEvent) -> {
 			geSearchArea.getItemSearchInput().setText("");
 			geSearchArea.clearGeSearchResults();
 		});
 	}
+
+	public void onKeyReleased(KeyEvent event) {
+		if (event.getCode().equals(KeyCode.ENTER)) {
+			geSearchResultsDb(geSearchArea.getItemSearchInput().getText()); // Run immediately on ENTER
+		} else {
+			if(geSearchArea.getItemSearchInput().getText().isBlank()) {
+				geSearchArea.clearGeSearchResults();
+			}
+			// Reset the pause transition on any other key
+			pause.stop();
+			searchHasRun = false; // Reset the flag when user types
+			pause.play(); // Start or restart the delay
+		}
+	}
+
 	/**
 	 * Update tab icon label locations based on windows size. Added delay to improve performance
 	 * */
@@ -325,7 +369,7 @@ public class TabController extends PaneInterfaceController {
 	 * */
 	private void geSearchResults() {
 		geSearchArea.clearGeSearchResults();
-		addLabelActionListeners();
+//		addLabelActionListeners();
 
 		tc_itemListArray = requestController.returnItemListArray() ;
 
@@ -357,14 +401,53 @@ public class TabController extends PaneInterfaceController {
 
 	}
 
+	private void geSearchResultsDb(String searchItem) {
+		System.out.println("Item search ran for item: "  + searchItem);
+		geSearchArea.clearGeSearchResults();
+//		tc_itemListArray = requestController.returnItemListArray() ;
+		List<ItemsDb> itemsDbListArray = itemsDao.findItemBySearch(searchItem);
+		addLabelActionListeners(itemsDbListArray.size());
+		try { //Open stream to grab the image for each of the returned items
+
+			for(int i = 0; i < itemsDbListArray.size() ; i++)
+			{
+				String keyGen = "geSearchResult" + (i+1);
+				GeSearchResultLabel geSearchResultLabel;
+				ItemsDb current = itemsDbListArray.get(i);
+
+				if(geSearchArea.getGeSearchResultLabelMap().containsKey(keyGen)){
+					geSearchResultLabel = geSearchArea.getGeSearchResultLabelMap().get(keyGen);
+					geSearchResultLabel.getLabel().setText(current.getItem_name().concat("  (").concat(current.getItem_high_alch().toString()).concat(")"));
+//					input = new URL (tc_itemListArray[i][GE_SEARCH_ICON_URL]).openStream();
+					geSearchResultLabel.getLabelImage().setImage(new Image(new ByteArrayInputStream(current.getData())));
+					geSearchResultLabel.setId(current.getItemId());
+				}
+			}
+		}
+		catch(Exception e) {
+			/**
+			 * When an Item is searched, if the resulting response is less than 12 items, the url list will not
+			 * be filled, hence, a null will be present in the url field. This exception 'handles' it by doing nothing
+			 */
+			System.out.println("Error grabbing Icon Images in TabController>geSearchResults");
+			//System.out.println(e);
+
+		}
+
+
+	}
+
+
 	/**
 	 * @Purpose
 	 * - Dynamically add action listeners to labels based on search result size
 	 * - Enable mouse Enter/Exit animation
 	 * - Allow items to be selected and displayed
 	 * */
-	protected void addLabelActionListeners() {
-		int arrLength = requestController.get_getSearchResultSize();
+	protected void addLabelActionListeners(int size) {
+//		int arrLength = requestController.get_getSearchResultSize();
+
+		int arrLength = size;
 
 		for(int i = 0; i < arrLength ; i++)
 		{
@@ -392,7 +475,8 @@ public class TabController extends PaneInterfaceController {
 					if(geSearchArea.getGeSearchResultLabelMap().containsKey(selectedSearchItem)){
 						geSearchArea.getGeSearchResultLabelMap().get(selectedSearchItem).getLabel().setBackground(new Background(new BackgroundFill(null, null, null)));
 					}
-					itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[j][1]));
+//					itemSearchSelectionListener(Integer.valueOf(tc_itemListArray[j][1]));
+					itemSearchSelectionListener(geSearchResultLabel.getId());
 					selectedSearchItem = geSearchResultLabel.getLabelInstanceName();
 				});
 				label.setOnMousePressed((mouseEvent) -> {

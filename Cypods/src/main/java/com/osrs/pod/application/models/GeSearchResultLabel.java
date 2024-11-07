@@ -7,6 +7,7 @@ import javafx.scene.layout.AnchorPane;
 import org.springframework.stereotype.Component;
 
 public class GeSearchResultLabel {
+    private int id;
     Image image;
     private Label label = new Label("");
     private String labelInstanceName;
@@ -21,6 +22,14 @@ public class GeSearchResultLabel {
         this.labelInstanceName = labelInstanceName;
     }
 
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public Label getLabel() {
         return label;

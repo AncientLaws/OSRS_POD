@@ -56,6 +56,10 @@ public class ItemsDao {
         return repository.findAll();
     }
 
+    public List<ItemsDb> findItemBySearch(String item){
+        return repository.findByItemName(item);
+    }
+
 
     public ItemsDb findById(long id){
         if(repository.existsById(id)){
