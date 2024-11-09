@@ -11,9 +11,15 @@ import org.springframework.stereotype.Component;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemPriceTrendOsrsDTO {
-    String trend;
-    String price;
-    String change;
+public class ItemMaplet {
+    String examine;
+    Integer id;
+    boolean members;
+    Integer lowalch;
+    Integer limit;
+    Integer value;
+    Integer highalch;
+    String icon;
+    String name;
 
 }

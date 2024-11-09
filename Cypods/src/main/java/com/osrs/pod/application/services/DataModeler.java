@@ -135,8 +135,6 @@ public class DataModeler {
      * @Credit
      * https://stackoverflow.com/questions/43280204/y-axis-is-not-displaying-correct-figure-for-millions-and-billions-in-jfreechart?noredirect=1&lq=1#
      * */
-
-
     public void setNumberFormatOverrideAxis(long MILLION, long BILLION, long TRILLION, long THOUSAND, NumberAxis priceChartAxis) {
         priceChartAxis.setNumberFormatOverride(new NumberFormat() {
 
@@ -169,5 +167,18 @@ public class DataModeler {
         });
     }
 
+    public StringBuffer formatNumber(long number) {
+        final long MILLION = 1000000L;
+        final long BILLION = 1000000000L;
+        final long TRILLION = 1000000000000L;
+        final long THOUSAND = 1000L;
 
+        String temp = number < THOUSAND ? String.valueOf((number * 100.0) / 100.0) :
+                number < MILLION ? ((double) ((number / THOUSAND) * 100.0) / 100.0) + " K" :
+                        number < BILLION ? ((double) ((number / MILLION) * 100.0) / 100.0) + " M" :
+                                number < TRILLION ? Math.round(((double) (number / BILLION) * 100.0) / 100.0) + " B" :
+                                        ((double) ((number / TRILLION) * 100.0) / 100.0) + " T";
+        return new StringBuffer(temp);
+
+    }
 }

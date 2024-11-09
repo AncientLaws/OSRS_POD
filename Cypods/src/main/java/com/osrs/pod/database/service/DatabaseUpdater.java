@@ -3,6 +3,8 @@ package com.osrs.pod.database.service;
 import com.osrs.pod.application.ApplicationConstant;
 import com.osrs.pod.database.controller.DatabaseUpdaterController;
 import com.osrs.pod.database.domain.entities.ItemsDb;
+import com.osrs.pod.database.model.Item;
+import com.osrs.pod.database.model.ItemMaplet;
 import com.osrs.pod.database.model.ItemPriceOsrsDTO;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -21,17 +25,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @ComponentScan(basePackages = {"com.osrs.pod.database"})
 @EntityScan(basePackages = "com.osrs.pod.database.domain.entities")
 public class DatabaseUpdater implements CommandLineRunner {
 
-    @Autowired
+
     public DatabaseUpdater() {
 //        this.itemsDao = itemsDao;
 //        getItemIconAndSaveIt(13652, "https://secure.runescape.com/m=itemdb_oldschool/1688984225416_obj_big.gif?id=13652");
@@ -66,7 +68,6 @@ public class DatabaseUpdater implements CommandLineRunner {
     @Autowired
     ItemPriceOsrsDTO itemPriceOsrsDTO;
 
-
     RestTemplate restTemplate;
 
     @Autowired
@@ -76,6 +77,8 @@ public class DatabaseUpdater implements CommandLineRunner {
     DatabaseTestService databaseTestService;
 
     String itemPriceURI = "https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=7323";
+
+    List<ItemMaplet> itemMapletList = new ArrayList<>();
 
     @Override
     public void run(String... args) throws Exception {
@@ -103,25 +106,61 @@ public class DatabaseUpdater implements CommandLineRunner {
 //        System.out.println(itemPrice);
 
 
+        /**Find items that dont exist in the database, and add it*/
+        itemMapletList = restTemplate.exchange(
+                ApplicationConstant.itemMappingUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<ItemMaplet>>() {}
+        ).getBody();
 
-        if(true){
+        Set<Long> allDatabaseItems = listOfItems.stream().map(ItemsDb::getId).collect(Collectors.toSet());
+
+        List<ItemMaplet> newItems = itemMapletList.stream().filter(itemMaplet -> !allDatabaseItems.contains(itemMaplet.getId().longValue())).collect(Collectors.toList());
+
+        System.out.println("Found a new items: " + newItems.size());
+
+        List<ItemsDb> itemsDbList = new ArrayList<>();
+
+        newItems.forEach(curr ->{
+            ItemsDb temp = new ItemsDb();
+                temp.setId(curr.getId().longValue());
+                temp.setItemId(curr.getId());
+                temp.setItem_examine(curr.getExamine());
+                temp.setItem_name(curr.getName());
+                temp.setItem_limit(curr.getLimit());
+                temp.setItem_high_alch(curr.getHighalch());
+                temp.setItem_low_alch(curr.getLowalch());
+                temp.setItem_value(curr.getValue());
+                temp.setData(null);
+            itemsDbList.add(temp);
+
+        });
+        itemsDao.add(itemsDbList.get(1));
+        System.out.println("Total of ".concat(String.valueOf(itemsDbList.size())).concat(" potential items to save with test item added ".concat(String.valueOf(itemsDbList.get(1).getId()))));
+//        itemsDao.saveAll(itemsDbList);
+
+
+        /**Find any item that doesn't have an image icon and add it*/
         for(int i = 0; i<listOfItems.size();i++){
-            String[] itemInfoArr = null;
-            itemInfoArr = new String [18];
+//            String[] itemInfoArr = null;
+//            itemInfoArr = new String [18];
             if(listOfItems.get(i).getData() != null){
                 continue;
             }
-                JSONObject obj = databaseUpdaterController.getItemJson(applicationConstant.RUNESCAPE_API_ITEM_LOOKUP_URL.concat(listOfItems.iterator().next().getId().toString()));
-                itemInfoArr = databaseUpdaterController.dataModeler_osrs_api_parseItemJson(obj);
-                getItemIconAndSaveIt(listOfItems.iterator().next().getId(),itemInfoArr[3]); //3 icon sprite url
-
-                System.out.println();
+                //Call rs url
+                Item item = restTemplate.getForObject(ApplicationConstant.RUNESCAPE_API_ITEM_LOOKUP_URL.concat(listOfItems.get(i).getId().toString()), Item.class);
+//                JSONObject obj = databaseUpdaterController.getItemJson(applicationConstant.RUNESCAPE_API_ITEM_LOOKUP_URL.concat(listOfItems.iterator().next().getId().toString()));
+                //Map respose to array
+//                itemInfoArr = databaseUpdaterController.dataModeler_osrs_api_parseItemJson(obj);
+                //Get large icon spring url and save it
+                getItemIconAndSaveIt(listOfItems.get(i).getId(),item.getIcon_large()); //3 icon sprite url
 
                 int sleepTimer = getRandomNumberBetween(2000, 4000);
                 Thread.sleep(sleepTimer);
-                System.out.println("Slept for " + sleepTimer + " after saving the item " +listOfItems.iterator().next().getId() + " "+ itemInfoArr[0].toString());
+                System.out.println("Slept for " + sleepTimer + " after saving the item " +listOfItems.get(i).getId() + " "+ item.getName());
 
-        }
+
         //use the method getItemIconAndSaveIt to save the icon to the db
         }
     }

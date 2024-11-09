@@ -3,6 +3,7 @@ package com.osrs.pod.application.controllers;
 
 import com.osrs.pod.application.ApplicationConstant;
 import com.osrs.pod.application.models.GeSearchResultLabel;
+import com.osrs.pod.application.services.DataModeler;
 import com.osrs.pod.database.configuration.ApplicationContextProvider;
 import com.osrs.pod.database.domain.entities.ItemsDb;
 import com.osrs.pod.database.service.ItemsDao;
@@ -62,6 +63,8 @@ public class TabController extends PaneInterfaceController {
 	private ItemsDao itemsDao;
 	private PauseTransition pause;
 	private boolean searchHasRun = false; // Flag to ensure it only runs once
+
+	DataModeler dataModeler = new DataModeler();
 
 	/********************End Other*************************/
 	TabController() {
@@ -402,13 +405,11 @@ public class TabController extends PaneInterfaceController {
 	}
 
 	private void geSearchResultsDb(String searchItem) {
-		System.out.println("Item search ran for item: "  + searchItem);
 		geSearchArea.clearGeSearchResults();
 //		tc_itemListArray = requestController.returnItemListArray() ;
 		List<ItemsDb> itemsDbListArray = itemsDao.findItemBySearch(searchItem);
 		addLabelActionListeners(itemsDbListArray.size());
 		try { //Open stream to grab the image for each of the returned items
-
 			for(int i = 0; i < itemsDbListArray.size() ; i++)
 			{
 				String keyGen = "geSearchResult" + (i+1);
@@ -417,7 +418,7 @@ public class TabController extends PaneInterfaceController {
 
 				if(geSearchArea.getGeSearchResultLabelMap().containsKey(keyGen)){
 					geSearchResultLabel = geSearchArea.getGeSearchResultLabelMap().get(keyGen);
-					geSearchResultLabel.getLabel().setText(current.getItem_name().concat("  (").concat(current.getItem_high_alch().toString()).concat(")"));
+					geSearchResultLabel.getLabel().setText(current.getItem_name().concat("  (").concat(dataModeler.formatNumber(current.getItem_high_alch()).toString()).concat(")"));
 //					input = new URL (tc_itemListArray[i][GE_SEARCH_ICON_URL]).openStream();
 					geSearchResultLabel.getLabelImage().setImage(new Image(new ByteArrayInputStream(current.getData())));
 					geSearchResultLabel.setId(current.getItemId());

@@ -14,6 +14,7 @@ import java.util.List;
 
 @Service
 @ComponentScan(basePackages = {"com.osrs.pod.database.domain.entities", "com.osrs.pod.database"})
+@Transactional
 public class ItemsDao {
 
     private final JdbcTemplate jdbc;
@@ -26,41 +27,17 @@ public class ItemsDao {
         System.out.println("Calling db count after init: " + repository.findAll().size());
 
     }
-//
-//    @Autowired
-//    JdbcTemplate jdbc;
-//
-//    @Autowired
-//    ItemsRepository repository;
 
-//        public ItemsDb findItemByItemId(Integer item_id){
-//        return jdbc.queryForObject("select * from items where item_id = ?",
-//                new Object[] {item_id},
-//                new BeanPropertyRowMapper<ItemsDb>(ItemsDb.class));
-//
-//    }
-//
-//    @Query("SELECT i FROM items i WHERE i.item_id =:item_id")
-//     ItemsDb findByItemIdContaining(@Param("item_id"),Integer item_id);
-
-//    @Transactional
-//    public ItemsDb findByItemId(Integer item_id){
-//
-//        if(repository.findByItemIdEquals(item_id).equals(null))
-//            return Item
-//        return repository.findByItemIdEquals(item_id);
-//    }
-
-
+    @Transactional
     public List<ItemsDb> findAll(){
         return repository.findAll();
     }
-
+    @Transactional
     public List<ItemsDb> findItemBySearch(String item){
         return repository.findByItemName(item);
     }
 
-
+    @Transactional
     public ItemsDb findById(long id){
         if(repository.existsById(id)){
             return repository.findById(id);
@@ -76,18 +53,25 @@ public class ItemsDao {
     }
 
     @Transactional
-    public boolean add(ItemsDb itemsDb){
+    public synchronized boolean add(ItemsDb itemsDb){
         try{
-//               if(repository.existsById(dashboardDb.getDASH_ID())!=true){
-            return repository.save(itemsDb)!=null;
-//               }
-//               else{
-//                   throw new IllegalArgumentException("Unable to add Dashboard. This is likely because the Dashboard ID exists");
-//               }
-
+                return repository.save(itemsDb)!=null;
         }
         catch (Exception e){
+            e.printStackTrace();
             throw new IllegalArgumentException("An error occurred while saving the ItemsDb to the database!");
+        }
+    }
+
+    @Transactional
+    public synchronized  boolean saveAll(List<ItemsDb> itemsDbList){
+        try{
+            repository.saveAll(itemsDbList);
+            return true;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            throw new IllegalArgumentException("An error occurred while saving the ItemsDb List to the database!");
         }
     }
 

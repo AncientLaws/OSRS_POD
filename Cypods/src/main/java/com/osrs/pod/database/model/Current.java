@@ -11,9 +11,7 @@ import org.springframework.stereotype.Component;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemPriceTrendOsrsDTO {
-    String trend;
-    String price;
-    String change;
-
+public class Current {
+    public String trend;
+    public String price;
 }

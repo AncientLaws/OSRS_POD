@@ -29,11 +29,6 @@ public class Window extends Application {
 	Scene scene;
 	Button bt  = new Button("");
 	public static Stage primaryStage;
-
-
-//	@Autowired
-//	public static DatabaseUpdater databaseUpdater;
-
 	public ConfigurableApplicationContext ac ;
 
     DisplayController dc;
@@ -126,14 +121,6 @@ public class Window extends Application {
 	public static void setPrimaryStage(Stage primaryStage) {
 		Window.primaryStage = primaryStage;
 	}
-
-//	public DatabaseUpdater getDatabaseUpdater() {
-//		return databaseUpdater;
-//	}
-//
-//	public void setDatabaseUpdater(DatabaseUpdater databaseUpdater) {
-//		this.databaseUpdater = databaseUpdater;
-//	}
 
 	public ConfigurableApplicationContext getAc() {
 		return ac;

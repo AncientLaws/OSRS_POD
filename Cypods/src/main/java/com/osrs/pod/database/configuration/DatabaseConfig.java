@@ -1,5 +1,7 @@
 package com.osrs.pod.database.configuration;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,16 +19,19 @@ public class DatabaseConfig {
     @Bean
     public DataSource dataSource() {
         System.out.println("Initializing dataSource with SQLiteConfig");
+        SQLiteConfig sqliteConfig = new SQLiteConfig();
+        sqliteConfig.setReadOnly(false); // Set to false for write operations
+//        sqliteConfig.setBusyTimeout(5000); // Set busy timeout for locks
 
-        SQLiteConfig config = new SQLiteConfig();
-        config.setReadOnly(false); // Explicitly set read-only to false if you need write access
+        HikariConfig hikariConfig = new HikariConfig();
+        hikariConfig.setJdbcUrl("jdbc:sqlite:Cypods/src/main/resources/gebuddyResource.db");
+        hikariConfig.setDriverClassName("org.sqlite.JDBC");
+        hikariConfig.setMaximumPoolSize(1);
+        hikariConfig.setConnectionTimeout(30000);
 
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.sqlite.JDBC");
-        dataSource.setUrl("jdbc:sqlite:Cypods/src/main/resources/gebuddyResource.db");
-        dataSource.setConnectionProperties(config.toProperties());
+        hikariConfig.setDataSourceProperties(sqliteConfig.toProperties());
 
-        return dataSource;
+        return new HikariDataSource(hikariConfig);
     }
 
     @Bean

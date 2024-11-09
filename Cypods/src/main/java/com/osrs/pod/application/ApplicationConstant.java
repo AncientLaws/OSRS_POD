@@ -38,6 +38,8 @@ public class ApplicationConstant {
 
         public static String osrsGetItemDetails = "https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=";
 
+        public static String itemMappingUrl = "https://prices.runescape.wiki/api/v1/osrs/mapping";
+
         public static boolean DEBUG = false;
 
         public static boolean BORDERS = false;
