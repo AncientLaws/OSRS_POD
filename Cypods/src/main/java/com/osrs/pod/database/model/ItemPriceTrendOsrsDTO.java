@@ -6,12 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 @Component
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemPriceTrendOsrsDTO {
+public class ItemPriceTrendOsrsDTO implements Serializable {
     String trend;
     String price;
     String change;

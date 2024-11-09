@@ -14,7 +14,9 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
@@ -136,7 +138,7 @@ public class DatabaseUpdater implements CommandLineRunner {
             itemsDbList.add(temp);
 
         });
-        itemsDao.add(itemsDbList.get(1));
+//        itemsDao.add(itemsDbList.get(1));
         System.out.println("Total of ".concat(String.valueOf(itemsDbList.size())).concat(" potential items to save with test item added ".concat(String.valueOf(itemsDbList.get(1).getId()))));
 //        itemsDao.saveAll(itemsDbList);
 
@@ -149,16 +151,25 @@ public class DatabaseUpdater implements CommandLineRunner {
                 continue;
             }
                 //Call rs url
-                Item item = restTemplate.getForObject(ApplicationConstant.RUNESCAPE_API_ITEM_LOOKUP_URL.concat(listOfItems.get(i).getId().toString()), Item.class);
-//                JSONObject obj = databaseUpdaterController.getItemJson(applicationConstant.RUNESCAPE_API_ITEM_LOOKUP_URL.concat(listOfItems.iterator().next().getId().toString()));
+            StringBuffer sb = new StringBuffer(ApplicationConstant.RUNESCAPE_API_ITEM_LOOKUP_URL.concat(listOfItems.get(i).getId().toString()));
+            ResponseEntity<Item> responseEntity = restTemplate.exchange(sb.toString(),HttpMethod.GET,null, Item.class);
+//                Item item = restTemplate.getForObject(sb.toString(), Item.class);
+            if(responseEntity.getStatusCode() == HttpStatus.OK){
+                //                JSONObject obj = databaseUpdaterController.getItemJson(applicationConstant.RUNESCAPE_API_ITEM_LOOKUP_URL.concat(listOfItems.iterator().next().getId().toString()));
                 //Map respose to array
 //                itemInfoArr = databaseUpdaterController.dataModeler_osrs_api_parseItemJson(obj);
                 //Get large icon spring url and save it
-                getItemIconAndSaveIt(listOfItems.get(i).getId(),item.getIcon_large()); //3 icon sprite url
+                getItemIconAndSaveIt(listOfItems.get(i).getId(),responseEntity.getBody().getIcon_large()); //3 icon sprite url
 
                 int sleepTimer = getRandomNumberBetween(2000, 4000);
                 Thread.sleep(sleepTimer);
-                System.out.println("Slept for " + sleepTimer + " after saving the item " +listOfItems.get(i).getId() + " "+ item.getName());
+                System.out.println("Slept for " + sleepTimer + " after saving the item " +listOfItems.get(i).getId() + " "+ responseEntity.getBody().getName());
+
+            }
+            else{
+                throw new Exception("");
+            }
+
 
 
         //use the method getItemIconAndSaveIt to save the icon to the db
@@ -212,7 +223,7 @@ public class DatabaseUpdater implements CommandLineRunner {
 //        System.out.println("Retrieved ItemDb ItemID: " + itemDb.getId());
 
 
-        System.out.println("Logo Image length: " + logoImage.length);
+//        System.out.println("Logo Image length: " + logoImage.length);
 
         itemDb.setData(logoImage);
 

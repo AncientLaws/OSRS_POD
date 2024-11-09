@@ -6,12 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 @Component
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Day180 {
+public class Day180 implements Serializable {
     public String trend;
     public String change;
 }
