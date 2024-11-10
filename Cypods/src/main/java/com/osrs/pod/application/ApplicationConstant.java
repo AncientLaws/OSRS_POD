@@ -48,6 +48,19 @@ public class ApplicationConstant {
 
         public static String RUNESCAPE_API_ITEM_LOOKUP_URL ="https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=";
 
+        public static Integer[] BLACK_LISTED_ITEMS = new Integer[]{
+                29098,  //Not meat
+                28860,  //Polar camo legs (equipped)
+                28857,  //Polar camo top (equipped)
+                28854,  //Desert camo legs (equipped)
+                28851,  //Desert camo top (equipped)
+                28848,  //Jungle camo legs (equipped)
+                28845,  //Jungle camo top (equipped)
+                28842,  //Wood camo legs (equipped)
+                28839,  //Wood camo top (equipped)
+                28585  //Warped sceptre
+        };
+
         public static String generateRuneLitePriceDataUrl(String timePeriod, Integer itemId){
                 if(timePeriod != null && itemId!= null){
                         return runeLitePriceData.concat(timePeriod).concat("&id=").concat(itemId.toString());

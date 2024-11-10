@@ -107,32 +107,37 @@ public class DatabaseUpdater implements CommandLineRunner {
         ).getBody();
 
         Set<Long> allDatabaseItems = listOfItems.stream().map(ItemsDb::getId).collect(Collectors.toSet());
+        ArrayList<Integer> blackListedItemsList = new ArrayList<>();
+        blackListedItemsList.addAll(List.of(ApplicationConstant.BLACK_LISTED_ITEMS));
 
         //Look for new items that don't exist in the database
         List<ItemMaplet> newItems = itemMapletList.stream().filter(itemMaplet -> !allDatabaseItems.contains(itemMaplet.getId().longValue())).collect(Collectors.toList());
+                         newItems.stream().filter(curr -> !newItems.containsAll(blackListedItemsList)).collect(Collectors.toList());
 
         System.out.println("Found a new items: " + newItems.size());
 
         //Save all new items metadata in the db without item image
         newItems.forEach(curr ->{
-            ItemsDb temp = new ItemsDb();
-            temp.setId(curr.getId().longValue());
-            temp.setItemId(curr.getId());
-            temp.setItem_examine(curr.getExamine());
-            temp.setItem_name(curr.getName());
-            temp.setItem_limit(curr.getLimit());
-            temp.setItem_high_alch(curr.getHighalch());
-            temp.setItem_low_alch(curr.getLowalch());
-            temp.setItem_value(curr.getValue());
-            temp.setData(null);
-            itemsDao.add(temp);
+            if(!blackListedItemsList.contains(curr.getId())){
+                ItemsDb temp = new ItemsDb();
+                temp.setId(curr.getId().longValue());
+                temp.setItemId(curr.getId());
+                temp.setItem_examine(curr.getExamine());
+                temp.setItem_name(curr.getName());
+                temp.setItem_limit(curr.getLimit());
+                temp.setItem_high_alch(curr.getHighalch());
+                temp.setItem_low_alch(curr.getLowalch());
+                temp.setItem_value(curr.getValue());
+                temp.setData(null);
+                itemsDao.add(temp);
+            }
         });
 
         listOfItems = itemsDao.findAll();
 
         /**Find any item that doesn't have an image icon and add it*/
         for(int i = 0; i < listOfItems.size() ; i++){
-            if(listOfItems.get(i).getData() != null){
+            if(listOfItems.get(i).getData() != null || blackListedItemsList.contains(listOfItems.get(i).getItemId())){
                 continue;
             }
 
