@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -55,7 +56,10 @@ public class ItemsDao {
     @Transactional
     public synchronized boolean add(ItemsDb itemsDb){
         try{
-                return repository.save(itemsDb)!=null;
+//                return repository.save(itemsDb)!=null;
+            repository.insertItem(itemsDb.getId().longValue(),itemsDb.getItemId().intValue(),itemsDb.getItem_name(),itemsDb.getItem_examine(),itemsDb.getItem_limit(),
+                    itemsDb.getItem_high_alch(), itemsDb.getItem_low_alch(), itemsDb.getData(),itemsDb.getItem_value());
+            return true;
         }
         catch (Exception e){
             e.printStackTrace();

@@ -23,7 +23,7 @@ public class Item implements Serializable {
     public String description;
     public Current current;
     public Today today;
-    public String members;
+    public boolean members;
     public Day30 day30;
     public Day90 day90;
     public Day180 day180;

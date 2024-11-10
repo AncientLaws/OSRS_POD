@@ -6,6 +6,7 @@ import com.osrs.pod.database.domain.entities.ItemsDb;
 import com.osrs.pod.database.model.Item;
 import com.osrs.pod.database.model.ItemMaplet;
 import com.osrs.pod.database.model.ItemPriceOsrsDTO;
+import com.osrs.pod.database.model.ResponseItem;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -13,10 +14,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
@@ -35,12 +33,6 @@ import java.util.stream.Collectors;
 @EntityScan(basePackages = "com.osrs.pod.database.domain.entities")
 public class DatabaseUpdater implements CommandLineRunner {
 
-
-    public DatabaseUpdater() {
-//        this.itemsDao = itemsDao;
-//        getItemIconAndSaveIt(13652, "https://secure.runescape.com/m=itemdb_oldschool/1688984225416_obj_big.gif?id=13652");
-    }
-
     public DatabaseUpdater(DatabaseTestService databaseTestService , ItemsDao itemsDao, ItemsDb itemsDb, DatabaseUpdaterController databaseUpdaterController, ApplicationConstant applicationConstant, ItemPriceOsrsDTO itemPriceOsrsDTO, RestTemplate restTemplate, RestTemplateBuilder restTemplateBuilder, String itemPriceURI) {
         this.databaseTestService = databaseTestService;
         this.itemsDao = itemsDao;
@@ -51,8 +43,9 @@ public class DatabaseUpdater implements CommandLineRunner {
         this.restTemplate = restTemplate;
         this.restTemplateBuilder = restTemplateBuilder;
         this.itemPriceURI = itemPriceURI;
+    }
 
-
+    public DatabaseUpdater() {
     }
 
     @Autowired
@@ -85,10 +78,14 @@ public class DatabaseUpdater implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 //        databaseTestService.testConnection();
+        Thread updateDatabaseItemsThread= new Thread(()->{
+            updateDatabaseItems();
+        });
+       updateDatabaseItemsThread.start();
+    }
 
-//        long i = 13652L;
-//        getItemIconAndSaveIt(i,"https://secure.runescape.com/m=itemdb_oldschool/1688984225416_obj_big.gif?id=13652");
-
+    /**Look for new items and add it to the database*/
+    public void updateDatabaseItems(){
         //Retrive an array of all the items in the itemsDb
         List<ItemsDb> listOfItems = itemsDao.findAll();
         //Loop through all the items in the itemdb, and use the id to create url
@@ -99,13 +96,6 @@ public class DatabaseUpdater implements CommandLineRunner {
         converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
         messageConverters.add(converter);
         this.restTemplate.setMessageConverters(messageConverters);
-
-        //Last stop
-//
-//       testing purposes
-//        Object itemPrice = restTemplate.getForObject(itemPriceURI, Object.class);
-//
-//        System.out.println(itemPrice);
 
 
         /**Find items that dont exist in the database, and add it*/
@@ -118,64 +108,59 @@ public class DatabaseUpdater implements CommandLineRunner {
 
         Set<Long> allDatabaseItems = listOfItems.stream().map(ItemsDb::getId).collect(Collectors.toSet());
 
+        //Look for new items that don't exist in the database
         List<ItemMaplet> newItems = itemMapletList.stream().filter(itemMaplet -> !allDatabaseItems.contains(itemMaplet.getId().longValue())).collect(Collectors.toList());
 
         System.out.println("Found a new items: " + newItems.size());
 
-        List<ItemsDb> itemsDbList = new ArrayList<>();
-
+        //Save all new items metadata in the db without item image
         newItems.forEach(curr ->{
             ItemsDb temp = new ItemsDb();
-                temp.setId(curr.getId().longValue());
-                temp.setItemId(curr.getId());
-                temp.setItem_examine(curr.getExamine());
-                temp.setItem_name(curr.getName());
-                temp.setItem_limit(curr.getLimit());
-                temp.setItem_high_alch(curr.getHighalch());
-                temp.setItem_low_alch(curr.getLowalch());
-                temp.setItem_value(curr.getValue());
-                temp.setData(null);
-            itemsDbList.add(temp);
-
+            temp.setId(curr.getId().longValue());
+            temp.setItemId(curr.getId());
+            temp.setItem_examine(curr.getExamine());
+            temp.setItem_name(curr.getName());
+            temp.setItem_limit(curr.getLimit());
+            temp.setItem_high_alch(curr.getHighalch());
+            temp.setItem_low_alch(curr.getLowalch());
+            temp.setItem_value(curr.getValue());
+            temp.setData(null);
+            itemsDao.add(temp);
         });
-//        itemsDao.add(itemsDbList.get(1));
-        System.out.println("Total of ".concat(String.valueOf(itemsDbList.size())).concat(" potential items to save with test item added ".concat(String.valueOf(itemsDbList.get(1).getId()))));
-//        itemsDao.saveAll(itemsDbList);
 
+        listOfItems = itemsDao.findAll();
 
         /**Find any item that doesn't have an image icon and add it*/
-        for(int i = 0; i<listOfItems.size();i++){
-//            String[] itemInfoArr = null;
-//            itemInfoArr = new String [18];
+        for(int i = 0; i < listOfItems.size() ; i++){
             if(listOfItems.get(i).getData() != null){
                 continue;
             }
-                //Call rs url
-            StringBuffer sb = new StringBuffer(ApplicationConstant.RUNESCAPE_API_ITEM_LOOKUP_URL.concat(listOfItems.get(i).getId().toString()));
-            ResponseEntity<Item> responseEntity = restTemplate.exchange(sb.toString(),HttpMethod.GET,null, Item.class);
-//                Item item = restTemplate.getForObject(sb.toString(), Item.class);
-            if(responseEntity.getStatusCode() == HttpStatus.OK){
-                //                JSONObject obj = databaseUpdaterController.getItemJson(applicationConstant.RUNESCAPE_API_ITEM_LOOKUP_URL.concat(listOfItems.iterator().next().getId().toString()));
-                //Map respose to array
-//                itemInfoArr = databaseUpdaterController.dataModeler_osrs_api_parseItemJson(obj);
-                //Get large icon spring url and save it
-                getItemIconAndSaveIt(listOfItems.get(i).getId(),responseEntity.getBody().getIcon_large()); //3 icon sprite url
 
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", "application/json");
+            headers.set("User-Agent","PostmanRuntime/7.36.1");
+
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            //Call rs url
+            StringBuffer sb = new StringBuffer(ApplicationConstant.RUNESCAPE_API_ITEM_LOOKUP_URL.concat(listOfItems.get(i).getId().toString()));
+            try{
+                ResponseItem item = restTemplate.exchange(sb.toString(),
+                        HttpMethod.GET,
+                        null,
+                        new ParameterizedTypeReference<ResponseItem>() {}).getBody();
+
+                //Get large icon spring url and save it
+                getItemIconAndSaveIt(listOfItems.get(i).getId(),item.getItem().getIcon_large()); //3 icon sprite url
                 int sleepTimer = getRandomNumberBetween(2000, 4000);
                 Thread.sleep(sleepTimer);
-                System.out.println("Slept for " + sleepTimer + " after saving the item " +listOfItems.get(i).getId() + " "+ responseEntity.getBody().getName());
-
+//                System.out.println("Slept for " + sleepTimer + " after saving the item " +listOfItems.get(i).getId() + " "+ item.getItem().getName());
             }
-            else{
-                throw new Exception("");
+            catch (Exception e){
+                System.out.println("An error occurred during retreiving or saving an item: " + listOfItems.get(i).getId());
             }
-
-
-
-        //use the method getItemIconAndSaveIt to save the icon to the db
         }
     }
-
 
     public void getItemIconAndSaveIt(long item_id, String url){
         byte[] logoImage = getLogoImage(url);
