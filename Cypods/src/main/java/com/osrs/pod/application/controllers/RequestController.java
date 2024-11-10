@@ -2,6 +2,9 @@ package com.osrs.pod.application.controllers;
 
 import com.osrs.pod.application.services.Connect;
 import com.osrs.pod.application.services.DataModeler;
+import com.osrs.pod.database.model.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
@@ -10,11 +13,12 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 import static com.osrs.pod.application.ApplicationConstant.*;
-
+@Component
+@Getter
+@Setter
 public class RequestController extends Connect implements Runnable {
 
 	JSONObject obj;
@@ -24,14 +28,14 @@ public class RequestController extends Connect implements Runnable {
 	private String[][] itemListArray = new String[100][6];
 	DataModeler dataModeler = new DataModeler();
 
-	RequestController() {
+	public RequestController() {
+
 	}
 
 	/**
 	 * Method takes an API endpoint as an input, and returns a JSONObject
 	 **/
-
-	private JSONObject requestItemData(String url) throws NullPointerException {
+	public JSONObject requestItemData(String url) throws NullPointerException {
 		String s = "";
 		try {
 			HttpURLConnection http = httpStringURL(url);

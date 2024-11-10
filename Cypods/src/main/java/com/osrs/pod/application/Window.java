@@ -3,7 +3,9 @@ package com.osrs.pod.application;
 
 import com.osrs.pod.PodApplication;
 import com.osrs.pod.application.controllers.DisplayController;
+import com.osrs.pod.application.controllers.RequestController;
 import com.osrs.pod.database.controller.DatabaseUpdaterController;
+import com.osrs.pod.database.model.ItemMaplet;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -13,12 +15,16 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.osrs.pod.application.ApplicationConstant.BORDERS;
 @Component
@@ -32,6 +38,7 @@ public class Window extends Application {
 	public ConfigurableApplicationContext ac ;
 
     DisplayController dc;
+	public static List<ItemMaplet> itemMapletList = new ArrayList<>();
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -60,8 +67,8 @@ public class Window extends Application {
 			primaryStage.setResizable(true);
 			primaryStage.show();
 
-			ac.getBean(DatabaseUpdaterController.class);
 
+			itemMapletList = ac.getBean(DatabaseUpdaterController.class).getItemMapList();
 	
 		} catch (Exception e) {
 			e.printStackTrace();

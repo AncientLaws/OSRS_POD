@@ -1,18 +1,57 @@
 package com.osrs.pod.database.controller;
 
+import com.osrs.pod.application.ApplicationConstant;
+import com.osrs.pod.database.configuration.ApplicationContextProvider;
+import com.osrs.pod.database.model.ItemMaplet;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static com.osrs.pod.database.service.DatabaseUpdater.itemMapletList;
 
 @Component
+@ComponentScan(basePackages = {"com.osrs.pod.database"})
 public class DatabaseUpdaterController {
-//    JSONObject obj;
+
+    public DatabaseUpdaterController(int responseCode, RestTemplateBuilder restTemplateBuilder, RestTemplate restTemplate, ItemMaplet itemMaplet, List<ItemMaplet> itemMapletList) {
+        this.responseCode = responseCode;
+        this.restTemplateBuilder = restTemplateBuilder;
+        this.restTemplate = restTemplate;
+        this.itemMaplet = itemMaplet;
+    }
+
+    //    JSONObject obj;
     int responseCode;
+    @Autowired
+    RestTemplateBuilder restTemplateBuilder;
+    RestTemplate restTemplate;
+    ItemMaplet itemMaplet;
+//    List<ItemMaplet> itemMapletList = new ArrayList<>();
+
+    DatabaseUpdaterController(){
+
+    }
+
+    public List<ItemMaplet> getItemMapList(){
+        return itemMapletList;
+    }
 
     protected HttpURLConnection httpStringURL (String inputURL){
         URL url;

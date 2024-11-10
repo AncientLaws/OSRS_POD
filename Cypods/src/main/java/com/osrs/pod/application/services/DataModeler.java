@@ -2,13 +2,16 @@ package com.osrs.pod.application.services;
 
 //import org.jfree.data.json.impl.JSONObject;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.osrs.pod.database.model.Data;
+import com.osrs.pod.database.model.LatestPriceNodes;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.json.JSONObject;
-import org.springframework.stereotype.Component;
 
 import java.text.FieldPosition;
 import java.text.NumberFormat;
@@ -17,6 +20,8 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 public class DataModeler {
     /**
@@ -167,18 +172,33 @@ public class DataModeler {
         });
     }
 
-    public StringBuffer formatNumber(long number) {
+    public StringBuffer formatNumber(Long inputNumber) {
+        double number = Optional.ofNullable(inputNumber.doubleValue()).orElse(0.0);
         final long MILLION = 1000000L;
         final long BILLION = 1000000000L;
         final long TRILLION = 1000000000000L;
         final long THOUSAND = 1000L;
 
-        String temp = number < THOUSAND ? String.valueOf((number * 100.0) / 100.0) :
-                number < MILLION ? ((double) ((number / THOUSAND) * 100.0) / 100.0) + " K" :
-                        number < BILLION ? ((double) ((number / MILLION) * 100.0) / 100.0) + " M" :
-                                number < TRILLION ? Math.round(((double) (number / BILLION) * 100.0) / 100.0) + " B" :
-                                        ((double) ((number / TRILLION) * 100.0) / 100.0) + " T";
-        return new StringBuffer(temp);
+        String formattedNumber;
 
+
+        if (number < THOUSAND) {
+            formattedNumber = String.format("%.2f", number);
+        } else if (number < MILLION) {
+            formattedNumber = String.format("%.2f K", number / THOUSAND);
+        } else if (number < BILLION) {
+            formattedNumber = String.format("%.2f M", number / MILLION);
+        } else if (number < TRILLION) {
+            formattedNumber = String.format("%.2f B", number / BILLION);
+        } else {
+            formattedNumber = String.format("%.2f T", number / TRILLION);
+        }
+        return new StringBuffer(formattedNumber);
+    }
+
+    public LatestPriceNodes getLastestPrices(JSONObject jsonResponse) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        LatestPriceNodes apiResponse = objectMapper.readValue(jsonResponse.toString(), LatestPriceNodes.class);
+        return apiResponse;
     }
 }

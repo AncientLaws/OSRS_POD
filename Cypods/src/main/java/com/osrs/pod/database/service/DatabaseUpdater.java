@@ -1,12 +1,11 @@
 package com.osrs.pod.database.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.osrs.pod.application.ApplicationConstant;
+import com.osrs.pod.application.controllers.RequestController;
 import com.osrs.pod.database.controller.DatabaseUpdaterController;
 import com.osrs.pod.database.domain.entities.ItemsDb;
-import com.osrs.pod.database.model.Item;
-import com.osrs.pod.database.model.ItemMaplet;
-import com.osrs.pod.database.model.ItemPriceOsrsDTO;
-import com.osrs.pod.database.model.ResponseItem;
+import com.osrs.pod.database.model.*;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -71,21 +70,29 @@ public class DatabaseUpdater implements CommandLineRunner {
     @Autowired
     DatabaseTestService databaseTestService;
 
+    RequestController requestController = new RequestController();
+
     String itemPriceURI = "https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=7323";
 
-    List<ItemMaplet> itemMapletList = new ArrayList<>();
+    public static List<ItemMaplet> itemMapletList = new ArrayList<>();
+
+    public static LatestPriceNodes latestPriceNodes;
 
     @Override
     public void run(String... args) throws Exception {
 //        databaseTestService.testConnection();
         Thread updateDatabaseItemsThread= new Thread(()->{
-            updateDatabaseItems();
+            try {
+                updateDatabaseItems();
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
         });
        updateDatabaseItemsThread.start();
     }
 
     /**Look for new items and add it to the database*/
-    public void updateDatabaseItems(){
+    public void updateDatabaseItems() throws JsonProcessingException {
         //Retrive an array of all the items in the itemsDb
         List<ItemsDb> listOfItems = itemsDao.findAll();
         //Loop through all the items in the itemdb, and use the id to create url
@@ -105,6 +112,8 @@ public class DatabaseUpdater implements CommandLineRunner {
                 null,
                 new ParameterizedTypeReference<List<ItemMaplet>>() {}
         ).getBody();
+
+        latestPriceNodes = requestController.getDataModeler().getLastestPrices(requestController.requestItemData(ApplicationConstant.WIKI_LATEST_PRICES));
 
         Set<Long> allDatabaseItems = listOfItems.stream().map(ItemsDb::getId).collect(Collectors.toSet());
         ArrayList<Integer> blackListedItemsList = new ArrayList<>();
@@ -220,6 +229,13 @@ public class DatabaseUpdater implements CommandLineRunner {
         itemsDao.update(itemDb);
     }
 
+    public static List<ItemMaplet> getItemMapletList() {
+        return itemMapletList;
+    }
+
+    public static void setItemMapletList(List<ItemMaplet> itemMapletList) {
+        DatabaseUpdater.itemMapletList = itemMapletList;
+    }
 }
 
 

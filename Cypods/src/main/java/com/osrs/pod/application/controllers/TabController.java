@@ -6,6 +6,7 @@ import com.osrs.pod.application.models.GeSearchResultLabel;
 import com.osrs.pod.application.services.DataModeler;
 import com.osrs.pod.database.configuration.ApplicationContextProvider;
 import com.osrs.pod.database.domain.entities.ItemsDb;
+import com.osrs.pod.database.model.ItemMaplet;
 import com.osrs.pod.database.service.ItemsDao;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -19,16 +20,27 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.osrs.pod.application.ApplicationConstant.*;
+import static com.osrs.pod.application.Window.itemMapletList;
+import static com.osrs.pod.database.service.DatabaseUpdater.latestPriceNodes;
 import static com.osrs.pod.application.Window.root;
-
 public class TabController extends PaneInterfaceController {
 
 
@@ -65,6 +77,7 @@ public class TabController extends PaneInterfaceController {
 	private boolean searchHasRun = false; // Flag to ensure it only runs once
 
 	DataModeler dataModeler = new DataModeler();
+
 
 	/********************End Other*************************/
 	TabController() {
@@ -418,10 +431,15 @@ public class TabController extends PaneInterfaceController {
 
 				if(geSearchArea.getGeSearchResultLabelMap().containsKey(keyGen)){
 					geSearchResultLabel = geSearchArea.getGeSearchResultLabelMap().get(keyGen);
-					geSearchResultLabel.getLabel().setText(current.getItem_name().concat("  (").concat(dataModeler.formatNumber(current.getItem_high_alch()).toString()).concat(")"));
-//					input = new URL (tc_itemListArray[i][GE_SEARCH_ICON_URL]).openStream();
-					geSearchResultLabel.getLabelImage().setImage(new Image(new ByteArrayInputStream(current.getData())));
 					geSearchResultLabel.setId(current.getItemId());
+					geSearchResultLabel.getLabelImage().setImage(new Image(new ByteArrayInputStream(current.getData())));
+					geSearchResultLabel.getLabel().setText(current.getItem_name());
+					try{
+						geSearchResultLabel.getLabel().setText(geSearchResultLabel.getLabel().getText().concat("\n" ).concat("  (").concat(dataModeler.formatNumber(latestPriceNodes.getData().get(current.getItemId().toString()).getHigh().longValue()).toString().concat(")")));
+					}
+					catch (Exception e){
+						//Fail quietly
+					}
 				}
 			}
 		}

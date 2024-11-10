@@ -40,13 +40,15 @@ public class ApplicationConstant {
 
         public static String itemMappingUrl = "https://prices.runescape.wiki/api/v1/osrs/mapping";
 
+        public static String RUNESCAPE_API_ITEM_LOOKUP_URL ="https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=";
+
+        public static String WIKI_LATEST_PRICES = "https://prices.runescape.wiki/api/v1/osrs/latest";
+
         public static boolean DEBUG = false;
 
         public static boolean BORDERS = false;
 
         public static boolean transparentBackground = false;
-
-        public static String RUNESCAPE_API_ITEM_LOOKUP_URL ="https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=";
 
         public static Integer[] BLACK_LISTED_ITEMS = new Integer[]{
                 29098,  //Not meat
@@ -58,7 +60,16 @@ public class ApplicationConstant {
                 28845,  //Jungle camo top (equipped)
                 28842,  //Wood camo legs (equipped)
                 28839,  //Wood camo top (equipped)
-                28585  //Warped sceptre
+                28585,  //Warped sceptre
+                29602,  //Corrupted volatile nightmare staff
+                29599,  //Corrupted dark bow
+                28549,  //Corrupted tumeken's shadow (uncharged)
+                28545,  //Corrupted scythe of vitur (uncharged)
+                28540,  //Corrupted twisted bow
+                28537,  //Corrupted armadyl godsword
+                28534,  //Corrupted dragon claws
+                28531   //Corrupted voidwaker
+
         };
 
         public static String generateRuneLitePriceDataUrl(String timePeriod, Integer itemId){
