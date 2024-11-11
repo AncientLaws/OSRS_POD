@@ -116,9 +116,19 @@ public class Charts implements ChartMouseListenerFX {
 		clipRect.heightProperty().bind(chartsPane.heightProperty());
 		chartsPane.setClip(clipRect);
 
+		/*Hide crosshair when its moved out of chart area*/
+		chartViewerPrice.getCanvas().setOnMouseExited(event -> hideCrosshairs());
+		chartViewerVolume.getCanvas().setOnMouseExited(event -> hideCrosshairs());
+
 		chartsPane.getChildren().addAll(chartViewerPrice,chartViewerVolume);
 	}
 
+	private void hideCrosshairs() {
+		if(this.xCrosshair != null && this.yCrosshair != null){
+			this.xCrosshair.setValue(Double.NaN);
+			this.yCrosshair.setValue(Double.NaN);
+		}
+	}
 
 	@Override
 	public void chartMouseClicked(ChartMouseEventFX event) { // ignore

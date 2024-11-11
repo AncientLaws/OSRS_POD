@@ -49,8 +49,6 @@ public class TabController extends PaneInterfaceController {
 	private String instanceTabName;
 	private String tabActive;
 	private Image image;
-	protected ImageView imageView;
-	Tooltip tooltip;
 	private String itemToolTip = "Item Tool Tip";
 	protected int tab_itemID;
 	protected String selectedSearchItem = "";
@@ -292,14 +290,6 @@ public class TabController extends PaneInterfaceController {
 
 
 	}
-	private void MakeItemPop() {
-		imageView.setScaleX(1.2);
-		imageView.setScaleY(1.2);
-	}
-	private void MakeItemPopBack() {
-		imageView.setScaleX(1);
-		imageView.setScaleY(1);
-	}
 
 	private void initImage(){
 		root.getChildren().add(imageView); //adds all imageViews to the top left corner
@@ -364,13 +354,6 @@ public class TabController extends PaneInterfaceController {
 		} catch (Exception e) {
 			System.out.println("Error in setInterfaceLabels: " + e);
 		}
-	}
-
-	private void tab_IconTooltip (String s) {
-		tooltip = new Tooltip(s);
-		//tooltip.setShowDelay(Duration.millis(100));
-		tooltip.setId("tooltip");
-		tooltip.install(imageView, tooltip);
 	}
 
 	/**

@@ -24,6 +24,8 @@ public class PaneInterfaceController extends DisplayController implements Runnab
 	ImageView itemTopMenu;
 	ImageView itemIconPaneImage;
 	Rectangle clipRect = new Rectangle();
+	protected ImageView imageView;
+	Tooltip tooltip;
 
 	/************************** Labels **************************/
 	Label selectedItemNameLabel;
@@ -287,6 +289,23 @@ public class PaneInterfaceController extends DisplayController implements Runnab
 	@Override
 	public void run() {
 		
+	}
+
+	protected void MakeItemPop() {
+		imageView.setScaleX(1.2);
+		imageView.setScaleY(1.2);
+	}
+	protected void MakeItemPopBack() {
+		imageView.setScaleX(1);
+		imageView.setScaleY(1);
+	}
+
+
+	protected void tab_IconTooltip (String s) {
+		tooltip = new Tooltip(s);
+		//tooltip.setShowDelay(Duration.millis(100));
+		tooltip.setId("tooltip");
+		tooltip.install(imageView, tooltip);
 	}
 
 	public Rectangle getClipRect() {
