@@ -42,7 +42,6 @@ public class Charts implements ChartMouseListenerFX {
 
 	private ItemsDao itemsDao;
 
-
 	private ChartViewer chartViewerPrice;
 	private ChartViewer chartViewerVolume;
 

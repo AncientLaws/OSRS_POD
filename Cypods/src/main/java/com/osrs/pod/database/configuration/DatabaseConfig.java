@@ -10,6 +10,9 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.sqlite.SQLiteConfig;
 
 import javax.sql.DataSource;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Configuration
 @ComponentScan(basePackages = {"com.osrs.pod.database"})
@@ -24,7 +27,13 @@ public class DatabaseConfig {
 //        sqliteConfig.setBusyTimeout(5000); // Set busy timeout for locks
 
         HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setJdbcUrl("jdbc:sqlite:Cypods/src/main/resources/gebuddyResource.db");
+        try{
+            Path dbPath = Paths.get(getClass().getResource("/gebuddyResource.db").toURI());
+            hikariConfig.setJdbcUrl("jdbc:sqlite:" + dbPath.toString());
+        }catch (URISyntaxException e) {
+            throw new RuntimeException("Failed to locate the SQLite database file.", e);
+        }
+
         hikariConfig.setDriverClassName("org.sqlite.JDBC");
         hikariConfig.setMaximumPoolSize(1);
         hikariConfig.setConnectionTimeout(30000);
