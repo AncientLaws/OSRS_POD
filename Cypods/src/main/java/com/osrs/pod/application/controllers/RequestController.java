@@ -2,7 +2,6 @@ package com.osrs.pod.application.controllers;
 
 import com.osrs.pod.application.services.Connect;
 import com.osrs.pod.application.services.DataModeler;
-import com.osrs.pod.database.model.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONArray;
@@ -28,6 +27,9 @@ public class RequestController extends Connect implements Runnable {
 	private String[][] itemListArray = new String[100][6];
 	DataModeler dataModeler = new DataModeler();
 
+	private long current_time = System.currentTimeMillis();
+	private long last_call_time;
+
 	public RequestController() {
 
 	}
@@ -36,21 +38,28 @@ public class RequestController extends Connect implements Runnable {
 	 * Method takes an API endpoint as an input, and returns a JSONObject
 	 **/
 	public JSONObject requestItemData(String url) throws NullPointerException {
-		String s = "";
 		try {
-			HttpURLConnection http = httpStringURL(url);
-			if (HttpURLConnection.HTTP_OK == responseCode) { // Success: Status = 200
-				BufferedReader in = new BufferedReader(new InputStreamReader(http.getInputStream()));
-				StringBuffer response = new StringBuffer();
-				String READ_INPUT_LINE_FROM_SITE;
-				while ((READ_INPUT_LINE_FROM_SITE = in.readLine()) != null) {
-					response.append(READ_INPUT_LINE_FROM_SITE);
+//			if(current_time - last_call_time < MIN_TIME_BETWEEN_REQUESTS) {
+				HttpURLConnection http = httpStringURL(url);
+				if (HttpURLConnection.HTTP_OK == responseCode) { // Success: Status = 200
+					BufferedReader in = new BufferedReader(new InputStreamReader(http.getInputStream()));
+					StringBuffer response = new StringBuffer();
+					String READ_INPUT_LINE_FROM_SITE;
+					while ((READ_INPUT_LINE_FROM_SITE = in.readLine()) != null) {
+						response.append(READ_INPUT_LINE_FROM_SITE);
+					}
+					in.close();
+					String jsonString = response.toString();
+					obj = new JSONObject(jsonString);
+					// get_osrs_api_parseItemJson();
+
+//					last_call_time = current_time;
+//					System.out.println("Timer: " + (current_time - last_call_time));
 				}
-				in.close();
-				String jsonString = response.toString();
-				obj = new JSONObject(jsonString);
-				// get_osrs_api_parseItemJson();
-			}
+//			}
+//			else{
+//				System.out.println("Please wait before making another api call: "  + current_time);
+//			}
 
 		}
 
