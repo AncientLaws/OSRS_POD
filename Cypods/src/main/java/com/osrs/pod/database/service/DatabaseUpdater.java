@@ -120,8 +120,11 @@ public class DatabaseUpdater implements CommandLineRunner {
         blackListedItemsList.addAll(List.of(ApplicationConstant.BLACK_LISTED_ITEMS));
 
         //Look for new items that don't exist in the database
-        List<ItemMaplet> newItems = itemMapletList.stream().filter(itemMaplet -> !allDatabaseItems.contains(itemMaplet.getId().longValue())).collect(Collectors.toList());
-                         newItems.stream().filter(curr -> !newItems.containsAll(blackListedItemsList)).collect(Collectors.toList());
+        List<ItemMaplet> newItems = itemMapletList.stream().filter(itemMaplet ->
+              !allDatabaseItems.contains(itemMaplet.getId().longValue())).collect(Collectors.toList());
+                         newItems = newItems.stream().filter(curr ->
+                                          !blackListedItemsList.contains(curr.getId())).collect(Collectors.toList());
+//                                         !newItems.containsAll(blackListedItemsList)).collect(Collectors.toList());
 
         System.out.println("Found a new items: " + newItems.size());
 
@@ -171,7 +174,7 @@ public class DatabaseUpdater implements CommandLineRunner {
 //                System.out.println("Slept for " + sleepTimer + " after saving the item " +listOfItems.get(i).getId() + " "+ item.getItem().getName());
             }
             catch (Exception e){
-                System.out.println("An error occurred during retreiving or saving an item: " + listOfItems.get(i).getId());
+                System.out.println("An error occurred during retrieving or saving an item: " + listOfItems.get(i).getId());
             }
         }
     }

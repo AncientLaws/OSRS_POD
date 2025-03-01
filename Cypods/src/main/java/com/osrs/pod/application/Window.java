@@ -45,7 +45,7 @@ public class Window extends Application {
 		try {
 			this.primaryStage =  primaryStage;
 
-			primaryStage.setTitle("Grand Exchange Central - By Ancient laws");
+			primaryStage.setTitle("RunePod - By Ancient laws");
 			Image icon = new Image 	(getClass().getClassLoader().getResource("images/icon.png").toString(), true);
 			primaryStage.getIcons().add(icon);
 			if(BORDERS) {
