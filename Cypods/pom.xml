@@ -164,8 +164,11 @@
             <version>1.18.34</version>
              <scope>provided</scope>
         </dependency>
-
-
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>28.2-android</version>
+        </dependency>
 
 
     </dependencies>

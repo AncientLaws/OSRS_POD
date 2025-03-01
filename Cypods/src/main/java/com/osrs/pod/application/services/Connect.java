@@ -1,7 +1,5 @@
 package com.osrs.pod.application.services;
 
-import org.springframework.stereotype.Component;
-
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -29,5 +27,6 @@ public class Connect {
 				}
 		return http;
 	}
-	
+
+
 }

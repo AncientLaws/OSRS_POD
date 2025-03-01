@@ -16,6 +16,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -91,6 +92,15 @@ public class DatabaseUpdater implements CommandLineRunner {
        updateDatabaseItemsThread.start();
     }
 
+    //Update lastest prices every 30 minutes
+    @Scheduled(fixedRate = 30 * 60 * 1000)
+    public void updateLatestPriceNodes() throws JsonProcessingException {
+        // This line fetches the latest price nodes.
+        latestPriceNodes = requestController.getDataModeler().getLastestPrices(
+                requestController.requestItemData(ApplicationConstant.WIKI_LATEST_PRICES));
+        System.out.println("Updated latestPriceNodes at " + java.time.LocalDateTime.now());
+    }
+
     /**Look for new items and add it to the database*/
     public void updateDatabaseItems() throws JsonProcessingException {
         //Retrive an array of all the items in the itemsDb
@@ -112,8 +122,6 @@ public class DatabaseUpdater implements CommandLineRunner {
                 null,
                 new ParameterizedTypeReference<List<ItemMaplet>>() {}
         ).getBody();
-
-        latestPriceNodes = requestController.getDataModeler().getLastestPrices(requestController.requestItemData(ApplicationConstant.WIKI_LATEST_PRICES));
 
         Set<Long> allDatabaseItems = listOfItems.stream().map(ItemsDb::getId).collect(Collectors.toSet());
         ArrayList<Integer> blackListedItemsList = new ArrayList<>();
