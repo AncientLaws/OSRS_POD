@@ -2,11 +2,14 @@ package com.osrs.pod.database.configuration;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.hibernate.cfg.AvailableSettings;
+import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.sqlite.SQLiteConfig;
 
 import javax.sql.DataSource;
@@ -16,6 +19,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @ComponentScan(basePackages = {"com.osrs.pod.database"})
@@ -58,6 +63,26 @@ public class DatabaseConfig {
         return new HikariDataSource(hikariConfig);
     }
 
+//    @Bean
+//    public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, DataSource dataSource) {
+//        return builder
+//                .dataSource(dataSource)
+//                .packages("com.osrs.pod.database.domain.entities") // Adjust package based on entities
+//                .persistenceUnit("default")
+//                .properties(jpaProperties())
+//                .build();
+//    }
+//
+//    private Map<String, Object> jpaProperties() {
+//        Map<String, Object> properties = new HashMap<>();
+//        properties.put(AvailableSettings.DIALECT, "com.osrs.pod.database.SQLDialect"); // Use your custom dialect
+//        properties.put(AvailableSettings.SHOW_SQL, "true"); // Enable SQL logging
+//        properties.put(AvailableSettings.FORMAT_SQL, "true");
+//        properties.put(AvailableSettings.HBM2DDL_AUTO, "update"); // Adjust to "validate" if schema should not be modified
+////        properties.put(AvailableSettings.TRANSACTION_COORDINATOR_STRATEGY, "jta"); // Ensure transaction consistency
+//        return properties;
+//    }
+//
     @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
