@@ -1,8 +1,9 @@
 package com.osrs.pod.application.controllers;
 
+import com.google.common.util.concurrent.RateLimiter;
 import com.osrs.pod.application.services.Connect;
 import com.osrs.pod.application.services.DataModeler;
-import com.osrs.pod.database.model.Data;
+import com.osrs.pod.application.services.SlidingWindowRateLimiter;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONArray;
@@ -28,6 +29,14 @@ public class RequestController extends Connect implements Runnable {
 	private String[][] itemListArray = new String[100][6];
 	DataModeler dataModeler = new DataModeler();
 
+	private long current_time = System.currentTimeMillis();
+	private long last_call_time;
+
+	// Create a RateLimiter that allows a limited number of calls per second
+	private final RateLimiter callIntervalRateLimiter = RateLimiter.create(45.0 / 60.0);
+
+	private final SlidingWindowRateLimiter maxCallsRateLimiter = new SlidingWindowRateLimiter();
+
 	public RequestController() {
 
 	}
@@ -36,28 +45,31 @@ public class RequestController extends Connect implements Runnable {
 	 * Method takes an API endpoint as an input, and returns a JSONObject
 	 **/
 	public JSONObject requestItemData(String url) throws NullPointerException {
-		String s = "";
+
 		try {
-			HttpURLConnection http = httpStringURL(url);
-			if (HttpURLConnection.HTTP_OK == responseCode) { // Success: Status = 200
-				BufferedReader in = new BufferedReader(new InputStreamReader(http.getInputStream()));
-				StringBuffer response = new StringBuffer();
-				String READ_INPUT_LINE_FROM_SITE;
-				while ((READ_INPUT_LINE_FROM_SITE = in.readLine()) != null) {
-					response.append(READ_INPUT_LINE_FROM_SITE);
-				}
-				in.close();
-				String jsonString = response.toString();
-				obj = new JSONObject(jsonString);
-				// get_osrs_api_parseItemJson();
+			// Try to acquire a permit.
+			if (!maxCallsRateLimiter.tryCall() || !callIntervalRateLimiter.tryAcquire()) {
+				System.out.println("Rate limit exceeded. Please wait before making another API call.");
+				return null;
 			}
+				HttpURLConnection http = httpStringURL(url);
+				if (HttpURLConnection.HTTP_OK == responseCode) { // Success: Status = 200
+					BufferedReader in = new BufferedReader(new InputStreamReader(http.getInputStream()));
+					StringBuffer response = new StringBuffer();
+					String READ_INPUT_LINE_FROM_SITE;
+					while ((READ_INPUT_LINE_FROM_SITE = in.readLine()) != null) {
+						response.append(READ_INPUT_LINE_FROM_SITE);
+					}
+					in.close();
+					String jsonString = response.toString();
+					obj = new JSONObject(jsonString);
+					// get_osrs_api_parseItemJson();
 
+				}
 		}
-
 		catch (Exception e) {
 			System.out.println("Error in Method: requestItemData() " + " " + e.getMessage());
 		}
-
 		return obj;
 	}
 

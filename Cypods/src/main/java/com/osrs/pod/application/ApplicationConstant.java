@@ -50,6 +50,8 @@ public class ApplicationConstant {
 
         public static boolean transparentBackground = false;
 
+        public static long MIN_TIME_BETWEEN_REQUESTS = 100;
+
         public static Integer[] BLACK_LISTED_ITEMS = new Integer[]{
                 29098,  //Not meat
                 28860,  //Polar camo legs (equipped)
