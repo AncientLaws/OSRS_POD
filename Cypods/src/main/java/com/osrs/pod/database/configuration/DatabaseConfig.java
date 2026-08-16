@@ -80,7 +80,7 @@ public class DatabaseConfig {
                 if (localAppData == null) {
                     localAppData = System.getProperty("user.home") + "\\AppData\\Local";
                 }
-                userDbPath = Paths.get(localAppData, "RunePod", "gebuddyResource.db");
+                userDbPath = Paths.get(localAppData, "RuneLaws", "gebuddyResource.db");
             } else if (osName.contains("mac")) {
                 // macOS: Use the Application Support directory
                 userDbPath = Paths.get(System.getProperty("user.home"), "Library", "Application Support", "RunePod", "gebuddyResource.db");
